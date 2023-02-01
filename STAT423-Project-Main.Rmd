@@ -1,0 +1,27 @@
+---
+title: "STAT423_Project1_Main"
+author: "Dante Ramirez"
+date: '2023-02-01'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+library(tidyverse)
+library(Lahman)
+
+# To find career postion player numbers
+batting_df <- Batting
+
+# To find career pitcher numbers
+pitching_df <- Pitching
+
+# For our response of boolean elected into the hall or not
+hall_df <- HallOfFame
+
+# For the WS win column
+team_df <- Teams
+
+```
+
+
