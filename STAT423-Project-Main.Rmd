@@ -10,6 +10,8 @@ output: html_document
 library(tidyverse)
 library(Lahman)
 
+# Please create a variable for all datasets below along with a message of what we need it for
+
 # To find career postion player numbers
 batting_df <- Batting
 
