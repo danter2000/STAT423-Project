@@ -9,10 +9,12 @@ output: html_document
 
 library(tidyverse)
 library(Lahman)
+library(readr)
+library(lubridate)
 
 # Please create a variable for all datasets below along with a message of what we need it for
 
-# To find career postion player numbers
+# To find career position player numbers
 batting_df <- Batting
 
 # To find career pitcher numbers
@@ -23,6 +25,129 @@ hall_df <- HallOfFame
 
 # For the WS win column
 team_df <- Teams
+
+```
+
+```{r time series mess}
+
+# Below are mainly for time series analysis
+
+# For player name, debute, and playerID conversion
+player_df <- read_csv(file = "Data/People2022.csv")
+
+# Creates Player column to ease merging with other df's
+player_df <- player_df %>% mutate(Player = str_c(nameFirst,
+                                                 nameLast,
+                                                 sep = " "))
+
+# For updated pitching data to get accurate innings pitched totals
+pitcherTimeSeries_df <- read_csv(file = "Data/Pitching2022.csv")
+
+# vector of playerID's who've played in 2017 or beyond
+pitcherTimeSeries_df_2017onwards <- pitcherTimeSeries_df %>%
+  group_by(playerID) %>%
+  filter(yearID >= 2017) %>% 
+  pull(playerID) %>%
+  unique()
+
+# Applies vector to main data set and filters, creates IP column
+pitcherTimeSeries_df <- pitcherTimeSeries_df %>% 
+  filter(playerID %in% pitcherTimeSeries_df_2017onwards) %>%
+  mutate(IP = round(IPouts/3, 1))
+
+# Merges Player bio df with median innings pitched df
+avg_ip_df <- pitcherTimeSeries_df %>%
+  group_by(playerID) %>% 
+  summarise_at(vars(IP), list(MedianIP = median)) %>%
+  inner_join(player_df, by = "playerID") %>%
+  mutate(played2017plus = T)
+
+# For time series pitch frequency covariates
+pitch_arsenal_df <- rbind(read_csv(file = "Data/pitch_arsenals_2017.csv"),
+                          read_csv(file = "Data/pitch_arsenals_2018.csv"),
+                          read_csv(file = "Data/pitch_arsenals_2019.csv"),
+                          read_csv(file = "Data/pitch_arsenals_2020.csv"),
+                          read_csv(file = "Data/pitch_arsenals_2021.csv"),
+                          read_csv(file = "Data/pitch_arsenals_2022.csv"))
+
+# Create universal name variable to join with tommyJohn_df 
+pitch_arsenal_df <- pitch_arsenal_df %>% mutate(Player = str_c(first_name,
+                                                               last_name,
+                                                               sep = " ")) %>%
+  group_by(Player) %>%
+  summarise_at(vars(n_ff,
+                    n_si,
+                    n_fc,
+                    n_sl,
+                    n_ch,
+                    n_cu,
+                    n_fs), list(mean))
+
+# For dates and player who had Tommy John surgery
+tommyJohn_df <- read_csv(file = "Data/Tommy John Surgery List (@MLBPlayerAnalys) - TJ List.csv")
+
+# Gets rid of spaces in col names
+names(tommyJohn_df) <- str_replace_all(names(tommyJohn_df),
+                                       c(" " = "_" , "," = "" ))
+
+# Merges the TJ, pitch arsenal, player bio, and IP data. Indicates censored
+timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
+  mutate(TJ_Surgery_Date = mdy(TJ_Surgery_Date)) %>%
+  full_join(avg_ip_df, by = "Player") %>%
+  filter(played2017plus == T) %>%
+  mutate(HadTJ = ifelse(is.na(TJ_Surgery_Date), "No", "Yes")) %>%
+  mutate(Censored = ifelse(HadTJ == "No" & finalGame < "2022-09-01",
+                           "Censored",
+                           "Non-Censored")) %>%
+  mutate(PrimaryPitch = ifelse(n_ff > n_si 
+                               & n_ff > n_fc
+                               & n_ff > n_sl
+                               & n_ff > n_ch
+                               & n_ff > n_cu
+                               & n_ff > n_fs, "4seamFastball",
+                        ifelse(n_si > n_ff 
+                               & n_si > n_fc
+                               & n_si > n_sl
+                               & n_si > n_ch 
+                               & n_si > n_cu
+                               & n_si > n_fs, "Sinker",
+                        ifelse(n_fc > n_ff 
+                               & n_fc > n_si 
+                               & n_fc > n_sl
+                               & n_fc > n_ch
+                               & n_fc > n_cu
+                               & n_fc > n_fs, "Cutter",
+                        ifelse(n_sl > n_ff 
+                               & n_sl > n_fc
+                               & n_sl > n_si
+                               & n_sl > n_ch
+                               & n_sl > n_cu
+                               & n_sl > n_fs, "Slider",
+                        ifelse(n_ch > n_ff
+                               & n_ch > n_fc
+                               & n_ch > n_sl
+                               & n_ch > n_si
+                               & n_ch > n_cu
+                               & n_ch > n_fs, "Change-up",
+                        ifelse(n_cu > n_ff 
+                               & n_cu > n_fc
+                               & n_cu > n_sl
+                               & n_cu > n_ch
+                               & n_cu > n_si
+                               & n_cu > n_fs, "Curveball",
+                        "Splitter"))))))) %>%
+  mutate(numDaysUntilTJ = TJ_Surgery_Date - debut) %>%
+  filter(is.na(numDaysUntilTJ) == T | numDaysUntilTJ > 0) %>%
+  mutate(Fast_Off = ifelse(PrimaryPitch == "4seamFastball"
+                           | PrimaryPitch == "Cutter"
+                           | PrimaryPitch == "Sinker", "Fastball",
+                           "Offspeed")) %>%
+  filter(!is.na(n_ff))
+
+# Final data frame to be used for analysis
+final_time_series_df <- timeseries_df %>%
+  select(1, 55, 50, 51, 67, 68, 70, 77, 78, 79, 80)
+
 
 ```
 
