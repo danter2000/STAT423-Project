@@ -5,7 +5,7 @@ date: '2023-02-01'
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, warning=FALSE, message=FALSE}
 
 library(tidyverse)
 library(Lahman)
@@ -28,7 +28,7 @@ team_df <- Teams
 
 ```
 
-```{r time series mess}
+```{r time series mess, warning=FALSE, message=FALSE}
 
 # Below are mainly for time series analysis
 
@@ -136,7 +136,9 @@ timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
                                & n_cu > n_si
                                & n_cu > n_fs, "Curveball",
                         "Splitter"))))))) %>%
-  mutate(numDaysUntilTJ = TJ_Surgery_Date - debut) %>%
+  mutate(numDaysUntilTJ = ifelse(!is.na(TJ_Surgery_Date),
+                                 TJ_Surgery_Date - debut,
+                                 finalGame - debut)) %>%
   filter(is.na(numDaysUntilTJ) == T | numDaysUntilTJ > 0) %>%
   mutate(Fast_Off = ifelse(PrimaryPitch == "4seamFastball"
                            | PrimaryPitch == "Cutter"
@@ -146,7 +148,7 @@ timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
 
 # Final data frame to be used for analysis
 final_time_series_df <- timeseries_df %>%
-  select(1, 55, 50, 51, 67, 68, 70, 77, 78, 79, 80)
+  select(1, 50, 55, 51, 67, 68, 70, 78, 80, 76, 79)
 
 
 ```
