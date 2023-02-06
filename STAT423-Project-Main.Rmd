@@ -15,16 +15,55 @@ library(lubridate)
 # Please create a variable for all datasets below along with a message of what we need it for
 
 # To find career position player numbers
-batting_df <- Batting
+batting_df <- read_csv(file = "Data/Batting2022updated.csv")
 
 # To find career pitcher numbers
-pitching_df <- Pitching
+pitching_df <- read_csv(file = "Data/PitchingUpdated2022.csv")
 
 # For our response of boolean elected into the hall or not
-hall_df <- HallOfFame
+hall_df <- read_csv(file = "Data/HallOfFameUpdated2022.csv")
 
 # For the WS win column
-team_df <- Teams
+team_df <- read_csv(file = "Data/TeamsUpdated2022.csv")
+
+# For awards won by players
+awards_df <- read_csv(file = "Data/AwardsPlayers.csv")
+
+# For allstar game appearences
+allstar_df <- read_csv(file = "Data/AllstarFull.csv")
+
+# Preleminary PED data frames
+espn_ped_df <- read_csv(file = "Data/suspectedusers_espn.csv")
+wiki_ped_df <- read_csv(file = "Data/suspendedlist_wikipedia.csv")
+
+```
+
+```{r combining hof mess}
+
+# Sums counting stats and removes categoricals
+batting_df_continuous_counts <- batting_df %>%
+  subset(select =-c(2:5)) %>% 
+  group_by(playerID) %>%
+  summarise(across(everything(), sum))
+
+
+# Find the mode of most common team and league per player
+batting_df_categorical_counts <- batting_df %>%
+  subset(select = c(1,4,5)) %>%
+  mutate(across(c(1:3), as.factor)) %>%
+  group_by(playerID) %>%
+  mutate(PrimaryTeam = names(which.max(table(teamID)))) %>%
+  mutate(PrimaryLg = names(which.max(table(lgID))))
+
+# Extract response y/n variable
+hall_df_tidy <- hall_df %>%
+  group_by(playerID) %>%
+  subset(select = c(1, 3, 7, 8))
+
+PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
+                                   batting_df_categorical_counts,
+                                   by = "playerID") %>%
+                        inner_join(hall_df, by = "playerID")
 
 ```
 
