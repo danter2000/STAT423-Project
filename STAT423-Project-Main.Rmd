@@ -88,7 +88,7 @@ hof_players <- hall_df %>%
   summarize(wein = "Y" %in% inducted * 1)
 
 # Unique award winners -- columns represent different rewards
-awards_wider <- awards %>% 
+awards_wider <- awards_df %>% 
   group_by(playerID, awardID) %>% 
   summarize(n = n()) %>%
   pivot_wider(id_cols = playerID, names_from = awardID, values_from = n) %>% 
