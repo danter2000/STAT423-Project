@@ -137,6 +137,9 @@ pitch_arsenal_df <- rbind(read_csv(file = "Data/pitch_arsenals_2017.csv"),
                           read_csv(file = "Data/pitch_arsenals_2021.csv"),
                           read_csv(file = "Data/pitch_arsenals_2022.csv"))
 
+
+# We are making the assumption that players retain primary pitch type prior to the 2017 StatCast season.
+
 # Create universal name variable to join with tommyJohn_df 
 pitch_arsenal_df <- pitch_arsenal_df %>% mutate(Player = str_c(first_name,
                                                                last_name,
