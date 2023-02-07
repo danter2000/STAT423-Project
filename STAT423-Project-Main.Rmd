@@ -210,7 +210,8 @@ timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
   mutate(Fast_Off = ifelse(PrimaryPitch == "4seamFastball"
                            | PrimaryPitch == "Cutter"
                            | PrimaryPitch == "Sinker", "Fastball",
-                           "Offspeed")) %>%
+                           ifelse(PrimaryPitch == "Splitter"
+                           | PrimaryPitch == "Change-up", "Offspeed", "Breakingball"))) %>%
   filter(!is.na(n_ff))
 
 # Final data frame to be used for analysis
