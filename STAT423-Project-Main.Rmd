@@ -103,7 +103,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                         inner_join(awards_wider, by = "playerID") %>%
                         inner_join(hof_players, by = "playerID") %>%
                         subset(select = c(1:26, 28:30, 34:37, 40:42, 44, 45, 47, 49, 50)) %>%
-                        mutate(across(c(19, 20, 29, 41), as.factor))
+                        mutate(across(c(19, 20, 23, 29, 41), as.factor))
 
 # Main Pitcher data frame to preform analysis on
 PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
@@ -247,6 +247,29 @@ final_time_series_df <- timeseries_df %>%
 
 # firstbump?
 
-pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27)])
+PositionPlayerHOF_df %>%
+  select(R, H, HR, RBI, SB) %>%
+  summarise_each(funs(min = min, 
+                      q25 = quantile(., 0.25), 
+                      median = median, 
+                      q75 = quantile(., 0.75), 
+                      max = max,
+                      mean = mean, 
+                      sd = sd))
+
+# Boxplot comparing homerun totals in non-hall of famers to hall of famers
+ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR)) + 
+  geom_boxplot()
+
+# Boxplot comparing hit totals in non-hall of famers to hall of famers
+ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = H)) + 
+  geom_boxplot()
+
+# Boxplots stratified by number of mvp's, grouped by hof, on number of hr totals 
+ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR, color = most_valuable_player)) + 
+  geom_boxplot()
+
+# Pairs plots
+pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
 
 ```
