@@ -107,7 +107,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   inner_join(hof_players, by = "playerID") %>%
   subset(select = -c(35, 37, 45, 55, 57)) %>%
   filter(G > 200) %>%
-  inner_join(player_df[, c(1, 25)], by = "playerID")
+  inner_join(player_df[, c(1, 25)], by = "playerID") %>%
+  mutate(IP = IPouts / 3)
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
