@@ -39,7 +39,7 @@ wiki_ped_df <- read_csv(file = "Data/suspendedlist_wikipedia.csv")
 
 ```
 
-```{r combining hof mess}
+```{r combining hof mess, warning=FALSE, message=FALSE}
 
 # Sums counting stats and removes categoricals
 batting_df_continuous_counts <- batting_df %>%
@@ -96,6 +96,15 @@ awards_wider <- awards_df %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
   mutate(across(1:29, ~ replace_na(.x, 0)))
 
+# Main Pitcher data frame to preform analysis on
+PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
+                                   pitching_df_categorical_counts,
+                                   by = "playerID") %>%
+  inner_join(awards_wider, by = "playerID") %>%
+  inner_join(hof_players, by = "playerID") %>%
+  subset(select = -c(35, 37, 45, 55, 57)) %>%
+  filter(G > 200)
+
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                                    batting_df_categorical_counts,
@@ -109,15 +118,6 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          OBP = round((H + BB + HBP) / (AB + ifelse(!is.na(SH), SH, 0) + ifelse(!is.na(SF), SF, 0) + BB + HBP), 3),
          `1B` = H - (`2B` + `3B` + HR),
          SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3))
-
-# Main Pitcher data frame to preform analysis on
-PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
-                                   pitching_df_categorical_counts,
-                                   by = "playerID") %>%
-  inner_join(awards_wider, by = "playerID") %>%
-  inner_join(hof_players, by = "playerID") %>%
-  subset(select = -c(35, 37, 45, 55, 57)) %>%
-  filter(G > 100)
 
 ```
 
