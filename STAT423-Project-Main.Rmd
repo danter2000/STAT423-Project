@@ -191,7 +191,7 @@ timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
   mutate(TJ_Surgery_Date = mdy(TJ_Surgery_Date)) %>%
   full_join(avg_ip_df, by = "Player") %>%
   filter(played2017plus == T) %>%
-  mutate(HadTJ = ifelse(is.na(TJ_Surgery_Date), "No", "Yes")) %>%
+  mutate(HadTJ = ifelse(is.na(TJ_Surgery_Date), 0, 1)) %>%
   mutate(Censored = ifelse(HadTJ == "No" & finalGame < "2022-09-01",
                            "Censored",
                            "Non-Censored")) %>%
@@ -236,7 +236,7 @@ timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
                                  TJ_Surgery_Date - debut,
                                  finalGame - debut)) %>%
   filter(is.na(numDaysUntilTJ) == T | numDaysUntilTJ > 0) %>%
-  mutate(Fast_Off = ifelse(PrimaryPitch == "4seamFastball"
+  mutate(Fast_Off_Break = ifelse(PrimaryPitch == "4seamFastball"
                            | PrimaryPitch == "Cutter"
                            | PrimaryPitch == "Sinker", "Fastball",
                            ifelse(PrimaryPitch == "Splitter"
@@ -282,3 +282,42 @@ rbi_by_HOF <- ggplot(data = PositionPlayerHOF_df,
 pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
 
 ```
+
+```{r Cox Proportional Hazards Analysis}
+
+library(survival)
+library(timereg)
+library(foreign)
+library(msm)
+library(KMsurv)
+
+# Preliminary analysis of distribution of primary pitches
+with(final_time_series_df, table(Fast_Off_Break))
+
+# Preliminary analysis of distribution of primary pitches
+with(final_time_series_df, table(PrimaryPitch))
+
+# Of pitchers who threw breaking balls primarily, number who had TJ vs not
+length(final_time_series_df$numDaysUntilTJ[final_time_series_df$Fast_Off_Break == "Breakingball" & final_time_series_df$HadTJ == "Yes"])
+length(final_time_series_df$numDaysUntilTJ[final_time_series_df$Fast_Off_Break == "Breakingball" & final_time_series_df$HadTJ == "No"])
+
+# Of pitchers who threw Fastballs primarily, number who had TJ vs not
+length(final_time_series_df$numDaysUntilTJ[final_time_series_df$Fast_Off_Break == "Fastball" & final_time_series_df$HadTJ == "Yes"])
+length(final_time_series_df$numDaysUntilTJ[final_time_series_df$Fast_Off_Break == "Fastball" & final_time_series_df$HadTJ == "No"])
+
+# Of pitchers who threw Offspeed pitches primarily, number who had TJ vs not
+length(final_time_series_df$numDaysUntilTJ[final_time_series_df$Fast_Off_Break == "Offspeed" & final_time_series_df$HadTJ == "Yes"])
+length(final_time_series_df$numDaysUntilTJ[final_time_series_df$Fast_Off_Break == "Offspeed" & final_time_series_df$HadTJ == "No"])
+
+
+KM_3pitch <- survfit(Surv(numDaysUntilTJ, HadTJ) ~ Fast_Off_Break,
+                     data = final_time_series_df)
+print(KM_3pitch)
+
+km_3pitch_plot <- plot(KM_3pitch, col = c("red", "blue", "green"),
+                       lwd = 2, xlab = "Time (days)",
+                       main = "", ylab = "Survival Probability")
+
+```
+
+
