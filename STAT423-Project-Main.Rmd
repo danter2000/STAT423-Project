@@ -11,6 +11,7 @@ library(tidyverse)
 library(Lahman)
 library(readr)
 library(lubridate)
+library(GGally)
 
 # Please create a variable for all datasets below along with a message of what we need it for
 
@@ -245,6 +246,6 @@ final_time_series_df <- timeseries_df %>%
 
 # firstbump?
 
-ggpairs(PositionPlayerHOF_df[,-c(1, 19)], aes(color = wein)) + theme_bw()
+pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27)])
 
 ```
