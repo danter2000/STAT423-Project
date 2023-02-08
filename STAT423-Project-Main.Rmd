@@ -96,6 +96,9 @@ awards_wider <- awards_df %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
   mutate(across(1:29, ~ replace_na(.x, 0)))
 
+# For player name, debute, and playerID conversion
+player_df <- read_csv(file = "Data/People2022.csv")
+
 # Main Pitcher data frame to preform analysis on
 PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                                    pitching_df_categorical_counts,
@@ -103,7 +106,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
   subset(select = -c(35, 37, 45, 55, 57)) %>%
-  filter(G > 200)
+  filter(G > 200) %>%
+  inner_join(player_df[, c(1, 25)], by = "playerID")
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
@@ -117,7 +121,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   mutate(AVG = round(H / AB, 3), 
          OBP = round((H + BB + HBP) / (AB + ifelse(!is.na(SH), SH, 0) + ifelse(!is.na(SF), SF, 0) + BB + HBP), 3),
          `1B` = H - (`2B` + `3B` + HR),
-         SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3))
+         SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
+  inner_join(player_df[, c(1, 25)], by = "playerID")
 
 ```
 
@@ -274,7 +279,7 @@ hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
   geom_boxplot()
 
 # Boxplots stratified by number of mvp's, grouped by hof, on number of hr totals 
-rbi_by_HOF <- ggplot(data = PositionPlayerHOF_df,
+ ggplot(data = PositionPlayerHOF_df,
                      mapping = aes(x = wein, y = HR, color = most_valuable_player)) + 
   geom_boxplot()
 
@@ -317,6 +322,16 @@ print(KM_3pitch)
 km_3pitch_plot <- plot(KM_3pitch, col = c("red", "blue", "green"),
                        lwd = 2, xlab = "Time (days)",
                        main = "", ylab = "Survival Probability")
+
+```
+
+```{r djd}
+
+djdjd <- final_time_series_df %>% filter(HadTJ == 1)
+
+plot(djdjd$MedianIP,djdjd$weight)
+
+cor(djdjd$numDaysUntilTJ,djdjd$weight)
 
 ```
 
