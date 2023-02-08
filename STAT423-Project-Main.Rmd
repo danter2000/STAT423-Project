@@ -92,10 +92,11 @@ hof_players <- hall_df %>%
 
 # Unique award winners -- columns represent different rewards
 awards_wider <- awards_df %>% 
-  group_by(playerID, awardID) %>% 
+  mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
+  group_by(playerID, award_id_clean) %>% 
   summarize(n = n()) %>%
-  pivot_wider(id_cols = playerID, names_from = awardID, values_from = n) %>% 
-  mutate(across(1:30, ~ replace_na(.x, 0)))
+  pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
+  mutate(across(1:29, ~ replace_na(.x, 0)))
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
