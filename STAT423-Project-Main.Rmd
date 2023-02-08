@@ -264,15 +264,18 @@ tapply(PositionPlayerHOF_df$H, PositionPlayerHOF_df$wein, summary)
 tapply(PositionPlayerHOF_df$RBI, PositionPlayerHOF_df$wein, summary)
 
 # Boxplot comparing homerun totals in non-hall of famers to hall of famers
-ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR)) + 
+hr_by_HOF <- ggplot(data = PositionPlayerHOF_df,
+                    mapping = aes(x = wein, y = HR)) +
   geom_boxplot()
 
 # Boxplot comparing hit totals in non-hall of famers to hall of famers
-ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = H)) + 
+hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
+                      mapping = aes(x = wein, y = H)) + 
   geom_boxplot()
 
 # Boxplots stratified by number of mvp's, grouped by hof, on number of hr totals 
-ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR, color = most_valuable_player)) + 
+rbi_by_HOF <- ggplot(data = PositionPlayerHOF_df,
+                     mapping = aes(x = wein, y = HR, color = most_valuable_player)) + 
   geom_boxplot()
 
 # Pairs plots
