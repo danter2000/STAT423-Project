@@ -325,14 +325,3 @@ km_3pitch_plot <- plot(KM_3pitch, col = c("red", "blue", "green"),
 
 ```
 
-```{r djd}
-
-djdjd <- final_time_series_df %>% filter(HadTJ == 1)
-
-plot(djdjd$MedianIP,djdjd$weight)
-
-cor(djdjd$numDaysUntilTJ,djdjd$weight)
-
-```
-
-
