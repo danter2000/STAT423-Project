@@ -108,7 +108,9 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   subset(select = -c(35, 37, 45, 55, 57)) %>%
   filter(G > 200) %>%
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
-  mutate(IP = IPouts / 3)
+  mutate(IP = IPouts / 3) %>%
+  relocate(Player, .after = playerID) %>%
+  relocate(IP, .after = IPouts)
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
@@ -123,8 +125,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          OBP = round((H + BB + HBP) / (AB + ifelse(!is.na(SH), SH, 0) + ifelse(!is.na(SF), SF, 0) + BB + HBP), 3),
          `1B` = H - (`2B` + `3B` + HR),
          SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
-  inner_join(player_df[, c(1, 25)], by = "playerID")
-
+  inner_join(player_df[, c(1, 25)], by = "playerID") %>%
+  relocate(Player, .after = playerID)
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
