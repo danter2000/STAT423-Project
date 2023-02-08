@@ -11,6 +11,7 @@ library(tidyverse)
 library(Lahman)
 library(readr)
 library(lubridate)
+library(GGally)
 
 # Please create a variable for all datasets below along with a message of what we need it for
 
@@ -253,6 +254,29 @@ final_time_series_df <- timeseries_df %>%
 
 # firstbump?
 
-ggpairs(PositionPlayerHOF_df[,-c(1, 19)], aes(color = wein)) + theme_bw()
+PositionPlayerHOF_df %>%
+  select(R, H, HR, RBI, SB) %>%
+  summarise_each(funs(min = min, 
+                      q25 = quantile(., 0.25), 
+                      median = median, 
+                      q75 = quantile(., 0.75), 
+                      max = max,
+                      mean = mean, 
+                      sd = sd))
+
+# Boxplot comparing homerun totals in non-hall of famers to hall of famers
+ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR)) + 
+  geom_boxplot()
+
+# Boxplot comparing hit totals in non-hall of famers to hall of famers
+ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = H)) + 
+  geom_boxplot()
+
+# Boxplots stratified by number of mvp's, grouped by hof, on number of hr totals 
+ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR, color = most_valuable_player)) + 
+  geom_boxplot()
+
+# Pairs plots
+pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
 
 ```
