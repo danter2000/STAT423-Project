@@ -254,15 +254,14 @@ final_time_series_df <- timeseries_df %>%
 
 # firstbump?
 
-PositionPlayerHOF_df %>%
-  select(R, H, HR, RBI, SB) %>%
-  summarise_each(funs(min = min, 
-                      q25 = quantile(., 0.25), 
-                      median = median, 
-                      q75 = quantile(., 0.75), 
-                      max = max,
-                      mean = mean, 
-                      sd = sd))
+# Summary Stats, HR by hall of fame status
+tapply(PositionPlayerHOF_df$HR, PositionPlayerHOF_df$wein, summary)
+
+# Summary Stats, H by hall of fame status
+tapply(PositionPlayerHOF_df$H, PositionPlayerHOF_df$wein, summary)
+
+# Summary Stats, RBI by hall of fame status
+tapply(PositionPlayerHOF_df$RBI, PositionPlayerHOF_df$wein, summary)
 
 # Boxplot comparing homerun totals in non-hall of famers to hall of famers
 ggplot(data = PositionPlayerHOF_df, mapping = aes(x = wein, y = HR)) + 
