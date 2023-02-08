@@ -39,7 +39,7 @@ wiki_ped_df <- read_csv(file = "Data/suspendedlist_wikipedia.csv")
 
 ```
 
-```{r combining hof mess}
+```{r combining hof mess, warning=FALSE, message=FALSE}
 
 # Sums counting stats and removes categoricals
 batting_df_continuous_counts <- batting_df %>%
@@ -103,7 +103,7 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
   subset(select = -c(35, 37, 45, 55, 57)) %>%
-  filter(G > 100)
+  filter(G > 200)
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
