@@ -99,6 +99,11 @@ awards_wider <- awards_df %>%
 # For player name, debute, and playerID conversion
 player_df <- read_csv(file = "Data/People2022.csv")
 
+# Creates Player column to ease merging with other df's
+player_df <- player_df %>% mutate(Player = str_c(nameFirst,
+                                                 nameLast,
+                                                 sep = " "))
+
 # Main Pitcher data frame to preform analysis on
 PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                                    pitching_df_categorical_counts,
