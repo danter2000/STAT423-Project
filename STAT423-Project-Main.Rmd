@@ -325,6 +325,23 @@ print(KM_3pitch)
 km_3pitch_plot <- plot(KM_3pitch, col = c("red", "blue", "green"),
                        lwd = 2, xlab = "Time (days)",
                        main = "", ylab = "Survival Probability")
+legend("topright", c("Fastball", "Offspeed", "BreakingBall"), col=c("blue", "red", "green"),
+ lwd=c(2, 2), cex=0.6,bty="n")
+
+
+final_time_series_filtered_df <- final_time_series_df %>%
+  filter(HadTJ == 1)
+
+box_plot <- ggplot(data = final_time_series_filtered_df, 
+                   mapping = aes(x = numDaysUntilTJ,
+                                 color = PrimaryPitch)) +
+  geom_boxplot()
+
+point_plot <- ggplot(data = final_time_series_filtered_df, 
+                     mapping = aes(x = numDaysUntilTJ,
+                                   y = MedianIP,
+                                   color = Fast_Off_Break)) +
+  geom_point()
 
 ```
 
