@@ -96,6 +96,10 @@ awards_wider <- awards_df %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
   mutate(across(1:29, ~ replace_na(.x, 0)))
 
+espn_ped_df <- espn_ped_df %>%
+  subset(select = c(2, 3)) %>% 
+  rename(Player = name)
+
 # For player name, debute, and playerID conversion
 player_df <- read_csv(file = "Data/People2022.csv")
 
@@ -115,7 +119,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
   mutate(IP = IPouts / 3) %>%
   relocate(Player, .after = playerID) %>%
-  relocate(IP, .after = IPouts)
+  relocate(IP, .after = IPouts) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0))
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
@@ -131,7 +136,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          `1B` = H - (`2B` + `3B` + HR),
          SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
-  relocate(Player, .after = playerID)
+  relocate(Player, .after = playerID) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0))
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
