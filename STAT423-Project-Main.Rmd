@@ -53,7 +53,7 @@ batting_df_categorical_counts <- batting_df %>%
   mutate(across(c(1:3), as.factor)) %>%
   group_by(playerID) %>%
   mutate(PrimaryTeam = names(which.max(table(teamID)))) %>%
-  mutate(PrimaryLg = names(which.max(table(lgID)))) %>%
+  mutate(PrimaryLg = as.factor(names(which.max(table(lgID))))) %>%
   subset(select = c(1, 4, 5)) %>%
   distinct()
 
@@ -78,7 +78,7 @@ pitching_df_categorical_counts <- pitching_df %>%
   mutate(across(c(1:3), as.factor)) %>%
   group_by(playerID) %>%
   mutate(PrimaryTeam = names(which.max(table(teamID)))) %>%
-  mutate(PrimaryLg = names(which.max(table(lgID)))) %>%
+  mutate(PrimaryLg = as.factor(names(which.max(table(lgID))))) %>%
   subset(select = c(1, 4, 5)) %>%
   distinct()
 
@@ -96,6 +96,18 @@ awards_wider <- awards_df %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
   mutate(across(1:29, ~ replace_na(.x, 0)))
 
+espn_ped_df <- espn_ped_df %>%
+  subset(select = c(2, 3)) %>% 
+  rename(Player = name)
+
+# For player name, debute, and playerID conversion
+player_df <- read_csv(file = "Data/People2022.csv")
+
+# Creates Player column to ease merging with other df's
+player_df <- player_df %>% mutate(Player = str_c(nameFirst,
+                                                 nameLast,
+                                                 sep = " "))
+
 # Main Pitcher data frame to preform analysis on
 PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                                    pitching_df_categorical_counts,
@@ -103,7 +115,12 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
   subset(select = -c(35, 37, 45, 55, 57)) %>%
-  filter(G > 200)
+  filter(G > 200) %>%
+  inner_join(player_df[, c(1, 25)], by = "playerID") %>%
+  mutate(IP = IPouts / 3) %>%
+  relocate(Player, .after = playerID) %>%
+  relocate(IP, .after = IPouts) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0))
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
@@ -117,8 +134,10 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   mutate(AVG = round(H / AB, 3), 
          OBP = round((H + BB + HBP) / (AB + ifelse(!is.na(SH), SH, 0) + ifelse(!is.na(SF), SF, 0) + BB + HBP), 3),
          `1B` = H - (`2B` + `3B` + HR),
-         SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3))
-
+         SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
+  inner_join(player_df[, c(1, 25)], by = "playerID") %>%
+  relocate(Player, .after = playerID) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0))
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
@@ -241,7 +260,7 @@ timeseries_df <- full_join(pitch_arsenal_df, tommyJohn_df, by = "Player") %>%
                            | PrimaryPitch == "Sinker", "Fastball",
                            ifelse(PrimaryPitch == "Splitter"
                            | PrimaryPitch == "Change-up", "Offspeed", "Breakingball"))) %>%
-  filter(!is.na(n_ff))
+  filter(!is.na(n_ff)) 
 
 # Final data frame to be used for analysis
 final_time_series_df <- timeseries_df %>%
@@ -274,7 +293,7 @@ hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
   geom_boxplot()
 
 # Boxplots stratified by number of mvp's, grouped by hof, on number of hr totals 
-rbi_by_HOF <- ggplot(data = PositionPlayerHOF_df,
+ ggplot(data = PositionPlayerHOF_df,
                      mapping = aes(x = wein, y = HR, color = most_valuable_player)) + 
   geom_boxplot()
 
@@ -329,6 +348,7 @@ print(KM_3pitch)
 km_3pitch_plot <- plot(KM_3pitch, col = c("red", "blue", "green"),
                        lwd = 2, xlab = "Time (days)",
                        main = "", ylab = "Survival Probability")
+<<<<<<< HEAD
 ```
 
 
@@ -357,7 +377,28 @@ PositionPlayerHOF_df %>%
 ```
 
 ```{r}
+legend("topright", c("Fastball", "Offspeed", "BreakingBall"), col=c("blue", "red", "green"),
+ lwd=c(2, 2), cex=0.6,bty="n")
+
+
+final_time_series_filtered_df <- final_time_series_df %>%
+  filter(HadTJ == 1)
+
+box_plot <- ggplot(data = final_time_series_filtered_df, 
+                   mapping = aes(x = numDaysUntilTJ,
+                                 color = PrimaryPitch)) +
+  geom_boxplot()
+
+point_plot <- ggplot(data = final_time_series_filtered_df, 
+                     mapping = aes(x = numDaysUntilTJ,
+                                   y = MedianIP,
+                                   color = Fast_Off_Break)) +
+  geom_point()
+```
+
+```{r}
 player_df %>% 
   filter(finalGame >= Sys.Date() - (365 * 5) & playerID %in% c((pitching_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique()), (batting_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique())) & !(playerID %in% (hall_df %>% pull(playerID) %>% unique())))
 ```
+
 
