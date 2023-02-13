@@ -301,6 +301,18 @@ hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
 # Pairs plots
 pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
 
+get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IPouts", "ERA", "WHIP")])
+
+get_corr_matrix(PositionPlayerHOF_df[c("G", "AB", "H", "2B", "3B", "HR", "RBI", "SB", "BB", "SO", "IBB", "HBP", "SH", "SF", "GIDP", "AVG", "OBP", "SLG")])
+
+get_corr_matrix <- function(data) {
+  data[is.na(data)] <- 0
+  
+  res <- cor(data.frame(lapply(data, as.numeric)))
+
+  corrplot(res, type = "upper",
+         tl.col = "black", tl.srt = 90)
+}
 ```
 
 ```{r Cox Proportional Hazards Analysis}
@@ -337,6 +349,34 @@ print(KM_3pitch)
 km_3pitch_plot <- plot(KM_3pitch, col = c("red", "blue", "green"),
                        lwd = 2, xlab = "Time (days)",
                        main = "", ylab = "Survival Probability")
+```
+
+
+```{r}
+library(RColorBrewer)
+
+PitcherHOF_df %>% 
+  mutate(wein = ifelse(wein == 1, "HoF", "No HoF")) %>% 
+  ggplot() +
+  geom_density_ridges(aes(x = SO, y = wein, fill = wein)) +
+  scale_fill_manual(values = RColorBrewer::brewer.pal(n=2,"Paired")) +
+  theme_ridges() +
+  theme(legend.title = element_blank()
+        ,legend.position = c(0.83, 0.8)) +
+  labs(x = "Strikeouts", y = "", title = "Distribution of Strikeouts (pitchers)")
+
+PositionPlayerHOF_df %>% 
+  mutate(wein = ifelse(wein == 1, "HoF", "No HoF")) %>% 
+  ggplot() +
+  geom_density_ridges(aes(x = HR, y = wein, fill = wein)) +
+  scale_fill_manual(values = RColorBrewer::brewer.pal(n=2,"Paired")) +
+  theme_ridges() +
+  theme(legend.title = element_blank()
+        ,legend.position = c(0.83, 0.8)) +
+  labs(x = "Home Runs", y = "", title = "Distribution of Homeruns (positional players)")
+```
+
+```{r}
 legend("topright", c("Fastball", "Offspeed", "BreakingBall"), col=c("blue", "red", "green"),
  lwd=c(2, 2), cex=0.6,bty="n")
 
@@ -354,6 +394,58 @@ point_plot <- ggplot(data = final_time_series_filtered_df,
                                    y = MedianIP,
                                    color = Fast_Off_Break)) +
   geom_point()
-
 ```
+
+```{r}
+library(rvest)
+
+# Players to model on -- if they retired in the last 5 years
+recent_players <- player_df %>% 
+  filter(finalGame >= Sys.Date() - (365 * 5) & playerID %in% c((pitching_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique()), (batting_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique())) & !(playerID %in% (hall_df %>% pull(playerID) %>% unique())))
+
+# Check if they are currently active or not based on if they are on a team
+# Around 28% of the players in this list are still active -- based on baseball reference
+
+# recent_players_info <- data.frame(matrix(ncol = 4))
+# 
+# colnames(recent_players_info) <- c("player", "active", "current_team", "info")
+# 
+# url <- "https://www.baseball-reference.com/players/%s.shtml"
+# 
+# for (player in recent_players$playerID) {
+#   result = tryCatch({
+#     str_player <- paste0(str_sub(player, 1, 1), "/", player)
+#     status <- read_html(sprintf(url, str_player)) %>% 
+#       html_node("#meta") %>% 
+#       html_node("div:nth-child(2)") %>% 
+#       html_nodes("p:nth-child(5)")
+#   }, warning = function(warning_condition) {
+#       print('warning')
+#   }, error = function(error_condition) {
+#       recent_players_info <- rbind(recent_players_info, c(player, F, NA, "Player not found."))
+#   }, finally={
+#       status_text <- str_replace_all(html_text(status), "\\n", "")
+#   
+#       if (str_detect(html_text(status), "Born")) {
+#         recent_players_info <- rbind(recent_players_info, c(player, F, NA, status_text))
+#       } else {
+#         recent_players_info <- rbind(recent_players_info, c(player, T, html_text(html_node(status, "a")), status_text))
+#       }
+#   })
+#   
+#   
+#   Sys.sleep(5)
+# }
+
+recent_players <- recent_players %>%
+  left_join(recent_players_info , by = c("playerID" = "player")) %>%
+  mutate(active = active == "TRUE", finalgame_before_2022 = finalGame <= "2022-04-07")
+
+recent_players %>%
+  select(active, finalgame_before_2022) %>%
+  summarize_all(mean)
+
+write.csv(recent_players, "recent_players.csv")
+```
+
 
