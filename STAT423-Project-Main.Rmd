@@ -128,7 +128,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                                    by = "playerID") %>%
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
-  subset(select = c(1:26, 28:30, 34:37, 40:42, 44, 45, 47, 49, 50)) %>%
+  subset(select = c(1:26, 28:31, 34:37, 40:42, 44, 45, 47, 49, 50)) %>%
   mutate(across(c(19, 20, 29, 41), as.factor)) %>%
   filter(!(playerID %in% PitcherHOF_df$playerID)) %>%
   mutate(AVG = round(H / AB, 3), 
@@ -137,8 +137,12 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
   relocate(Player, .after = playerID) %>%
+<<<<<<< HEAD
   mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
   mutate(Steroids = as.factor(Steroids))
+=======
+  mutate(Steroids = as.factor(ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)))
+>>>>>>> 2e2915cf86e73578e4e813454fb8cbe412d1aa4c
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
