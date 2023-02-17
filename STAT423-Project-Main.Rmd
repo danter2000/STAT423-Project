@@ -137,12 +137,9 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
   relocate(Player, .after = playerID) %>%
-<<<<<<< HEAD
   mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
   mutate(Steroids = as.factor(Steroids))
-=======
-  mutate(Steroids = as.factor(ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)))
->>>>>>> 2e2915cf86e73578e4e813454fb8cbe412d1aa4c
+
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
