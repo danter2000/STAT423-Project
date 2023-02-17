@@ -89,12 +89,15 @@ hof_players <- hall_df %>%
   summarize(wein = "Y" %in% inducted * 1)
 
 # Unique award winners -- columns represent different rewards
-awards_wider <- awards_df %>% 
+awards_new <- awards_df %>%
+  filter(!(yearID < 1951 & awardID == "TSN All-Star"))
+awards_new$awardID <- if_else(awards_new$awardID == "TSN All-Star" | awards_new$awardID == "Baseball Magazine All-Star", "All-Star", awards_new$awardID)
+awards_wider <- awards_new %>% 
   mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
   group_by(playerID, award_id_clean) %>% 
   summarize(n = n()) %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
-  mutate(across(1:29, ~ replace_na(.x, 0)))
+  mutate(across(1:28, ~ replace_na(.x, 0)))
 
 espn_ped_df <- espn_ped_df %>%
   subset(select = c(2, 3)) %>% 
@@ -128,7 +131,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                                    by = "playerID") %>%
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
-  subset(select = c(1:26, 28:31, 34:37, 40:42, 44, 45, 47, 49, 50)) %>%
+  subset(select = c(1:26, 28:31, 34:37, 40:42, 44, 45, 47, 49)) %>%
   mutate(across(c(19, 20, 29, 41), as.factor)) %>%
   filter(!(playerID %in% PitcherHOF_df$playerID)) %>%
   mutate(AVG = round(H / AB, 3), 
