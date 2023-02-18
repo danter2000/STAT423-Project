@@ -461,8 +461,12 @@ write.csv(recent_players, "recent_players.csv")
 
 ```{r try models}
 
-lm_pitcher_model1 <- glm(wein ~ IP + ERA + WHIP + BB + all_star + most_valuable_player + pitching_triple_crown + cy_young_award + steroids + nice_guy_awards,
-                         family=binomial(link="logit"),
+lm_pitcher_model1 <- glm(wein ~ IP + ERA + WHIP + BB + all_star +
+                                most_valuable_player + pitching_triple_crown + 
+                                cy_young_award + Steroids + nice_guy_awards,
+                         family=binomial(link = "logit"),
                          data = PitcherHOF_df)
+
+summary(lm_pitcher_model1)
 
 ```
