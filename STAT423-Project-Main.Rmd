@@ -117,7 +117,6 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                                    by = "playerID") %>%
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
-  subset(select = -c(35, 37, 45, 55, 57)) %>%
   filter(G > 200) %>%
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
   mutate(IP = IPouts / 3) %>%
@@ -462,6 +461,8 @@ write.csv(recent_players, "recent_players.csv")
 
 ```{r try models}
 
-
+lm_pitcher_model1 <- glm(wein ~ IP + ERA + WHIP + BB + all_star + most_valuable_player + pitching_triple_crown + cy_young_award + steroids + nice_guy_awards,
+                         family=binomial(link="logit"),
+                         data = PitcherHOF_df)
 
 ```
