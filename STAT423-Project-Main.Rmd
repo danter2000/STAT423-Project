@@ -37,6 +37,12 @@ allstar_df <- read_csv(file = "Data/AllstarFull.csv")
 espn_ped_df <- read_csv(file = "Data/suspectedusers_espn.csv")
 wiki_ped_df <- read_csv(file = "Data/suspendedlist_wikipedia.csv")
 
+war_df_pos <- read_csv(file = "Data/posplayerWAR.csv")
+colnames(war_df_pos)[1] ="playerID"
+
+war_df_pitcher <- read_csv(file = "Data/pitcherWAR.csv")
+colnames(war_df_pitcher)[1] ="playerID"
+
 ```
 
 ```{r combining hof mess, warning=FALSE, message=FALSE}
@@ -126,7 +132,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   mutate(nice_guy_awards = lou_gehrig_memorial_award +
                            hutch_award +
                            roberto_clemente_award + 
-                           branch_rickey_award)
+                           branch_rickey_award) %>%
+  left_join(war_df_pitcher, by = "playerID")
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
@@ -148,7 +155,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          nice_guy_awards = lou_gehrig_memorial_award +
                            hutch_award +
                            roberto_clemente_award + 
-                           branch_rickey_award)
+                           branch_rickey_award) %>%
+  left_join(war_df_pitcher, by = "playerID")
 
 ```
 
@@ -464,7 +472,7 @@ write.csv(recent_players, "recent_players.csv")
 lm_pitcher_model1 <- glm(wein ~ IP + ERA + WHIP + BB + all_star +
                                 most_valuable_player + pitching_triple_crown + 
                                 cy_young_award + Steroids + nice_guy_awards,
-                         family=binomial(link = "logit"),
+                         family = binomial(link = "logit"),
                          data = PitcherHOF_df)
 
 summary(lm_pitcher_model1)
