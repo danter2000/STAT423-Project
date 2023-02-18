@@ -123,7 +123,11 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   mutate(IP = IPouts / 3) %>%
   relocate(Player, .after = playerID) %>%
   relocate(IP, .after = IPouts) %>%
-  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0))
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
+  mutate(nice_guy_awards = lou_gehrig_memorial_award +
+                           hutch_award +
+                           roberto_clemente_award + 
+                           branch_rickey_award)
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
