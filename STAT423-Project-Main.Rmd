@@ -135,6 +135,19 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                            branch_rickey_award) %>%
   left_join(war_df_pitcher, by = "playerID")
 
+# Primary position by player
+primary_position <- Appearances %>% 
+  group_by(playerID) %>%
+  summarize(P = sum(G_p), C = sum(G_c), `1B` = sum(G_1b), `2B` = sum(G_2b),
+            `3B` = sum(G_3b), SS = sum(G_ss), RF = sum(G_rf), CF = sum(G_cf),
+            LF = sum(G_lf), DH = sum(G_dh)) %>%
+  pivot_longer(cols = c(P, C, `1B`, `2B`, `3B`, SS, RF, CF, LF, DH),
+               names_to = "Pos") %>%
+  group_by(playerID) %>%
+  summarize(Pos = Pos, Value = value, Max = max(value)) %>%
+  filter(Value == Max) %>%
+  select(playerID, Pos)
+
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                                    batting_df_categorical_counts,
@@ -156,7 +169,12 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                            hutch_award +
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
+<<<<<<< HEAD
   left_join(war_df_pos, by = "playerID")
+=======
+  left_join(war_df_pos, by = "playerID") %>%
+  left_join(primary_position, by = "playerID")
+>>>>>>> 20b65bcaa8e32ae1801d8eb2f95ced67e9c015bb
 
 ```
 
@@ -485,4 +503,5 @@ lm_pos_model1 <- glm(as.factor(wein) ~ H + HR + avg + obp + slg + all_star +
 
 summary(lm_pitcher_model1)
 
+summary(glm(wein ~ all_star + (HR:Steroids + AVG:Steroids)*WAR + Pos, data = PositionPlayerHOF_df, family = "binomial"))
 ```
