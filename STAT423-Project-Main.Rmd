@@ -156,7 +156,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                            hutch_award +
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
-  left_join(war_df_pitcher, by = "playerID")
+  left_join(war_df_pos, by = "playerID")
 
 ```
 
@@ -469,9 +469,17 @@ write.csv(recent_players, "recent_players.csv")
 
 ```{r try models}
 
-lm_pitcher_model1 <- glm(wein ~ IP + ERA + WHIP + BB + all_star +
-                                most_valuable_player + pitching_triple_crown + 
-                                cy_young_award + Steroids + nice_guy_awards,
+lm_pitcher_model1 <- glm(as.factor(wein) ~ IP + ERA + WHIP + BB + all_star +
+                                WAR + 
+                                cy_young_award + Steroids,
+                         family = binomial(link = "logit"),
+                         data = PitcherHOF_df)
+
+summary(lm_pitcher_model1)
+
+lm_pos_model1 <- glm(as.factor(wein) ~ H + HR + avg + obp + slg + all_star +
+                                WAR + 
+                                cy_young_award + Steroids,
                          family = binomial(link = "logit"),
                          data = PitcherHOF_df)
 
