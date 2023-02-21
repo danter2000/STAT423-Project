@@ -542,14 +542,15 @@ write.csv(recent_players, "recent_players.csv")
 
 ```{r try models}
 
-# Pitcher Model selection BAD MODEL (GG, ROLOAIDS INCLUDED) ----
+# Pitcher Model selection ----
 
+# Trying to find best predictors, including awards introduced after 1933
 lm_pitcher_subset_bad <- regsubsets(as.factor(wein) ~ W + L + G + IP + ERA +
-                                                      all_star + WHIP +
-                                                      gold_glove + WAR +
+                                                      all_star + WHIP + SO +
+                                                      gold_glove + WAR + SV +
                                                       cy_young_award +
                                                       Steroids +
-                                                      as.factor(most_valuable_player) + 
+                                                      most_valuable_player + 
                                                       pitching_triple_crown +
                                                       rolaids_relief_man_award +
                                                       nice_guy_awards,
@@ -557,28 +558,49 @@ lm_pitcher_subset_bad <- regsubsets(as.factor(wein) ~ W + L + G + IP + ERA +
 
 summary(lm_pitcher_subset_bad)
 
-# Pitcher Model SELECTION GOOD (ONLY COUNTING, RATE, & RELEVANT AWARDS) ----
+# Gold glove and Cy Young only added to 7 and 8 term models. Why does do the reliever awards do so well?
 
+# Trying to find best predictors, only including awards introduced before 1933
 lm_pitcher_subset_good <- regsubsets(as.factor(wein) ~ W + L + G + IP + ERA +
-                                                       all_star + WHIP +
-                                                       WAR + Steroids +
-                                                       as.factor(most_valuable_player) + 
+                                                       all_star + WHIP + SO +
+                                                       WAR + Steroids + SV +
+                                                       most_valuable_player + 
                                                        pitching_triple_crown +
                                                        nice_guy_awards,
-                                    data = PitcherHOF_df)
+                                     data = PitcherHOF_df)
 
 summary(lm_pitcher_subset_good)
 
-# Positon Player Model selection ----
+# Why is the saves column so good at predicting?
 
-# Trying to find best 7 predictors
-lm_position_subset <- regsubsets(as.factor(wein) ~ G + AB + R + H + HR + RBI +
-                                                   SB + BB + PrimaryLg +
-                                                   all_star +
-                                                   as.factor(most_valuable_player) +
-                                                   AVG + OBP + SLG + Steroids +
-                                                   nice_guy_awards + WAR + Pos,
-                                 data = PositionPlayerHOF_df)
-summary(lm_position_subset)
+# Position Player Model selection ----
+
+# Trying to find best predictors, including awards introduced after 1933
+lm_position_subset_bad <- regsubsets(as.factor(wein) ~ G + AB + R + H + HR +
+                                                       RBI + SB + BB +
+                                                       PrimaryLg + all_star +
+                                                       most_valuable_player +
+                                                       AVG + OBP + SLG +
+                                                       Steroids + 
+                                                       nice_guy_awards + WAR +
+                                                       Pos + gold_glove + 
+                                                       silver_slugger +
+                                                       hank_aaron_award,
+                                     data = PositionPlayerHOF_df)
+summary(lm_position_subset_bad)
+
+# Notice silver slugger and gold glove never relevant. This may justify dropping them.
+
+# Trying to find best predictors, only including awards introduced before 1933
+lm_position_subset_good <- regsubsets(as.factor(wein) ~ G + AB + R + H + HR +
+                                                        RBI + SB + BB +
+                                                        PrimaryLg + all_star +
+                                                        most_valuable_player +
+                                                        AVG + OBP + SLG +
+                                                        Steroids + 
+                                                        nice_guy_awards + WAR +
+                                                        Pos,
+                                      data = PositionPlayerHOF_df)
+summary(lm_position_subset_good)
 
 ```
