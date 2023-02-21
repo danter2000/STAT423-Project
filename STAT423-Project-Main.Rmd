@@ -12,6 +12,7 @@ library(Lahman)
 library(readr)
 library(lubridate)
 library(GGally)
+library(leaps)
 
 # Please create a variable for all datasets below along with a message of what we need it for
 
@@ -169,12 +170,9 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                            hutch_award +
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
-<<<<<<< HEAD
-  left_join(war_df_pos, by = "playerID")
-=======
   left_join(war_df_pos, by = "playerID") %>%
   left_join(primary_position, by = "playerID")
->>>>>>> 20b65bcaa8e32ae1801d8eb2f95ced67e9c015bb
+
 
 ```
 
@@ -350,6 +348,43 @@ get_corr_matrix <- function(data) {
   corrplot(res, type = "upper",
          tl.col = "black", tl.srt = 90)
 }
+
+# Counting number of players elected into the hall before and after major awards
+
+hall_df_eda <- hall_df %>%
+  group_by(playerID) %>%
+  subset(select = c(1, 2, 3, 7, 8)) %>%
+  filter(category == "Player")
+
+ggplot(data = hall_df_eda, 
+       mapping = aes(x = yearID,
+                     fill = inducted)) +
+  geom_histogram(col=I("black")) +
+  geom_vline(xintercept = 1931, col = "blue") +
+  geom_vline(xintercept = 1933, col = "red") +
+  geom_vline(xintercept = 1956, col = "forestgreen") +
+  geom_vline(xintercept = 1957, col = "gold3") +
+  geom_vline(xintercept = 1976, col = "purple") +
+  geom_vline(xintercept = 1980, col = "grey50") +
+  theme_classic() +
+  labs(x = "Year", y = "Inducted or Dropped from Ballot",
+       title = "Introduction of Awards Overlayed by Hall of Fame Class") +
+  annotate(geom="text", x=2005, y=300, label="Introduction of MVP",
+              color="blue") + 
+  annotate(geom="text", x=2005, y=280, label="Introduction of All Star",
+              color="red") + 
+  annotate(geom="text", x=2005, y=260, label="Introduction of Cy Young",
+              color="forestgreen") + 
+  annotate(geom="text", x=2005, y=240, label="Introduction of Gold Glove",
+              color="gold3") + 
+  annotate(geom="text", x=2005, y=220, label="Introduction of Rolaids Relief Man",
+              color="purple") +
+  annotate(geom="text", x=2005, y=200, label="Introduction of Silver Slugger",
+              color="grey50")
+  
+      
+# Find the proportion of total hall of fame electees before each award was introduced
+
 ```
 
 ```{r Cox Proportional Hazards Analysis}
@@ -487,21 +522,43 @@ write.csv(recent_players, "recent_players.csv")
 
 ```{r try models}
 
-lm_pitcher_model1 <- glm(as.factor(wein) ~ IP + ERA + WHIP + BB + all_star +
-                                WAR + 
-                                cy_young_award + Steroids,
-                         family = binomial(link = "logit"),
-                         data = PitcherHOF_df)
+# Pitcher Model selection BAD MODEL (GG, ROLOAIDS INCLUDED) ----
 
-summary(lm_pitcher_model1)
+lm_pitcher_subset_bad <- regsubsets(as.factor(wein) ~ W + L + G + IP + ERA +
+                                                      all_star + WHIP +
+                                                      gold_glove + WAR +
+                                                      cy_young_award +
+                                                      Steroids +
+                                                      as.factor(most_valuable_player) + 
+                                                      pitching_triple_crown +
+                                                      rolaids_relief_man_award +
+                                                      nice_guy_awards,
+                                    data = PitcherHOF_df)
 
-lm_pos_model1 <- glm(as.factor(wein) ~ H + HR + avg + obp + slg + all_star +
-                                WAR + 
-                                cy_young_award + Steroids,
-                         family = binomial(link = "logit"),
-                         data = PitcherHOF_df)
+summary(lm_pitcher_subset_bad)
 
-summary(lm_pitcher_model1)
+# Pitcher Model SELECTION GOOD (ONLY COUNTING, RATE, & RELEVANT AWARDS) ----
 
-summary(glm(wein ~ all_star + (HR:Steroids + AVG:Steroids)*WAR + Pos, data = PositionPlayerHOF_df, family = "binomial"))
+lm_pitcher_subset_good <- regsubsets(as.factor(wein) ~ W + L + G + IP + ERA +
+                                                       all_star + WHIP +
+                                                       WAR + Steroids +
+                                                       as.factor(most_valuable_player) + 
+                                                       pitching_triple_crown +
+                                                       nice_guy_awards,
+                                    data = PitcherHOF_df)
+
+summary(lm_pitcher_subset_good)
+
+# Positon Player Model selection ----
+
+# Trying to find best 7 predictors
+lm_position_subset <- regsubsets(as.factor(wein) ~ G + AB + R + H + HR + RBI +
+                                                   SB + BB + PrimaryLg +
+                                                   all_star +
+                                                   as.factor(most_valuable_player) +
+                                                   AVG + OBP + SLG + Steroids +
+                                                   nice_guy_awards + WAR + Pos,
+                                 data = PositionPlayerHOF_df)
+summary(lm_position_subset)
+
 ```
