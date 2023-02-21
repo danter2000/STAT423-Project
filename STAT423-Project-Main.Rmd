@@ -585,7 +585,8 @@ lm_position_subset_bad <- regsubsets(as.factor(wein) ~ G + AB + R + H + HR +
                                                        nice_guy_awards + WAR +
                                                        Pos + gold_glove + 
                                                        silver_slugger +
-                                                       hank_aaron_award,
+                                                       hank_aaron_award +
+                                                       Steroids:HR,
                                      data = PositionPlayerHOF_df)
 summary(lm_position_subset_bad)
 
@@ -599,7 +600,7 @@ lm_position_subset_good <- regsubsets(as.factor(wein) ~ G + AB + R + H + HR +
                                                         AVG + OBP + SLG +
                                                         Steroids + 
                                                         nice_guy_awards + WAR +
-                                                        Pos,
+                                                        Pos + Steroids:HR,
                                       data = PositionPlayerHOF_df)
 summary(lm_position_subset_good)
 
