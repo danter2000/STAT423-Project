@@ -354,7 +354,13 @@ get_corr_matrix <- function(data) {
 hall_df_eda <- hall_df %>%
   group_by(playerID) %>%
   subset(select = c(1, 2, 3, 7, 8)) %>%
-  filter(category == "Player")
+  filter(category == "Player") %>%
+  mutate(before_mvp = ifelse(yearID < 1931, 1, 0))  %>%
+  mutate(before_as = ifelse(yearID < 1933, 1, 0))  %>%
+  mutate(before_cy = ifelse(yearID < 1956, 1, 0))  %>%
+  mutate(before_gg = ifelse(yearID < 1957, 1, 0))  %>%
+  mutate(before_rr = ifelse(yearID < 1976, 1, 0))  %>%
+  mutate(before_ss = ifelse(yearID < 1980, 1, 0))
 
 ggplot(data = hall_df_eda, 
        mapping = aes(x = yearID,
@@ -384,6 +390,20 @@ ggplot(data = hall_df_eda,
   
       
 # Find the proportion of total hall of fame electees before each award was introduced
+
+total_hall_before_mvp <- mean(hall_df_eda$before_mvp)
+total_hall_before_as <- mean(hall_df_eda$before_as)
+total_hall_before_cy <- mean(hall_df_eda$before_cy)
+total_hall_before_gg <- mean(hall_df_eda$before_gg)
+total_hall_before_rr <- mean(hall_df_eda$before_rr)
+total_hall_before_ss <- mean(hall_df_eda$before_ss)
+
+t(tibble(Before_MVP = total_hall_before_mvp,
+       Before_AS = total_hall_before_as,
+       Before_Cy = total_hall_before_cy,
+       Before_GG = total_hall_before_gg,
+       Before_RR = total_hall_before_rr,
+       Before_SS = total_hall_before_ss))
 
 ```
 
