@@ -7,7 +7,7 @@ const margin = { left: 170, top: 50, bottom: 50, right: 20 }
 const width = 1000 - margin.left - margin.right
 const height = 950 - margin.top - margin.bottom
 
-d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/vizdata/hofcircles.csv', function (d) {
+d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/vizdata/hofdistinct.csv', function (d) {
   return d
 }).then(data => {
   dataset = data
@@ -16,12 +16,12 @@ d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/v
 })
 
 const x = d3.scaleLinear()
-  .domain([1, 80])
+  .domain([1, 100])
   .range([1, 400]);
 
 const y = d3.scaleLinear()
-  .domain([1, 250])
-  .range([1, 1000]);
+  .domain([1, 200])
+  .range([1, 800]);
 
 function drawInitial() {
   let svg = d3.select("#vis")
