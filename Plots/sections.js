@@ -16,12 +16,12 @@ d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/v
 })
 
 const x = d3.scaleLinear()
-  .domain([1, 100])
-  .range([1, 400]);
+  .domain([1, 10])
+  .range([200, 550]);
 
 const y = d3.scaleLinear()
-  .domain([1, 200])
-  .range([1, 800]);
+  .domain([1, 20])
+  .range([50, 900]);
 
 function drawInitial() {
   let svg = d3.select("#vis")
@@ -37,11 +37,20 @@ function drawInitial() {
     .data(dataset)
     .enter()
     .append("circle")
-    .attr('fill', 'none')
-    .attr('stroke', 'black')
+    .attr('fill', 'black')
+    .attr('opacity', 0)
+    // .attr('stroke', 'black')
     .attr("cx", function (d) { return x(d.x); })
     .attr("cy", function (d) { return y(d.y); })
-    .attr("r", 1)
+    .attr("r", 10)
+    .attr("class", function (d) {
+      return d.type
+    })
+
+    svg.selectAll("circle")
+    .transition()
+    .duration(100)
+    .attr('opacity', 1)
 }
 
 function draw1() {
@@ -56,33 +65,43 @@ function draw1() {
 function draw2() {
   svg = d3.select("#vis").select("svg")
 
-  svg.selectAll("circle")
+  // svg.selectAll("circle")
+  //   .transition()
+  //   .duration(1000)
+  //   .attr("opacity", (d) => {
+  //     if (d.type == "eligible" || d.type == "inducted") {
+  //       return 1;
+  //     } else {
+  //       return 0.2;
+  //     }
+  //   })
+
+  svg.selectAll(".all")
     .transition()
     .duration(1000)
-    .attr("opacity", (d) => {
-      if (d.eligible == 1) {
-        return 1;
-      } else {
-        return 0.2;
-      }
-    })
+    .attr("opacity", 0.2)
 }
 
 function draw3() {
   svg = d3.select("#vis").select("svg")
 
-  svg.selectAll("circle")
+  // svg.selectAll("circle")
+  //   .transition()
+  //   .duration(1000)
+  //   .attr("opacity", (d) => {
+  //     if (d.type == "inducted") {
+  //       return 1;
+  //     } else if (d.type == "eligible") {
+  //       return 0.5;
+  //     } else {
+  //       return 0.2
+  //     }
+  //   })
+
+  svg.selectAll(".eligible")
     .transition()
     .duration(1000)
-    .attr("opacity", (d) => {
-      if (d.inducted == 1) {
-        return 1;
-      } else if (d.inducted == 0 && d.eligible == 1) {
-        return 0.5;
-      } else {
-        return 0.2
-      }
-    })
+    .attr("opacity", 0.5)
 }
 
 function draw4() {
