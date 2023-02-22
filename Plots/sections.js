@@ -7,7 +7,7 @@ const margin = { left: 170, top: 50, bottom: 50, right: 20 }
 const width = 1000 - margin.left - margin.right
 const height = 950 - margin.top - margin.bottom
 
-d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/vizdata/hofdistinct.csv', function (d) {
+d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/vizdata/circlestest.csv', function (d) {
   return d
 }).then(data => {
   dataset = data
