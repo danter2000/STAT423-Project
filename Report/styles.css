@@ -34,7 +34,7 @@ body {
 
 h1, h2 {
     font-weight: 700;
-    text-align: right;
+    text-align: left;
     line-height: 32px;
 }
 
@@ -101,4 +101,8 @@ a {
 
 img {
     display: none;
+}
+
+section {
+  padding-left: 10%;
 }

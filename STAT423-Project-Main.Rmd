@@ -206,11 +206,37 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
 
 ```
 
+```{r andy's attempt at doing something useful, warning=FALSE, message=FALSE}
+
+# update hall_df to show years with less than five percent of ballots
+hall_df_update <- hall_df %>% 
+  mutate(fivePercent = ifelse(1.0 * votes / ballots > 0.05,1,0))
+
+# update hof_players with yearsOnBallet and fivePercent
+hof_players <- hall_df_update %>% 
+  filter(category == "Player") %>% 
+  group_by(playerID) %>%
+  mutate(yearsOnBallet = n()) %>%
+  summarize(wein = "Y" %in% inducted * 1, votedBy, yearID, maxYear = max(yearID), yearsOnBallet, fivePercent) %>%
+  filter(yearID == maxYear) %>%
+  select(-c(yearID, maxYear))
+
+# df with players that have played more than 10 years, have not had less than 5% on a ballot or failed to make the
+# hall of fame after 10 years 
+# note that players who never made it on a ballot are included
+PredictHOF <- player_df %>%
+  filter(as.numeric(difftime(finalGame, debut, units="days")) / 365 > 10) %>%
+  left_join(hof_players, by = "playerID") %>%
+  filter(wein != 1 | is.na(wein)) %>%
+  filter(fivePercent == 1 | is.na(fivePercent)) %>%
+  filter(yearsOnBallet < 10 | is.na(yearsOnBallet))
+```
+
 ```{r time series mess, warning=FALSE, message=FALSE}
 
 # Below are mainly for time series analysis
 
-# For player name, debute, and playerID conversion
+# For player name, debut, and playerID conversion
 player_df <- read_csv(file = "Data/People2022.csv")
 
 # Creates Player column to ease merging with other df's
@@ -364,7 +390,7 @@ hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
   geom_boxplot()
 
 # Pairs plots
-pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
+# pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
 
 get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IPouts", "ERA", "WHIP")])
 
