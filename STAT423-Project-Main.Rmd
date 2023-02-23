@@ -196,11 +196,39 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
 
 ```
 
+```{r andy's attempt at doing something useful, warning=FALSE, message=FALSE}
+
+## for reference
+PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
+                                   pitching_df_categorical_counts,
+                                   by = "playerID") %>%
+  inner_join(awards_wider, by = "playerID") %>%
+  inner_join(hof_players, by = "playerID") %>%
+  filter(G > 200) %>%
+  inner_join(player_df[, c(1, 25)], by = "playerID") %>%
+  mutate(IP = IPouts / 3) %>%
+  relocate(Player, .after = playerID) %>%
+  relocate(IP, .after = IPouts) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
+  mutate(nice_guy_awards = lou_gehrig_memorial_award +
+                           hutch_award +
+                           roberto_clemente_award + 
+                           branch_rickey_award) %>%
+  left_join(war_df_pitcher, by = "playerID")
+
+
+
+PredictHOF <- player_df %>%
+  filter(as.numeric(difftime(finalGame, debut, units="days")) / 365 > 10) %>%
+  left_join(hof_players, by = "playerID") %>%
+  filter(wein != 1 | is.na(wein))
+```
+
 ```{r time series mess, warning=FALSE, message=FALSE}
 
 # Below are mainly for time series analysis
 
-# For player name, debute, and playerID conversion
+# For player name, debut, and playerID conversion
 player_df <- read_csv(file = "Data/People2022.csv")
 
 # Creates Player column to ease merging with other df's
@@ -354,7 +382,7 @@ hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
   geom_boxplot()
 
 # Pairs plots
-pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
+# pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
 
 get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IPouts", "ERA", "WHIP")])
 
