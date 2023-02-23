@@ -173,7 +173,25 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
   left_join(war_df_pos, by = "playerID") %>%
-  left_join(primary_position, by = "playerID")
+  left_join(primary_position, by = "playerID") %>%
+  distinct(playerID, .keep_all = TRUE) %>%
+  mutate(votedBy = ifelse(Player == "Al Lopez", "Veterans",
+                   ifelse(Player == "Charlie Gehringer", "BBWAA",
+                   ifelse(Player == "Frank Chance", "Veterans",
+                   ifelse(Player == "Fred Clark", "Veterans",
+                   ifelse(Player == "Honus Wagner", "BBWAA",
+                   ifelse(Player == "Hugh Duffy", "Veterans",
+                   ifelse(Player == "Johnny Evers", "Veterans",
+                   ifelse(Player == "Luke Appling", "BBWAA",
+                   ifelse(Player == "Ray Schalk", "Veterans",
+                   ifelse(Player == "Roger Bresnahan", "Veterans",
+                   ifelse(Player == "Roberto Clemente", "BBWAA",
+                   ifelse(Player == "Lou Gehrig", "BBWAA",
+                   ifelse(Player == "Lou Criger", "Veterans",
+                   ifelse(Player == "Shoeless Joe Jackson", "Veterans",
+                   ifelse(Player == "Bill Killefer", "Veterans",
+                   ifelse(Player == "Billy Sullivan", "Veterans",
+                          votedBy)))))))))))))))))
 
 
 ```
@@ -406,6 +424,23 @@ t(tibble(Before_MVP = total_hall_before_mvp,
        Before_GG = total_hall_before_gg,
        Before_RR = total_hall_before_rr,
        Before_SS = total_hall_before_ss))
+
+# Cooks distance ----
+
+row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$playerID
+
+bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
+                                     PrimaryLg + all_star + 
+                                     most_valuable_player + AVG + OBP + SLG +
+                                     Steroids + nice_guy_awards + WAR + Pos +
+                                     gold_glove + silver_slugger +
+                                     hank_aaron_award + Steroids:HR +
+                                     H:Steroids,
+                   data = PositionPlayerHOF_df,
+                   family = "binomial")
+
+plot(bad_glm_pos, which = 4)
+
 
 ```
 
