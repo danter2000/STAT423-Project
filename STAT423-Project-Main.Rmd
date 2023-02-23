@@ -173,8 +173,6 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
   left_join(war_df_pos, by = "playerID") %>%
-<<<<<<< HEAD
-  left_join(primary_position, by = "playerID") %>%
   distinct(playerID, .keep_all = TRUE) %>%
   mutate(votedBy = ifelse(Player == "Al Lopez", "Veterans",
                    ifelse(Player == "Charlie Gehringer", "BBWAA",
@@ -192,12 +190,10 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                    ifelse(Player == "Shoeless Joe Jackson", "Veterans",
                    ifelse(Player == "Bill Killefer", "Veterans",
                    ifelse(Player == "Billy Sullivan", "Veterans",
-                          votedBy)))))))))))))))))
+                          votedBy))))))))))))))))) %>%
+  mutate(Player = ifelse(playerID == "griffke02", "Ken Griffey Jr", Player)) %>%
+  inner_join(primary_position, by = "playerID")
 
-
-=======
-  left_join(primary_position, by = "playerID")
->>>>>>> a614fb03b7022690299d3adc1e48972c0d05c3be
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
