@@ -173,6 +173,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
   left_join(war_df_pos, by = "playerID") %>%
+<<<<<<< HEAD
   left_join(primary_position, by = "playerID") %>%
   distinct(playerID, .keep_all = TRUE) %>%
   mutate(votedBy = ifelse(Player == "Al Lopez", "Veterans",
@@ -194,6 +195,9 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                           votedBy)))))))))))))))))
 
 
+=======
+  left_join(primary_position, by = "playerID")
+>>>>>>> a614fb03b7022690299d3adc1e48972c0d05c3be
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
@@ -641,4 +645,12 @@ lm_position_subset_good <- regsubsets(as.factor(wein) ~ G + AB + R + H +        
                                       really.big = T)
 summary(lm_position_subset_good)
 
+PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos), ref = "DH")
+ideal_model <- step(glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
+                          all_star*WAR + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
+                          nice_guy_awards + HR*WAR + Pos + votedBy,
+                        data = PositionPlayerHOF_df, family = "binomial"),
+                    direction = "both", k = 2)
 ```
+
