@@ -198,30 +198,28 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
 
 ```{r andy's attempt at doing something useful, warning=FALSE, message=FALSE}
 
-## for reference
-PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
-                                   pitching_df_categorical_counts,
-                                   by = "playerID") %>%
-  inner_join(awards_wider, by = "playerID") %>%
-  inner_join(hof_players, by = "playerID") %>%
-  filter(G > 200) %>%
-  inner_join(player_df[, c(1, 25)], by = "playerID") %>%
-  mutate(IP = IPouts / 3) %>%
-  relocate(Player, .after = playerID) %>%
-  relocate(IP, .after = IPouts) %>%
-  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
-  mutate(nice_guy_awards = lou_gehrig_memorial_award +
-                           hutch_award +
-                           roberto_clemente_award + 
-                           branch_rickey_award) %>%
-  left_join(war_df_pitcher, by = "playerID")
+# update hall_df to show years with less than five percent of ballots
+hall_df_update <- hall_df %>% 
+  mutate(fivePercent = ifelse(1.0 * votes / ballots > 0.05,1,0))
 
+# update hof_players with yearsOnBallet and fivePercent
+hof_players <- hall_df_update %>% 
+  filter(category == "Player") %>% 
+  group_by(playerID) %>%
+  mutate(yearsOnBallet = n()) %>%
+  summarize(wein = "Y" %in% inducted * 1, votedBy, yearID, maxYear = max(yearID), yearsOnBallet, fivePercent) %>%
+  filter(yearID == maxYear) %>%
+  select(-c(yearID, maxYear))
 
-
+# df with players that have played more than 10 years, have not had less than 5% on a ballot or failed to make the
+# hall of fame after 10 years 
+# note that players who never made it on a ballot are included
 PredictHOF <- player_df %>%
   filter(as.numeric(difftime(finalGame, debut, units="days")) / 365 > 10) %>%
   left_join(hof_players, by = "playerID") %>%
-  filter(wein != 1 | is.na(wein))
+  filter(wein != 1 | is.na(wein)) %>%
+  filter(fivePercent == 1 | is.na(fivePercent)) %>%
+  filter(yearsOnBallet < 10 | is.na(yearsOnBallet))
 ```
 
 ```{r time series mess, warning=FALSE, message=FALSE}
