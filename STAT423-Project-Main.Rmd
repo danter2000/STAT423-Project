@@ -136,7 +136,15 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                            hutch_award +
                            roberto_clemente_award + 
                            branch_rickey_award) %>%
-  left_join(war_df_pitcher, by = "playerID")
+  left_join(war_df_pitcher, by = "playerID") %>%
+  distinct(playerID, .keep_all = TRUE) %>%
+  mutate(votedBy = ifelse(Player == "Charles Bender", "Veterans",
+                   ifelse(Player == "Ed Walsh", "Veterans",
+                   ifelse(Player == "Eddie Plank", "Veterans",
+                   ifelse(Player == "Mel Harder", "BBWAA",
+                   ifelse(Player == "Red Ruffing", "BBWAA",
+                   ifelse(Player == "Rube Waddell", "Veterans",
+                          votedBy)))))))
 
 # Primary position by player
 primary_position <- Appearances %>% 
@@ -192,7 +200,9 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                    ifelse(Player == "Billy Sullivan", "Veterans",
                           votedBy))))))))))))))))) %>%
   mutate(Player = ifelse(playerID == "griffke02", "Ken Griffey Jr", Player)) %>%
-  inner_join(primary_position, by = "playerID")
+  inner_join(primary_position, by = "playerID") %>%
+  mutate(Pos = as.factor(Pos)) %>%
+  mutate(votedBy = as.factor(votedBy))
 
 ```
 
@@ -425,9 +435,9 @@ t(tibble(Before_MVP = total_hall_before_mvp,
        Before_RR = total_hall_before_rr,
        Before_SS = total_hall_before_ss))
 
-# Cooks distance ----
+# Cooks distance for both bad and good models position players ----
 
-row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$playerID
+row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 
 bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
                                      PrimaryLg + all_star + 
@@ -441,6 +451,39 @@ bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
 
 plot(bad_glm_pos, which = 4)
 
+good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
+                          all_star*WAR + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
+                          nice_guy_awards + HR*WAR + Pos + votedBy,
+                        data = PositionPlayerHOF_df, family = "binomial")
+
+plot(good_glm_pos, which = 4)
+
+# Cooks distance for both bad and good models pitchers ----
+
+row.names(PitcherHOF_df) <- PitcherHOF_df$Player
+
+good_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV + 
+                             WAR + Steroids + most_valuable_player + 
+                             pitching_triple_crown + nice_guy_awards +
+                             all_star + Steroids:ERA + Steroids:WAR + 
+                             Steroids:most_valuable_player + Steroids:SO +
+                             votedBy,
+                      data = PitcherHOF_df)
+
+plot(good_glm_pitch, which = 4)
+
+bad_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
+                            WAR + Steroids + most_valuable_player + 
+                            pitching_triple_crown + nice_guy_awards + 
+                            all_star + Steroids:ERA + Steroids:WAR + 
+                            Steroids:most_valuable_player + Steroids:SO +
+                            gold_glove + cy_young_award + 
+                            Steroids:cy_young_award + pitching_triple_crown +
+                            rolaids_relief_man_award + votedBy,
+                      data = PitcherHOF_df)
+
+plot(bad_glm_pitch, which = 4)
 
 ```
 
@@ -641,12 +684,27 @@ lm_position_subset_good <- regsubsets(as.factor(wein) ~ G + AB + R + H +        
                                       really.big = T)
 summary(lm_position_subset_good)
 
-PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos), ref = "DH")
+# Relevel to set DH as our position reference group
+PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
+                                    ref = "DH")
+
+# Step function method of model selection for position players, relevant awards 
 ideal_model <- step(glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
                           all_star*WAR + most_valuable_player + 
                           AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
                           nice_guy_awards + HR*WAR + Pos + votedBy,
                         data = PositionPlayerHOF_df, family = "binomial"),
                     direction = "both", k = 2)
+
+# Step function method of model selection for position players, all awards 
+ideal_model_bad <- step(bad_glm_pos,
+                    direction = "both", k = 2)
+
+# Step function method of model selection for pitchers, relevant awards
+ideal_model_pitch_good <- step(good_glm_pitch, direction = "both", k = 2)
+
+# Step function method of model selection for pitchers, all awards
+ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
+
 ```
 
