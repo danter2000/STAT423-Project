@@ -813,7 +813,7 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- predict(good_glm_pos, data = PositionPlayerHOF_df)
+y_hat_train_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df)
 train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
 
 y_hat_test_pos <- predict(good_glm_pos, data = PredictHOF_pos_df)
@@ -837,7 +837,7 @@ step(glm(wein ~ G + WHIP + SV + ERA + IP + R +
                         data = PitcherHOF_df, family = "binomial"),
                     direction = "both", k = 2)
 
-# The glm object is above 
+# The glm object is above for 
 
 ```
 
