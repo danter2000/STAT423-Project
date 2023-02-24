@@ -1,4 +1,4 @@
-let dataset, dataset2, svg
+let dataset, dataset2, svg, circleLabel
 let salarySizeScale, salaryXScale, categoryColorScale
 let simulation, nodes
 let categoryLegend, salaryLegend
@@ -50,7 +50,8 @@ function drawInitial() {
     .data(dataset)
     .enter()
     .append("circle")
-    .attr('fill', '#002a3c')
+    .attr('stroke', 'black')
+    .attr('fill', '#4b6f84')
     .attr('opacity', 0)
     .attr("cx", function (d) { return x(d.x); })
     .attr("cy", function (d) { return y(d.y); })
@@ -84,6 +85,21 @@ function drawInitial() {
     .transition()
     .duration(100)
     .attr('opacity', 1)
+
+  circleLabel = svg.append("g")
+
+  circleLabel.append("text")
+    .text("Each circle represents roughly 100 players")
+    .attr("x", x(11))
+    .attr("y", y(1) - 60)
+    .call(wrap, 150)
+
+  circleLabel.append("line")
+    .style("stroke", "black")
+    .attr("x1", x(10) + 10)
+    .attr("y1", y(1) - 15)
+    .attr("x2", x(11))
+    .attr("y2", y(1) - 40)
 }
 
 function draw1() {
@@ -93,15 +109,27 @@ function draw1() {
     .transition()
     .duration(1000)
     .attr("opacity", 1)
+
+  circleLabel
+    .transition()
+    .duration(1000)
+    .attr("opacity", 1)
+
+
 }
 
 function draw2() {
   svg = d3.select("#vis").select("svg")
 
   svg.selectAll(".all")
-    .transition()
+    .transition("circle")
     .duration(1000)
     .attr("opacity", 0.2)
+
+  circleLabel
+    .transition("label")
+    .duration(1000)
+    .attr("opacity", 0)
 }
 
 function draw3() {
@@ -120,6 +148,11 @@ function draw4() {
     .transition()
     .duration(1000)
     .attr("opacity", 0)
+
+    svg.selectAll(".eligible")
+    .transition()
+    .duration(1000)
+    .attr("opacity", 0)
 }
 
 function draw5() {
@@ -135,10 +168,7 @@ function draw5() {
     .duration(1000)
     .attr("opacity", 0)
 
-  svg.selectAll(".eligible")
-    .transition()
-    .duration(1000)
-    .attr("opacity", 0)
+
 }
 
 function draw6() {
@@ -196,3 +226,36 @@ scroll.on('progress', function (index, progress) {
 
   }
 })
+
+function wrap(text, width) {
+  text.each(function () {
+    var text = d3.select(this),
+      words = text.text().split(/\s+/).reverse(),
+      word,
+      line = [],
+      lineNumber = 0,
+      lineHeight = 1.1, // ems
+      x = text.attr("x"),
+      y = text.attr("y"),
+      dy = 0, //parseFloat(text.attr("dy")),
+      tspan = text.text(null)
+        .append("tspan")
+        .attr("x", x)
+        .attr("y", y)
+        .attr("dy", dy + "em");
+    while (word = words.pop()) {
+      line.push(word);
+      tspan.text(line.join(" "));
+      if (tspan.node().getComputedTextLength() > width) {
+        line.pop();
+        tspan.text(line.join(" "));
+        line = [word];
+        tspan = text.append("tspan")
+          .attr("x", x)
+          .attr("y", y)
+          .attr("dy", ++lineNumber * lineHeight + dy + "em")
+          .text(word);
+      }
+    }
+  });
+}
