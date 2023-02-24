@@ -150,8 +150,13 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                    ifelse(Player == "Mel Harder", "BBWAA",
                    ifelse(Player == "Red Ruffing", "BBWAA",
                    ifelse(Player == "Rube Waddell", "Veterans",
-                          votedBy))))))) %>%
-  mutate(all_star = all_star + as.numeric(baseball_magazine_all_star))
+                   ifelse(Player == "Old Hoss Radbourn", "Veterans",
+                   ifelse(Player == "Mordecai Brown", "Veterans",
+                   ifelse(Player == "Nap Rucker", "Veterans",
+                   ifelse(Player == "Bill Donovan", "Veterans",
+                          votedBy))))))))))) %>%
+  mutate(all_star = all_star + as.numeric(baseball_magazine_all_star)) %>%
+  mutate(votedBy = as.factor(votedBy))
 
 # Primary position by player
 primary_position <- Appearances %>% 
@@ -207,13 +212,16 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                    ifelse(Player == "Shoeless Joe Jackson", "Veterans",
                    ifelse(Player == "Bill Killefer", "Veterans",
                    ifelse(Player == "Billy Sullivan", "Veterans",
-                          votedBy))))))))))))))))) %>%
+                   ifelse(Player == "Monte Irvin", "Veterans",
+                          votedBy)))))))))))))))))) %>%
   mutate(Player = ifelse(playerID == "griffke02", "Ken Griffey Jr", Player)) %>%
   inner_join(primary_position, by = "playerID") %>%
   mutate(Pos = as.factor(Pos),
          votedBy = as.factor(votedBy),
          all_star = all_stars + as.numeric(baseball_magazine_all_star)-1) %>%
-  mutate(wein = as.numeric(as.character(wein)))
+  mutate(wein = as.numeric(as.character(wein))) %>%
+  filter(Player != "Satchel Paige")
+  
 
 
 ```
