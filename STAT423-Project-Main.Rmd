@@ -159,7 +159,9 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                    ifelse(Player == "Bill Donovan", "Veterans",
                           votedBy))))))))))) %>%
   mutate(all_star = all_star + as.numeric(baseball_magazine_all_star)) %>%
-  mutate(votedBy = as.factor(votedBy))
+  mutate(votedBy = as.factor(votedBy))  %>%
+  filter(war != is.na(war))
+  
 
 # Primary position by player
 primary_position <- Appearances %>% 
@@ -223,7 +225,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
          votedBy = as.factor(votedBy),
          all_star = all_stars + as.numeric(baseball_magazine_all_star)-1) %>%
   mutate(wein = as.numeric(as.character(wein))) %>%
-  filter(Player != "Satchel Paige")
+  filter(Player != "Satchel Paige") %>%
+  filter(war != is.na(war))
   
 
 
@@ -541,7 +544,7 @@ row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
                                      PrimaryLg + all_star + 
                                      most_valuable_player + AVG + OBP + SLG +
-                                     Steroids + nice_guy_awards + WAR + Pos +
+                                     Steroids + nice_guy_awards + war + Pos +
                                      gold_glove + silver_slugger +
                                      hank_aaron_award + Steroids:HR +
                                      H:Steroids,
@@ -551,9 +554,9 @@ bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
 plot(bad_glm_pos, which = 4)
 
 good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
-                          all_star*WAR + most_valuable_player + 
-                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
-                          nice_guy_awards + HR*WAR + Pos + votedBy,
+                          all_star*war + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + war:Steroids +
+                          nice_guy_awards + HR*war + Pos + votedBy,
                         data = PositionPlayerHOF_df, family = "binomial")
 
 plot(good_glm_pos, which = 4)
@@ -563,9 +566,9 @@ plot(good_glm_pos, which = 4)
 row.names(PitcherHOF_df) <- PitcherHOF_df$Player
 
 good_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV + 
-                             WAR + Steroids + most_valuable_player + 
+                             war + Steroids + most_valuable_player + 
                              pitching_triple_crown + nice_guy_awards +
-                             all_star + Steroids:ERA + Steroids:WAR + 
+                             all_star + Steroids:ERA + Steroids:war + 
                              Steroids:most_valuable_player + Steroids:SO +
                              votedBy,
                       data = PitcherHOF_df)
@@ -573,9 +576,9 @@ good_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
 plot(good_glm_pitch, which = 4)
 
 bad_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
-                            WAR + Steroids + most_valuable_player + 
+                            war + Steroids + most_valuable_player + 
                             pitching_triple_crown + nice_guy_awards + 
-                            all_star + Steroids:ERA + Steroids:WAR + 
+                            all_star + Steroids:ERA + Steroids:war + 
                             Steroids:most_valuable_player + Steroids:SO +
                             gold_glove + cy_young_award + 
                             Steroids:cy_young_award + pitching_triple_crown +
