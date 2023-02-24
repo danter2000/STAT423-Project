@@ -38,10 +38,10 @@ allstar_df <- read_csv(file = "Data/AllstarFull.csv")
 espn_ped_df <- read_csv(file = "Data/suspectedusers_espn.csv")
 wiki_ped_df <- read_csv(file = "Data/suspendedlist_wikipedia.csv")
 
-war_df_pos <- read_csv(file = "Data/posplayerWAR.csv")
+war_df_pos <- read_csv(file = "Data/posplayerWARupdated.csv")
 colnames(war_df_pos)[1] ="playerID"
 
-war_df_pitcher <- read_csv(file = "Data/pitcherWAR.csv")
+war_df_pitcher <- read_csv(file = "Data/pitcherWARupdated.csv")
 colnames(war_df_pitcher)[1] ="playerID"
 
 ```
@@ -99,8 +99,13 @@ hof_players <- hall_df %>%
 
 # Unique award winners -- columns represent different rewards
 awards_new <- awards_df %>%
+<<<<<<< HEAD
   filter(!(yearID < 1951 & awardID == "TSN All-Star"))
 awards_new$awardID <- if_else(awards_new$awardID == "TSN All-Star" | awards_new$awardID == "Baseball Magazine All-Star", "All-Star", awards_new$awardID) 
+=======
+  filter(!(yearID > 1933 & awardID == "Baseball Magazine All-Star")) %>%
+  filter(awardID != "TSN All-Star")
+>>>>>>> 5417df861482d2b52ed6f930d0b1469425c4146a
 
 awards_wider <- awards_new %>% 
   mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
@@ -145,7 +150,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                    ifelse(Player == "Mel Harder", "BBWAA",
                    ifelse(Player == "Red Ruffing", "BBWAA",
                    ifelse(Player == "Rube Waddell", "Veterans",
-                          votedBy)))))))
+                          votedBy)))))),
+         all_star = all_stars + as.numeric(baseball_magazine_all_star))
 
 # Primary position by player
 primary_position <- Appearances %>% 
@@ -159,6 +165,8 @@ primary_position <- Appearances %>%
   summarize(Pos = Pos, Value = value, Max = max(value)) %>%
   filter(Value == Max) %>%
   select(playerID, Pos)
+  
+
 
 # Main Position Player data frame to preform analysis on
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
@@ -202,9 +210,18 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                           votedBy))))))))))))))))) %>%
   mutate(Player = ifelse(playerID == "griffke02", "Ken Griffey Jr", Player)) %>%
   inner_join(primary_position, by = "playerID") %>%
+<<<<<<< HEAD
   mutate(Pos = as.factor(Pos)) %>%
   mutate(votedBy = as.factor(votedBy)) %>%
   mutate(wein = as.numeric(as.character((wein))))
+=======
+  mutate(Pos = as.factor(Pos),
+         votedBy = as.factor(votedBy),
+         all_star = all_stars + as.numeric(baseball_magazine_all_star)-1) %>%
+  mutate(wein = as.numeric(wein)) %>%
+  select(-c(all_stars))
+
+>>>>>>> 5417df861482d2b52ed6f930d0b1469425c4146a
 
 ```
 
@@ -252,6 +269,8 @@ PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
                            branch_rickey_award) %>%
   inner_join(primary_position, by = "playerID") %>%
   mutate(Pos = as.factor(Pos)) %>%
+  left_join(war_df_pos, by = "playerID") %>% 
+  mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
   distinct(playerID, .keep_all = TRUE)
 
 row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$Player
@@ -269,6 +288,8 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
                                                 hutch_award +
                                                 roberto_clemente_award + 
                                                 branch_rickey_award) %>%
+  left_join(war_df_pitcher, by = "playerID") %>% 
+  mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
   distinct(playerID, .keep_all = TRUE) %>%
   filter(G > 10)
 
@@ -762,9 +783,9 @@ PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
 
 # Step function method of model selection for position players, relevant awards 
 ideal_model <- step(glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
-                          all_star*WAR + most_valuable_player + 
-                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
-                          nice_guy_awards + HR*WAR + Pos + votedBy,
+                          all_star*war + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + war:Steroids +
+                          nice_guy_awards + HR*war + Pos + votedBy,
                         data = PositionPlayerHOF_df, family = "binomial"),
                     direction = "both", k = 2)
 
