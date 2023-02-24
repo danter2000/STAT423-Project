@@ -101,6 +101,7 @@ hof_players <- hall_df %>%
 awards_new <- awards_df %>%
   filter(!(yearID < 1951 & awardID == "TSN All-Star"))
 awards_new$awardID <- if_else(awards_new$awardID == "TSN All-Star" | awards_new$awardID == "Baseball Magazine All-Star", "All-Star", awards_new$awardID)
+
 awards_wider <- awards_new %>% 
   mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
   group_by(playerID, award_id_clean) %>% 
@@ -862,5 +863,22 @@ replayPlot(pos_corr)
 
 
 # ggsave(filename = "~/desktop/postcorr.png", replayPlot(pos_corr))
+```
+
+```{r awards sanity check}
+PositionPlayerHOF_df[floor(runif(10, 1, nrow(PositionPlayerHOF_df))),] %>% 
+  select(playerID, Player, all_star)
+
+batting_df %>% 
+  group_by(playerID) %>% 
+  summarize(seasons = n()) %>% 
+  filter(seasons >= 10) %>% 
+  write.csv("data/hof_eligible_pos.csv")
+
+pitching_df %>% 
+  group_by(playerID) %>% 
+  summarize(seasons = n()) %>% 
+  filter(seasons >= 10) %>% 
+  write.csv("data/hof_eligible_pitcher.csv")
 ```
 

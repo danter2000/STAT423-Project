@@ -1,5 +1,7 @@
 library(rvest)
 
+
+
 war_results <- list()
 
 url <- "https://www.baseball-reference.com/players/%s.shtml"
