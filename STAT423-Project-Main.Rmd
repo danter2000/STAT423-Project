@@ -245,7 +245,7 @@ hof_players <- hall_df_update %>%
   mutate(yearsOnBallet = n()) %>%
   summarize(wein = "Y" %in% inducted * 1, votedBy, yearID, maxYear = max(yearID), yearsOnBallet, fivePercent) %>%
   filter(yearID == maxYear) %>%
-  select(-c(yearID, maxYear))
+  select(-c(yearID, maxYear)) 
 
 # df with players that have played more than 10 years, have not had less than 5% on a ballot or failed to make the
 # hall of fame after 10 years 
@@ -254,8 +254,11 @@ PredictHOF <- player_df %>%
   filter(as.numeric(difftime(finalGame, debut, units="days")) / 365 > 10) %>%
   left_join(hof_players, by = "playerID") %>%
   filter(wein != 1 | is.na(wein)) %>%
-  filter(fivePercent == 1 | is.na(fivePercent)) %>%
-  filter(yearsOnBallet < 10 | is.na(yearsOnBallet))
+  filter(fivePercent != 1 | is.na(fivePercent)) %>%
+  filter(yearsOnBallet < 10 | is.na(yearsOnBallet)) %>%
+  mutate(votedBy = ifelse(as.Date(finalGame) +  10 * 365 < Sys.Date(),
+                          "Veterans",
+                          "BBWAA"))
 
 # Prediction test set for position players
 
@@ -281,7 +284,7 @@ PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
   distinct(playerID, .keep_all = TRUE) %>%
   filter(Pos != "P")
  
-row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$Player
+row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$playerID
 
 # Prediction test set for pitchers
 
@@ -302,7 +305,7 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
   filter(G > 10) %>%
   filter(Player != "Joe Coleman")
 
-row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$Player
+row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
 
 
@@ -791,11 +794,7 @@ PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
                                     ref = "DH")
 
 # Step function method of model selection for position players, relevant awards 
-ideal_model <- step(glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
-                          all_star*war + most_valuable_player + 
-                          AVG + OBP + SLG + HR:Steroids + war:Steroids +
-                          nice_guy_awards + HR*war + Pos + votedBy,
-                        data = PositionPlayerHOF_df, family = "binomial"),
+ideal_model <- step(good_glm_pos,
                     direction = "both", k = 2)
 
 # Step function method of model selection for position players, all awards 
@@ -915,3 +914,21 @@ pitching_df %>%
   write.csv("data/hof_eligible_pitcher.csv")
 ```
 
+
+```{r final glm objects}
+
+final_pos_glm <- glm(wein ~ RBI + SB + BB + all_star + war + SLG + Pos +
+                            votedBy + all_star:war + war:Steroids,
+                     family = "binomial",
+                     data = PositionPlayerHOF_df)
+
+summary(final_pos_glm)
+
+final_pitch_glm <- glm(wein ~ W + L + all_star + SO + SV + Steroids +
+                              rolaids_relief_man_award + votedBy,
+                       family = "binomial",
+                       data = PitcherHOF_df)
+
+summary(final_pitch_glm)
+
+```
