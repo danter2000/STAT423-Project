@@ -133,7 +133,7 @@ player_df <- player_df %>% mutate(Player = str_c(nameFirst,
 PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                                    pitching_df_categorical_counts,
                                    by = "playerID") %>%
-  inner_join(awards_wider, by = "playerID") %>%
+  left_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
   filter(G > 200) %>%
   inner_join(player_df[, c(1, 25)], by = "playerID") %>%
@@ -180,7 +180,7 @@ primary_position <- Appearances %>%
 PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                                    batting_df_categorical_counts,
                                    by = "playerID") %>%
-  inner_join(awards_wider, by = "playerID") %>%
+  left_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
   subset(select = c(1:26, 28:31, 34:37, 40:42, 44, 45, 47, 49:51)) %>%
   mutate(across(c(19, 20, 29, 41), as.factor)) %>%
@@ -221,12 +221,14 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   inner_join(primary_position, by = "playerID") %>%
   mutate(Pos = as.factor(Pos),
          votedBy = as.factor(votedBy),
-         all_star = all_stars + as.numeric(baseball_magazine_all_star)-1) %>%
+         all_star = all_star + as.numeric(baseball_magazine_all_star)) %>%
   mutate(wein = as.numeric(as.character(wein))) %>%
   filter(Player != "Satchel Paige")
   
-
-
+PositionPlayerHOF_df$all_star[is.na(PositionPlayerHOF_df$all_star)] <- 0
+PositionPlayerHOF_df$most_valuable_player[is.na(PositionPlayerHOF_df$most_valuable_player)] <- 0
+PositionPlayerHOF_df$gold_glove[is.na(PositionPlayerHOF_df$gold_glove)] <- 0
+PositionPlayerHOF_df$nice_guy_awards[is.na(PositionPlayerHOF_df$nice_guy_awards)] <- 0
 ```
 
 ```{r andy's attempt at doing something useful, warning=FALSE, message=FALSE}
