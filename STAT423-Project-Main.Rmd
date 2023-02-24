@@ -202,7 +202,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   mutate(Player = ifelse(playerID == "griffke02", "Ken Griffey Jr", Player)) %>%
   inner_join(primary_position, by = "playerID") %>%
   mutate(Pos = as.factor(Pos)) %>%
-  mutate(votedBy = as.factor(votedBy))
+  mutate(votedBy = as.factor(votedBy)) %>%
+  mutate(wein = as.numeric(wein))
 
 ```
 
@@ -230,9 +231,53 @@ PredictHOF <- player_df %>%
   filter(wein != 1 | is.na(wein)) %>%
   filter(fivePercent == 1 | is.na(fivePercent)) %>%
   filter(yearsOnBallet < 10 | is.na(yearsOnBallet))
+
+# Prediction test set for position players
+
+PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
+  inner_join(batting_df_continuous_counts) %>%
+  inner_join(batting_df_categorical_counts) %>%
+  inner_join(awards_wider) %>%
+  mutate(AVG = round(H / AB, 3), 
+         OBP = round((H + BB + HBP) / (AB + ifelse(!is.na(SH), SH, 0) +
+         ifelse(!is.na(SF), SF, 0) + BB + HBP), 3),
+         `1B` = H - (`2B` + `3B` + HR),
+         SLG = round((`1B` + `2B` * 2 + `3B` * 3 + HR * 4) / AB, 3)) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
+  mutate(Steroids = as.factor(Steroids),
+         nice_guy_awards = lou_gehrig_memorial_award +
+                           hutch_award +
+                           roberto_clemente_award + 
+                           branch_rickey_award) %>%
+  inner_join(primary_position, by = "playerID") %>%
+  mutate(Pos = as.factor(Pos)) %>%
+  distinct(playerID, .keep_all = TRUE)
+
+row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$Player
+
+# Prediction test set for pitchers
+
+PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
+                       inner_join(pitching_df_continuous_counts,
+                                   pitching_df_categorical_counts,
+                                   by = "playerID") %>%
+                       inner_join(awards_wider, by = "playerID") %>%
+                       mutate(IP = IPouts / 3) %>%
+                       mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
+                       mutate(nice_guy_awards = lou_gehrig_memorial_award +
+                                                hutch_award +
+                                                roberto_clemente_award + 
+                                                branch_rickey_award) %>%
+  distinct(playerID, .keep_all = TRUE) %>%
+  filter(G > 10)
+
+row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$Player
+
+
+
 ```
 
-```{r time series mess, warning=FALSE, message=FALSE}
+```{r}
 
 # Below are mainly for time series analysis
 
@@ -734,3 +779,21 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 
 ```
 
+```{r training and test error}
+
+# Testing and training mse for position players
+y_hat_train_pos <- predict(good_glm_pos, data = PositionPlayerHOF_df)
+train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
+
+y_hat_test_pos <- predict(good_glm_pos, data = PredictHOF_pos_df)
+test_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_test_pos)^2)
+
+
+# Testing and training mse for pitchers
+y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df)
+train_MSE_pitch <- mean((PitcherHOF_df$wein - y_hat_train_pitch)^2)
+
+y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df)
+test_MSE_pitch <- mean((PitcherHOF_df$wein  - y_hat_test_pitch)^2)
+
+```
