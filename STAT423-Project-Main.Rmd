@@ -174,7 +174,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                                    by = "playerID") %>%
   inner_join(awards_wider, by = "playerID") %>%
   inner_join(hof_players, by = "playerID") %>%
-  subset(select = c(1:26, 28:31, 34:37, 40:42, 44, 45, 47, 49:50)) %>%
+  subset(select = c(1:26, 28:31, 34:37, 40:42, 44, 45, 47, 49:51)) %>%
   mutate(across(c(19, 20, 29, 41), as.factor)) %>%
   filter(!(playerID %in% PitcherHOF_df$playerID)) %>%
   mutate(AVG = round(H / AB, 3), 
@@ -213,8 +213,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   mutate(Pos = as.factor(Pos),
          votedBy = as.factor(votedBy),
          all_star = all_stars + as.numeric(baseball_magazine_all_star)-1) %>%
-  mutate(wein = as.numeric(as.character(wein))) %>%
-  select(-c(all_stars))
+  mutate(wein = as.numeric(as.character(wein)))
 
 
 ```
