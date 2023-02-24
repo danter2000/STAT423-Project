@@ -32,7 +32,8 @@ team_df <- read_csv(file = "Data/TeamsUpdated2022.csv")
 awards_df <- read_csv(file = "Data/AwardsPlayers.csv")
 
 # For allstar game appearences
-allstar_df <- read_csv(file = "Data/AllstarFull.csv")
+allstar_df <- read_csv(file = "Data/AllstarFull.csv") %>%
+              mutate(awardID = "All-Star")
 
 # Preleminary PED data frames
 espn_ped_df <- read_csv(file = "Data/suspectedusers_espn.csv")
@@ -99,13 +100,12 @@ hof_players <- hall_df %>%
 
 # Unique award winners -- columns represent different rewards
 awards_new <- awards_df %>%
-<<<<<<< HEAD
-  filter(!(yearID < 1951 & awardID == "TSN All-Star"))
-awards_new$awardID <- if_else(awards_new$awardID == "TSN All-Star" | awards_new$awardID == "Baseball Magazine All-Star", "All-Star", awards_new$awardID) 
-=======
   filter(!(yearID > 1933 & awardID == "Baseball Magazine All-Star")) %>%
-  filter(awardID != "TSN All-Star")
->>>>>>> 5417df861482d2b52ed6f930d0b1469425c4146a
+  filter(awardID != "TSN All-Star") %>% 
+  full_join(allstar_df[,c(1,2,6,9)], by = c("playerID",
+                                            "yearID",
+                                            "lgID",
+                                            "awardID"))
 
 awards_wider <- awards_new %>% 
   mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
@@ -150,8 +150,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                    ifelse(Player == "Mel Harder", "BBWAA",
                    ifelse(Player == "Red Ruffing", "BBWAA",
                    ifelse(Player == "Rube Waddell", "Veterans",
-                          votedBy)))))),
-         all_star = all_stars + as.numeric(baseball_magazine_all_star))
+                          votedBy))))))) %>%
+  mutate(all_star = all_star + as.numeric(baseball_magazine_all_star))
 
 # Primary position by player
 primary_position <- Appearances %>% 
@@ -210,18 +210,12 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
                           votedBy))))))))))))))))) %>%
   mutate(Player = ifelse(playerID == "griffke02", "Ken Griffey Jr", Player)) %>%
   inner_join(primary_position, by = "playerID") %>%
-<<<<<<< HEAD
-  mutate(Pos = as.factor(Pos)) %>%
-  mutate(votedBy = as.factor(votedBy)) %>%
-  mutate(wein = as.numeric(as.character((wein))))
-=======
   mutate(Pos = as.factor(Pos),
          votedBy = as.factor(votedBy),
          all_star = all_stars + as.numeric(baseball_magazine_all_star)-1) %>%
-  mutate(wein = as.numeric(wein)) %>%
+  mutate(wein = as.numeric(as.character(wein))) %>%
   select(-c(all_stars))
 
->>>>>>> 5417df861482d2b52ed6f930d0b1469425c4146a
 
 ```
 
@@ -827,6 +821,9 @@ step(glm(wein ~ G + WHIP + SV + ERA + IP + R +
                           nice_guy_awards + votedBy,
                         data = PitcherHOF_df, family = "binomial"),
                     direction = "both", k = 2)
+
+# The glm object is above 
+
 ```
 
 
