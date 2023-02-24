@@ -114,6 +114,9 @@ awards_wider <- awards_new %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
   mutate(across(1:28, ~ replace_na(.x, 0)))
 
+# Preleminary PED data frames
+espn_ped_df <- read_csv(file = "Data/suspectedusers_espn.csv")
+
 espn_ped_df <- espn_ped_df %>%
   subset(select = c(2, 3)) %>% 
   rename(Player = name)
