@@ -100,7 +100,7 @@ hof_players <- hall_df %>%
 # Unique award winners -- columns represent different rewards
 awards_new <- awards_df %>%
   filter(!(yearID < 1951 & awardID == "TSN All-Star"))
-awards_new$awardID <- if_else(awards_new$awardID == "TSN All-Star" | awards_new$awardID == "Baseball Magazine All-Star", "All-Star", awards_new$awardID)
+awards_new$awardID <- if_else(awards_new$awardID == "TSN All-Star" | awards_new$awardID == "Baseball Magazine All-Star", "All-Star", awards_new$awardID) 
 
 awards_wider <- awards_new %>% 
   mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
@@ -204,7 +204,7 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   inner_join(primary_position, by = "playerID") %>%
   mutate(Pos = as.factor(Pos)) %>%
   mutate(votedBy = as.factor(votedBy)) %>%
-  mutate(wein = as.numeric(wein))
+  mutate(wein = as.numeric(as.character((wein))))
 
 ```
 
