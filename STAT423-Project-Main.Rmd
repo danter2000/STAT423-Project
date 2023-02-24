@@ -275,8 +275,9 @@ PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
   mutate(Pos = as.factor(Pos)) %>%
   left_join(war_df_pos, by = "playerID") %>% 
   mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
-  distinct(playerID, .keep_all = TRUE)
-
+  distinct(playerID, .keep_all = TRUE) %>%
+  filter(Pos != "P")
+ 
 row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$Player
 
 # Prediction test set for pitchers
@@ -295,7 +296,8 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
   left_join(war_df_pitcher, by = "playerID") %>% 
   mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
   distinct(playerID, .keep_all = TRUE) %>%
-  filter(G > 10)
+  filter(G > 10) %>%
+  filter(Player != "Joe Coleman")
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$Player
 
