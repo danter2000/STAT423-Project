@@ -797,3 +797,70 @@ y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df)
 test_MSE_pitch <- mean((PitcherHOF_df$wein  - y_hat_test_pitch)^2)
 
 ```
+
+```{r try pitchers}
+step(glm(wein ~ G + WHIP + SV + ERA + IP + R + 
+           PrimaryLg + cy_young_award + tsn_reliever_of_the_year + 
+                          all_star*WAR + most_valuable_player + WAR:Steroids +
+                          nice_guy_awards + votedBy,
+                        data = PitcherHOF_df, family = "binomial"),
+                    direction = "both", k = 2)
+```
+
+
+```{r plots}
+library(ggridges)
+
+PositionPlayerHOF_df %>% 
+  ggplot() +
+  geom_histogram(aes(x = HR, fill = as.factor(wein)))
+
+
+##### Correlation Matrix
+library(Hmisc)
+
+# ++++++++++++++++++++++++++++
+# flattenCorrMatrix
+# ++++++++++++++++++++++++++++
+# cormat : matrix of the correlation coefficients
+# pmat : matrix of the correlation p-values
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = pmat[ut]
+    )
+}
+
+get_corr_matrix <- function(data) {
+  data[is.na(data)] <- 0
+  res2<-rcorr(as.matrix(as.data.frame(lapply(data, as.numeric))))
+  cor_df <- flattenCorrMatrix(res2$r, res2$P)
+  return(cor_df)
+  cor_df %>%
+    ggplot() +
+    geom_tile(aes(x = row, y = column, fill = cor))
+  
+}
+
+get_corr_matrix <- function(data) {
+  data[is.na(data)] <- 0
+  
+  res <- cor(data.frame(lapply(data, as.numeric)))
+
+  corrplot(res, method = 'square', order = 'FPC', type = 'lower', tl.col = 'black', tl.srt = 90 , col = COL2('RdBu', 10))
+  return(recordPlot())
+}
+
+pos_corr <- get_corr_matrix(PositionPlayerHOF_df[c("G", "AB", "H", "2B", "3B", "HR", "RBI", "SB", "BB", "SO", "IBB", "HBP", "SH", "SF", "GIDP", "AVG", "OBP", "SLG", "WAR")])
+replayPlot(pos_corr)
+
+pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IP", "ERA", "WHIP")])
+replayPlot(pos_corr)
+
+
+# ggsave(filename = "~/desktop/postcorr.png", replayPlot(pos_corr))
+```
+
