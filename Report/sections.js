@@ -16,11 +16,14 @@ d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/v
 })
 
 function getData() {
-  d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/posplayerWAR.csv', function (d, i) {
+  d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/hof.csv', function (d, i) {
     return {
-      player: d[''],
-      war: d.WAR,
-      group: i % 3
+      x: i % 3,
+      player: d.player,
+      war: d.war,
+      as: d.all_stars,
+      type: d.type,
+      year: d.yearID
     }
   }).then(data => {
     dataset2 = data
@@ -69,11 +72,11 @@ function drawInitial() {
     .attr('opacity', 0)
     .attr("cx", function (d) {
       if (d.group == 0) {
-        return x(1);
+        return x(4);
       } else if (d.group == 1) {
-        return x(2);
+        return x(5);
       } else {
-        return x(3);
+        return x(6);
       }
     })
     .attr("cy", 150)
@@ -161,6 +164,12 @@ function draw5() {
   svg.selectAll(".inducted")
     .transition()
     .duration(1000)
+    .attr("cx", (d) => {
+      return x(d.x);
+    })
+    .attr("cy", (d) => {
+      return y(d.y);
+    })
     .attr("r", 10)
 
   svg.selectAll(".player")
@@ -177,6 +186,12 @@ function draw6() {
   svg.selectAll(".inducted")
     .transition()
     .duration(1000)
+    .attr("cx", (d) => {
+      return x(d.x + 3);
+    })
+    .attr("cy", (d) => {
+      return y(d.y + 3);
+    })
     .attr("r", 0)
 
   svg.selectAll(".player")

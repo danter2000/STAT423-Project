@@ -882,3 +882,22 @@ pitching_df %>%
   write.csv("data/hof_eligible_pitcher.csv")
 ```
 
+```{r dummy data for plot}
+data.frame(x = rep(1:10, 20), y = rep(1:20, each = 10)) %>% 
+  mutate(type = ifelse(x <= 3 & y == 1, "inducted", ifelse(y <= 5, "eligible", "all"))) %>% 
+  write.csv("~/circlestest.csv")
+
+pitcher_WAR <- read.csv("data/pitcherWARupdated.csv")
+pos_WAR <- read.csv("data/posplayerWARupdated")
+
+pitcher_WAR %>% 
+  mutate(type = "pitcher") %>% 
+  left_join(hall_df, by = c("player" = "playerID")) %>% 
+  filter(inducted == "Y") %>% 
+  rbind(pos_WAR %>% 
+  mutate(type = "position") %>% 
+  left_join(hall_df, by = c("player" = "playerID")) %>% 
+  filter(inducted == "Y")) %>% 
+  write.csv("data/vizdata/hof.csv", row.names = F)
+```
+
