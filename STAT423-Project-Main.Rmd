@@ -224,9 +224,9 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   mutate(Pos = as.factor(Pos),
          votedBy = as.factor(votedBy),
          all_star = all_star + as.numeric(baseball_magazine_all_star)) %>%
-  mutate(wein = as.numeric(as.character(wein))) %>%
+  mutate(wein = as.factor(wein)) %>%
   filter(Player != "Satchel Paige") %>%
-  filter(war != is.na(war))
+  filter(war != is.na(war)) 
   
 PositionPlayerHOF_df$all_star[is.na(PositionPlayerHOF_df$all_star)] <- 0
 PositionPlayerHOF_df$most_valuable_player[is.na(PositionPlayerHOF_df$most_valuable_player)] <- 0
@@ -264,7 +264,7 @@ PredictHOF <- player_df %>%
 
 # Prediction test set for position players
 
-PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
+PredictHOF_pos_df <- PredictHOF[,c(1,25, 27)] %>%
   inner_join(batting_df_continuous_counts) %>%
   inner_join(batting_df_categorical_counts) %>%
   inner_join(awards_wider) %>%
@@ -290,7 +290,7 @@ row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$playerID
 
 # Prediction test set for pitchers
 
-PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
+PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
                        inner_join(pitching_df_continuous_counts,
                                    pitching_df_categorical_counts,
                                    by = "playerID") %>%
@@ -814,12 +814,10 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df)
-train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
+y_hat_train_pos <- fitted(good_glm_pos)
+train_MSE_pos <- mean((PositionPlayerHOF_df$as.factor(wein) - y_hat_train_pos)^2)
 
-y_hat_test_pos <- predict(good_glm_pos, data = PredictHOF_pos_df)
-test_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_test_pos)^2)
-
+y_hat_test_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df)
 
 # Testing and training mse for pitchers
 y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df)
