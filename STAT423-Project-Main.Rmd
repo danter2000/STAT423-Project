@@ -160,7 +160,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                    ifelse(Player == "Bill Donovan", "Veterans",
                           votedBy))))))))))) %>%
   mutate(all_star = all_star + as.numeric(baseball_magazine_all_star), wein = as.factor(wein), votedBy = as.factor(votedBy)) %>%
-  filter(war != is.na(war))
+  filter(war != is.na(war)) %>%
+  mutate(Steroids = ifelse(Player == "Roger Clemens", 1, Steroids))
   
 
 # Primary position by player
@@ -316,6 +317,7 @@ row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 # Relevel to set DH as our position reference group
 PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
                                     ref = "DH")
+row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 
 ```
 
@@ -828,7 +830,7 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- predict(good_glm_pos, newdata = PositionPlayerHOF_df, type = "response")
+y_hat_train_pos <- predict(final_pos_glm, newdata = PositionPlayerHOF_df, type = "response")
 y_hat_train_pos <- ifelse(y_hat_train_pos > 0.5, 1, 0)
 
 y_hat_train_pos_nowar <- predict(good_glm_pos_nowar, newdata = PositionPlayerHOF_df, type = "response")
@@ -851,7 +853,7 @@ train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
 
 
 # Testing and training mse for pitchers
-y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df, type = "response")
+y_hat_train_pitch <- predict(final_pitch_glm, data = PitcherHOF_df, type = "response")
 y_hat_train_pitch <- ifelse(y_hat_train_pitch > 0.5, 1, 0)
 train_MSE_pitch <- mean((PitcherHOF_df$wein - y_hat_train_pitch)^2)
 
@@ -949,6 +951,9 @@ pitching_df %>%
 
 ```{r final glm objects}
 
+# Postion Player
+row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
+
 final_pos_glm <- glm(wein ~ all_star + HR + Steroids + Pos + votedBy + RBI + R +
                        SB + HR:Steroids + Steroids:SLG,
                      family = "binomial",
@@ -956,12 +961,21 @@ final_pos_glm <- glm(wein ~ all_star + HR + Steroids + Pos + votedBy + RBI + R +
 
 summary(final_pos_glm)
 
-final_pitch_glm <- glm(wein ~ W + L + all_star + SO + SV + as.factor(Steroids) +
-                              rolaids_relief_man_award + votedBy,
+plot(final_pos_glm, which = 4)
+
+# Pitcher
+row.names(PitcherHOF_df) <- PitcherHOF_df$Player
+
+final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
+                         most_valuable_player + all_star + 
+                         cy_young_award + rolaids_relief_man_award + votedBy +
+                         Steroids:most_valuable_player,
                        family = "binomial",
                        data = PitcherHOF_df)
 
 summary(final_pitch_glm)
+
+plot(final_pitch_glm, which = 4)
 
 ```
 
