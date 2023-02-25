@@ -657,14 +657,16 @@ plot(good_glm_pos, which = 4)
 # Position model sans war
 good_glm_pos_nowar <- step(
   glm(
-    wein ~ all_star + HR * Steroids + G  +
-      nice_guy_awards + Steroids + Pos + votedBy +
-      RBI + gold_glove + AVG + most_valuable_player
-    + SLG:Steroids + H + R + SB,
+    wein ~ all_star + HR*Steroids + G + Pos +
+      nice_guy_awards + Steroids + HR*Pos + votedBy +
+      RBI + gold_glove + AVG*Pos + most_valuable_player*all_star
+    + SLG:Steroids + R + G + SB,
     data = PositionPlayerHOF_df,
     family = "binomial"
   )
 )
+
+summary(good_glm_pos_nowar)
 
 # Cooks distance for both bad and good models pitchers ----
 
