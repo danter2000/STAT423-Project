@@ -305,7 +305,8 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
   mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
   distinct(playerID, .keep_all = TRUE) %>%
   filter(G > 10) %>%
-  filter(Player != "Joe Coleman")
+  filter(Player != "Joe Coleman") %>%
+  filter(all_star != is.na(all_star))
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
@@ -831,11 +832,18 @@ y_hat_train_pos_nowar <- ifelse(y_hat_train_pos_nowar > 0.5, 1, 0)
 y_hat_test_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df, type = "response")
 y_hat_test_pos <- ifelse(y_hat_test_pos > 0.5, 1, 0)
 
+# Adding predicted wein values to the test data sets
+PredictHOF_pos_df <- PredictHOF_pos_df %>%
+                     mutate(PredictedWein = y_hat_test_pos)
+
+PredictHOF_pitch_df <- PredictHOF_pitch_df %>%
+                     mutate(PredictedWein = y_hat_test_pitch)
+
 y_hat_test_pos_nowar <- predict(good_glm_pos_nowar, newdata = PredictHOF_pos_df, type = "response")
 y_hat_test_pos_nowar <- ifelse(y_hat_test_pos_nowar > 0.5, 1, 0)
 
 train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
->>>>>>> 6c0a03d12117ad3751413c7e5af7ba8f2864b498
+
 
 # Testing and training mse for pitchers
 y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df, type = "response")
