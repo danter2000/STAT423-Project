@@ -945,8 +945,8 @@ pitching_df %>%
 
 ```{r final glm objects}
 
-final_pos_glm <- glm(wein ~ RBI + SB + BB + all_star + war + SLG + Pos +
-                            votedBy + all_star:war + war:Steroids,
+final_pos_glm <- glm(wein ~ all_star + HR + Steroids + Pos + votedBy + RBI + R +
+                       SB + HR:Steroids + Steroids:SLG,
                      family = "binomial",
                      data = PositionPlayerHOF_df)
 
