@@ -570,6 +570,10 @@ good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
 
 plot(good_glm_pos, which = 4)
 
+row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
+
+plot(final_pos_glm, which = 4)
+
 # Position model sans war
 good_glm_pos_nowar <- step(glm(wein ~ all_star + HR*Steroids + G  +
                                  nice_guy_awards + Steroids + Pos + votedBy +
