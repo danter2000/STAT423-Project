@@ -822,24 +822,27 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df, type = "response")
+y_hat_train_pos <- predict(good_glm_pos, newdata = PositionPlayerHOF_df, type = "response")
 y_hat_train_pos <- ifelse(y_hat_train_pos > 0.5, 1, 0)
 
-y_hat_train_pos_nowar <- predict(good_glm_pos_nowar, newdata = PredictHOF_pos_df, type = "response")
+y_hat_train_pos_nowar <- predict(good_glm_pos_nowar, newdata = PositionPlayerHOF_df, type = "response")
 y_hat_train_pos_nowar <- ifelse(y_hat_train_pos_nowar > 0.5, 1, 0)
+
+y_hat_test_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df, type = "response")
+y_hat_test_pos <- ifelse(y_hat_test_pos > 0.5, 1, 0)
+
+y_hat_test_pos_nowar <- predict(good_glm_pos_nowar, newdata = PredictHOF_pos_df, type = "response")
+y_hat_test_pos_nowar <- ifelse(y_hat_test_pos_nowar > 0.5, 1, 0)
 
 train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
 
-y_hat_test_pos <- predict(good_glm_pos, data = PredictHOF_pos_df)
-test_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_test_pos)^2)
-
-
 # Testing and training mse for pitchers
-y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df)
+y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df, type = "response")
+y_hat_train_pitch <- ifelse(y_hat_train_pitch > 0.5, 1, 0)
 train_MSE_pitch <- mean((PitcherHOF_df$wein - y_hat_train_pitch)^2)
 
-y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df)
-test_MSE_pitch <- mean((PitcherHOF_df$wein  - y_hat_test_pitch)^2)
+y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df, type = "response")
+y_hat_test_pitch <- ifelse(y_hat_test_pitch > 0.5, 1, 0)
 
 ```
 
