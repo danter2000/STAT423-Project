@@ -264,7 +264,7 @@ PredictHOF <- player_df %>%
 
 # Prediction test set for position players
 
-PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
+PredictHOF_pos_df <- PredictHOF[,c(1,25, 27)] %>%
   inner_join(batting_df_continuous_counts) %>%
   inner_join(batting_df_categorical_counts) %>%
   inner_join(awards_wider) %>%
@@ -290,7 +290,7 @@ row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$playerID
 
 # Prediction test set for pitchers
 
-PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
+PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
                        inner_join(pitching_df_continuous_counts,
                                    pitching_df_categorical_counts,
                                    by = "playerID") %>%
@@ -309,7 +309,9 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
-
+# Relevel to set DH as our position reference group
+PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
+                                    ref = "DH")
 
 ```
 
@@ -566,6 +568,14 @@ good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
 
 plot(good_glm_pos, which = 4)
 
+# Position model sans war
+good_glm_pos_nowar <- step(glm(wein ~ all_star + HR*Steroids + G  +
+                                 nice_guy_awards + Steroids + Pos + votedBy +
+                                 RBI + gold_glove + AVG + most_valuable_player
+                               + SLG:Steroids + H + R + SB, 
+                               data = PositionPlayerHOF_df,
+                               family = "binomial"))
+
 # Cooks distance for both bad and good models pitchers ----
 
 row.names(PitcherHOF_df) <- PitcherHOF_df$Player
@@ -791,13 +801,11 @@ lm_position_subset_good <- regsubsets(as.factor(wein) ~ G + AB + R + H +        
                                       really.big = T)
 summary(lm_position_subset_good)
 
-# Relevel to set DH as our position reference group
-PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
-                                    ref = "DH")
 
 # Step function method of model selection for position players, relevant awards 
 ideal_model <- step(good_glm_pos,
                     direction = "both", k = 2)
+
 
 # Step function method of model selection for position players, all awards 
 ideal_model_bad <- step(bad_glm_pos,
@@ -814,7 +822,12 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df)
+y_hat_train_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df, type = "response")
+y_hat_train_pos <- ifelse(y_hat_train_pos > 0.5, 1, 0)
+
+y_hat_train_pos_nowar <- predict(good_glm_pos_nowar, newdata = PredictHOF_pos_df, type = "response")
+y_hat_train_pos_nowar <- ifelse(y_hat_train_pos_nowar > 0.5, 1, 0)
+
 train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
 
 y_hat_test_pos <- predict(good_glm_pos, data = PredictHOF_pos_df)
@@ -916,24 +929,6 @@ pitching_df %>%
   write.csv("data/hof_eligible_pitcher.csv")
 ```
 
-```{r dummy data for plot}
-data.frame(x = rep(1:10, 20), y = rep(1:20, each = 10)) %>% 
-  mutate(type = ifelse(x <= 3 & y == 1, "inducted", ifelse(y <= 5, "eligible", "all"))) %>% 
-  write.csv("~/circlestest.csv")
-
-pitcher_WAR <- read.csv("data/pitcherWARupdated.csv")
-pos_WAR <- read.csv("data/posplayerWARupdated")
-
-pitcher_WAR %>% 
-  mutate(type = "pitcher") %>% 
-  left_join(hall_df, by = c("player" = "playerID")) %>% 
-  filter(inducted == "Y") %>% 
-  rbind(pos_WAR %>% 
-  mutate(type = "position") %>% 
-  left_join(hall_df, by = c("player" = "playerID")) %>% 
-  filter(inducted == "Y")) %>% 
-  write.csv("data/vizdata/hof.csv", row.names = F)
-```
 
 ```{r final glm objects}
 
