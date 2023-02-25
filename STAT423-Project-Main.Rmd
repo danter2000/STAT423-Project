@@ -306,7 +306,8 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
   distinct(playerID, .keep_all = TRUE) %>%
   filter(G > 10) %>%
   filter(Player != "Joe Coleman") %>%
-  filter(all_star != is.na(all_star))
+  filter(all_star != is.na(all_star)) %>%
+  mutate(votedBy = as.factor(votedBy))
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
@@ -552,7 +553,7 @@ row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
                                      PrimaryLg + all_star + 
                                      most_valuable_player + AVG + OBP + SLG +
-                                     Steroids + nice_guy_awards + WAR + Pos +
+                                     Steroids + nice_guy_awards + war + Pos +
                                      gold_glove + silver_slugger +
                                      hank_aaron_award + Steroids:HR +
                                      H:Steroids,
@@ -562,9 +563,9 @@ bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
 plot(bad_glm_pos, which = 4)
 
 good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
-                          all_star*WAR + most_valuable_player + 
-                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
-                          nice_guy_awards + HR*WAR + Pos + votedBy,
+                          all_stars*war + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + war:Steroids +
+                          nice_guy_awards + HR*war + Pos + votedBy,
                         data = PositionPlayerHOF_df, family = "binomial")
 
 plot(good_glm_pos, which = 4)
@@ -591,7 +592,7 @@ good_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
 
 plot(good_glm_pitch, which = 4)
 
-bad_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
+bad_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + WHIP + SO + SV +
                             war + Steroids + most_valuable_player + 
                             pitching_triple_crown + nice_guy_awards + 
                             all_star + Steroids:ERA + Steroids:war + 
@@ -850,7 +851,7 @@ y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df, type = "respon
 y_hat_train_pitch <- ifelse(y_hat_train_pitch > 0.5, 1, 0)
 train_MSE_pitch <- mean((PitcherHOF_df$wein - y_hat_train_pitch)^2)
 
-y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df, type = "response")
+y_hat_test_pitch <- predict(final_pitch_glm, newdata = PredictHOF_pitch_df, type = "response")
 y_hat_test_pitch <- ifelse(y_hat_test_pitch > 0.5, 1, 0)
 
 ```
@@ -951,7 +952,7 @@ final_pos_glm <- glm(wein ~ RBI + SB + BB + all_star + war + SLG + Pos +
 
 summary(final_pos_glm)
 
-final_pitch_glm <- glm(wein ~ W + L + all_star + SO + SV + Steroids +
+final_pitch_glm <- glm(wein ~ W + L + all_star + SO + SV + as.factor(Steroids) +
                               rolaids_relief_man_award + votedBy,
                        family = "binomial",
                        data = PitcherHOF_df)
