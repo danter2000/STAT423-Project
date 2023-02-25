@@ -309,7 +309,9 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
-
+# Relevel to set DH as our position reference group
+PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
+                                    ref = "DH")
 
 ```
 
@@ -549,7 +551,7 @@ row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
                                      PrimaryLg + all_star + 
                                      most_valuable_player + AVG + OBP + SLG +
-                                     Steroids + nice_guy_awards + war + Pos +
+                                     Steroids + nice_guy_awards + WAR + Pos +
                                      gold_glove + silver_slugger +
                                      hank_aaron_award + Steroids:HR +
                                      H:Steroids,
@@ -559,12 +561,20 @@ bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
 plot(bad_glm_pos, which = 4)
 
 good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
-                          all_star*war + most_valuable_player + 
-                          AVG + OBP + SLG + HR:Steroids + war:Steroids +
-                          nice_guy_awards + HR*war + Pos + votedBy,
+                          all_star*WAR + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
+                          nice_guy_awards + HR*WAR + Pos + votedBy,
                         data = PositionPlayerHOF_df, family = "binomial")
 
 plot(good_glm_pos, which = 4)
+
+# Position model sans war
+good_glm_pos_nowar <- step(glm(wein ~ all_star + HR*Steroids + G  +
+                                 nice_guy_awards + Steroids + Pos + votedBy +
+                                 RBI + gold_glove + AVG + most_valuable_player
+                               + SLG:Steroids + H + R + SB, 
+                               data = PositionPlayerHOF_df,
+                               family = "binomial"))
 
 # Cooks distance for both bad and good models pitchers ----
 
@@ -791,13 +801,11 @@ lm_position_subset_good <- regsubsets(as.factor(wein) ~ G + AB + R + H +        
                                       really.big = T)
 summary(lm_position_subset_good)
 
-# Relevel to set DH as our position reference group
-PositionPlayerHOF_df$Pos <- relevel(as.factor(PositionPlayerHOF_df$Pos),
-                                    ref = "DH")
 
 # Step function method of model selection for position players, relevant awards 
 ideal_model <- step(good_glm_pos,
                     direction = "both", k = 2)
+
 
 # Step function method of model selection for position players, all awards 
 ideal_model_bad <- step(bad_glm_pos,
@@ -814,17 +822,28 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- fitted(good_glm_pos)
-train_MSE_pos <- mean((PositionPlayerHOF_df$as.factor(wein) - y_hat_train_pos)^2)
+y_hat_train_pos <- predict(good_glm_pos, newdata = PositionPlayerHOF_df, type = "response")
+y_hat_train_pos <- ifelse(y_hat_train_pos > 0.5, 1, 0)
 
-y_hat_test_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df)
+y_hat_train_pos_nowar <- predict(good_glm_pos_nowar, newdata = PositionPlayerHOF_df, type = "response")
+y_hat_train_pos_nowar <- ifelse(y_hat_train_pos_nowar > 0.5, 1, 0)
+
+y_hat_test_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df, type = "response")
+y_hat_test_pos <- ifelse(y_hat_test_pos > 0.5, 1, 0)
+
+y_hat_test_pos_nowar <- predict(good_glm_pos_nowar, newdata = PredictHOF_pos_df, type = "response")
+y_hat_test_pos_nowar <- ifelse(y_hat_test_pos_nowar > 0.5, 1, 0)
+
+train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
+>>>>>>> 6c0a03d12117ad3751413c7e5af7ba8f2864b498
 
 # Testing and training mse for pitchers
-y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df)
+y_hat_train_pitch <- predict(bad_glm_pitch, data = PitcherHOF_df, type = "response")
+y_hat_train_pitch <- ifelse(y_hat_train_pitch > 0.5, 1, 0)
 train_MSE_pitch <- mean((PitcherHOF_df$wein - y_hat_train_pitch)^2)
 
-y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df)
-test_MSE_pitch <- mean((PitcherHOF_df$wein  - y_hat_test_pitch)^2)
+y_hat_test_pitch <- predict(bad_glm_pitch, data = PredictHOF_pitch_df, type = "response")
+y_hat_test_pitch <- ifelse(y_hat_test_pitch > 0.5, 1, 0)
 
 ```
 
