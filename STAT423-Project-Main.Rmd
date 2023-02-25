@@ -223,8 +223,9 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   inner_join(primary_position, by = "playerID") %>%
   mutate(Pos = as.factor(Pos),
          votedBy = as.factor(votedBy),
-         all_star = all_star + as.numeric(baseball_magazine_all_star)) %>%
-  mutate(wein = as.numeric(as.character(wein))) %>%
+         all_star = all_star + as.numeric(baseball_magazine_all_star),
+         wein = as.factor(wein)) %>%
+  # mutate(wein = as.numeric(as.character(wein))) %>%
   filter(Player != "Satchel Paige") %>%
   filter(war != is.na(war))
   
@@ -232,6 +233,8 @@ PositionPlayerHOF_df$all_star[is.na(PositionPlayerHOF_df$all_star)] <- 0
 PositionPlayerHOF_df$most_valuable_player[is.na(PositionPlayerHOF_df$most_valuable_player)] <- 0
 PositionPlayerHOF_df$gold_glove[is.na(PositionPlayerHOF_df$gold_glove)] <- 0
 PositionPlayerHOF_df$nice_guy_awards[is.na(PositionPlayerHOF_df$nice_guy_awards)] <- 0
+
+row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$playerID
 ```
 
 ```{r andy's attempt at doing something useful, warning=FALSE, message=FALSE}
@@ -263,8 +266,7 @@ PredictHOF <- player_df %>%
                           "BBWAA"))
 
 # Prediction test set for position players
-
-PredictHOF_pos_df <- PredictHOF[,c(1,25)] %>%
+PredictHOF_pos_df <- PredictHOF[,c(1,25,27)] %>%
   inner_join(batting_df_continuous_counts) %>%
   inner_join(batting_df_categorical_counts) %>%
   inner_join(awards_wider) %>%
@@ -308,9 +310,6 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25)] %>%
   filter(Player != "Joe Coleman")
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
-
-
-
 ```
 
 ```{r}
@@ -546,7 +545,7 @@ t(tibble(Before_MVP = total_hall_before_mvp,
 
 row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 
-bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
+bad_glm_pos <- glm(wein ~ G + AB + R + H + HR + RBI + SB + BB +
                                      PrimaryLg + all_star + 
                                      most_valuable_player + AVG + OBP + SLG +
                                      Steroids + nice_guy_awards + war + Pos +
@@ -676,11 +675,11 @@ point_plot <- ggplot(data = final_time_series_filtered_df,
 ```
 
 ```{r}
-library(rvest)
+# library(rvest)
 
 # Players to model on -- if they retired in the last 5 years
-recent_players <- player_df %>% 
-  filter(finalGame >= Sys.Date() - (365 * 5) & playerID %in% c((pitching_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique()), (batting_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique())) & !(playerID %in% (hall_df %>% pull(playerID) %>% unique())))
+# recent_players <- player_df %>% 
+#   filter(finalGame >= Sys.Date() - (365 * 5) & playerID %in% c((pitching_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique()), (batting_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique())) & !(playerID %in% (hall_df %>% pull(playerID) %>% unique())))
 
 # Check if they are currently active or not based on if they are on a team
 # Around 28% of the players in this list are still active -- based on baseball reference
@@ -716,15 +715,15 @@ recent_players <- player_df %>%
 #   Sys.sleep(5)
 # }
 
-recent_players <- recent_players %>%
-  left_join(recent_players_info , by = c("playerID" = "player")) %>%
-  mutate(active = active == "TRUE", finalgame_before_2022 = finalGame <= "2022-04-07")
-
-recent_players %>%
-  select(active, finalgame_before_2022) %>%
-  summarize_all(mean)
-
-write.csv(recent_players, "recent_players.csv")
+# recent_players <- recent_players %>%
+#   left_join(recent_players_info , by = c("playerID" = "player")) %>%
+#   mutate(active = active == "TRUE", finalgame_before_2022 = finalGame <= "2022-04-07")
+# 
+# recent_players %>%
+#   select(active, finalgame_before_2022) %>%
+#   summarize_all(mean)
+# 
+# write.csv(recent_players, "recent_players.csv")
 ```
 
 ```{r try models}
@@ -814,7 +813,8 @@ ideal_model_pitch_bad <- step(bad_glm_pitch, direction = "both", k = 2)
 ```{r training and test error}
 
 # Testing and training mse for position players
-y_hat_train_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df)
+y_hat_train_pos <- predict(good_glm_pos, PredictHOF_pos_df)
+y_hat_train_pos[y_hat_train_pos > 0.5] <- 1
 train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
 
 y_hat_test_pos <- predict(good_glm_pos, data = PredictHOF_pos_df)
@@ -952,3 +952,48 @@ final_pitch_glm <- glm(wein ~ W + L + all_star + SO + SV + Steroids +
 summary(final_pitch_glm)
 
 ```
+
+```{r}
+pos_fitted <- fitted(good_glm_pos)
+
+PositionPlayerHOF_df %>% 
+  mutate(i = 1:n()) %>% 
+  left_join(data.frame(i = as.numeric(names(pos_fitted)), fit = pos_fitted), by = "i") %>% 
+  select(-i) %>% 
+  mutate(wein_pred = as.factor((fit > 0.5)*1)) %>% 
+  group_by(wein_pred, wein) %>% 
+  summarize(n = n())
+
+get_confusion_matrix <- function(mod, data) {
+  fitted <- fitted(mod)
+  
+  confusion_matrix <- data %>% 
+    mutate(i = 1:n()) %>% 
+    left_join(data.frame(i = as.numeric(names(fitted)), fit = fitted), by = "i") %>% 
+    select(-i) %>% 
+    mutate(wein_pred = as.factor((fit > 0.5)*1)) %>% 
+    group_by(wein_pred, wein) %>% 
+    summarize(n = n()) %>% 
+    filter(!is.na(wein_pred))
+  
+  confusion_matrix %>% 
+    mutate(wein = ifelse(wein == 1, "HoF", "No HoF"), wein_pred = ifelse(wein_pred == 1, "HoF", "No HoF")) %>% 
+    ggplot() +
+    geom_tile(aes(x = wein_pred, y = wein, fill = n)) + 
+    geom_text(aes(x = wein_pred, y = wein, label = n)) +
+    theme_minimal() +
+    labs(x = "Prediction", y = "Actual") %>% 
+    return()
+}
+
+get_confusion_matrix(good_glm_pos, PositionPlayerHOF_df)
+```
+
+```{r}
+library(DHARMa)
+plot(good_glm_pos)
+testDispersion(good_glm_pos, plot=T,
+type="PearsonChisq",
+alternative="less")
+```
+

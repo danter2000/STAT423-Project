@@ -1,6 +1,6 @@
 let dataset, dataset2, svg, circleLabel
 let salarySizeScale, salaryXScale, categoryColorScale
-let simulation, nodes
+let simulation, nodes, scaleR
 let categoryLegend, salaryLegend
 
 const margin = { left: 170, top: 50, bottom: 50, right: 20 }
@@ -16,11 +16,10 @@ d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/v
 })
 
 function getData() {
-  d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/hof.csv', function (d, i) {
+  d3.csv('https://raw.githubusercontent.com/danter2000/STAT423-Project/main/Data/vizdata/hof.csv', function (d, i) {
     return {
-      x: i % 3,
       player: d.player,
-      war: d.war,
+      war: parseInt(d.war),
       as: d.all_stars,
       type: d.type,
       year: d.yearID
@@ -63,25 +62,19 @@ function drawInitial() {
       return d.type + " gen"
     })
 
-  svg.append('g')
-    .selectAll("dot")
-    .data(dataset2)
-    .enter()
-    .append("circle")
-    .attr("fill", "#4b6f84")
-    .attr('opacity', 0)
-    .attr("cx", function (d) {
-      if (d.group == 0) {
-        return x(4);
-      } else if (d.group == 1) {
-        return x(5);
-      } else {
-        return x(6);
-      }
-    })
-    .attr("cy", 150)
-    .attr("r", 4)
-    .attr("class", "player")
+  makeBeeswarm(dataset2);
+
+  // svg.append('g')
+  //   .selectAll("dot")
+  //   .data(dataset2)
+  //   .enter()
+  //   .append("circle")
+  //   .attr("fill", "#4b6f84")
+  //   .attr('opacity', 0)
+  //   .attr("cx", x(5))
+  //   .attr("cy", y(10))
+  //   .attr("r", 4)
+  //   .attr("class", function (d) { return d.type + " players" })
 
 
   svg.selectAll("circle.gen")
@@ -117,8 +110,6 @@ function draw1() {
     .transition()
     .duration(1000)
     .attr("opacity", 1)
-
-
 }
 
 function draw2() {
@@ -152,7 +143,7 @@ function draw4() {
     .duration(1000)
     .attr("opacity", 0)
 
-    svg.selectAll(".eligible")
+  svg.selectAll(".eligible")
     .transition()
     .duration(1000)
     .attr("opacity", 0)
@@ -172,7 +163,7 @@ function draw5() {
     })
     .attr("r", 10)
 
-  svg.selectAll(".player")
+  svg.selectAll(".players")
     .transition()
     .duration(1000)
     .attr("opacity", 0)
@@ -186,19 +177,57 @@ function draw6() {
   svg.selectAll(".inducted")
     .transition()
     .duration(1000)
+    .attr('opacity', 1)
     .attr("cx", (d) => {
-      return x(d.x + 3);
+      return x(parseInt(d.x) + 3);
     })
     .attr("cy", (d) => {
-      return y(d.y + 3);
+      return y(parseInt(d.y) + 9);
     })
-    .attr("r", 0)
 
-  svg.selectAll(".player")
+  svg.selectAll(".players")
     .transition()
     .duration(1000)
-    .attr("opacity", 1)
+    .attr("cx", x(5))
+    .attr("cy", y(10))
+    .attr('opacity', 0)
+}
 
+function draw7() {
+  svg = d3.select("#vis").select("svg")
+
+  svg.selectAll(".inducted")
+    .transition()
+    .duration(500)
+    .attr("cx", (d) => {
+      return x(parseInt(5));
+    })
+    .attr("opacity", 0)
+    .end()
+    .then((d) => {
+      const path = d3.path();
+      path.moveTo(x(5), y(0));
+      path.lineTo(x(5), y(20)); 
+      path.closePath();
+      
+      svg.append("path")
+        .attr("fill", "none")
+        .attr("stroke-color", "black")
+        .attr("class", "line")
+        .style("stroke-dasharray", ("3, 3"))  // <== This line here!!
+        .attr("d", path);
+
+      svg.selectAll(".players")
+        .transition("specific")
+        .duration(2000)
+        .delay(function (d, i) {
+          return i / 30;
+        })
+        .attr('opacity', 1)
+        .attr('cx', (d) => { return d.x })
+        .attr('cy', (d) => { return d.y })
+        .attr('r', (d) => { return scaleR(d.war) })
+    })
 }
 
 let activationFunctions = [
@@ -207,7 +236,8 @@ let activationFunctions = [
   draw3,
   draw4,
   draw5,
-  draw6
+  draw6,
+  draw7
 ]
 
 //All the scrolling function
@@ -273,4 +303,90 @@ function wrap(text, width) {
       }
     }
   });
+}
+
+function makeBeeswarm(dataset) {
+  var center;
+
+  scaleR = d3.scaleLinear()
+    .domain([d3.min(dataset, function (d) { return d.war; }), d3.max(dataset, function (d) { return d.war; })])
+    .range([5, 15])
+
+  svg = d3.select("#vis").select("svg")
+
+  for (var type of ["position", "pitcher"]) {
+    if (type == "position") {
+      center = 1
+    } else {
+      center = 9
+    }
+
+    var data = dataset.filter((d) => { return d.type == type })
+
+    var node = svg.append('g')
+      .selectAll("dot")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("class", (d) => {
+        return "players " + d.type
+      })
+      .attr("fill", function (d) {
+        if (type == "position") {
+          return "#003f5c"
+        } else {
+          return "#ffa600"
+        }
+      })
+      .attr("stroke", "black")
+      .attr("r", 0)
+      .attr("cx", x(5))
+      .attr("cy", y(10))
+      .attr("id", (d) => {
+        return d.player;
+      })
+    // .style("fill", "#679f51")
+    // .style("fill-opacity", 0.8)
+    // .attr("stroke", "black")
+    // .style("stroke-width", 1)
+    // .on("mouseover", mouseover) // What to do when hovered
+    // .on("mousemove", mousemove)
+    // .on("mouseleave", mouseleave)
+    // .call(d3.drag() // call specific function when circle is dragged
+    //   .on("start", dragstarted)
+    //   .on("drag", dragged)
+    //   .on("end", dragended));
+
+    const simulation = d3.forceSimulation()
+      .force('forceX', d3.forceX(x(center)).strength(0.9))
+      .force('forceY', d3.forceY(y(10)).strength(0.05))
+      .force("charge", d3.forceManyBody().distanceMax(3).distanceMin(2).strength(1)) // Nodes are attracted one each other of value is > 0
+      .force("collide", d3.forceCollide().strength(1).radius(function (d) { return (scaleR(d.war)) }).iterations(1)) // Force that avoids circle overlapping
+
+    simulation
+      .nodes(data)
+      .on("tick", function () {
+        // node
+        //   .attr("cx", (d, i) => {data[i]['cx'] = d.x; return x(5)})
+        //   .attr("cy", (d, i) => {data[i]['cy'] = d.y; return y(10)})
+        node
+          .attr("cx", (d) => { return d.x })
+          .attr("cy", (d) => { return d.y })
+      });
+  }
+
+  function dragstarted(event, d) {
+    if (!event.active) simulation.alphaTarget(.03).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+  function dragged(event, d) {
+    d.fx = event.x;
+    d.fy = event.y;
+  }
+  function dragended(event, d) {
+    if (!event.active) simulation.alphaTarget(.03);
+    d.fx = null;
+    d.fy = null;
+  }
 }
