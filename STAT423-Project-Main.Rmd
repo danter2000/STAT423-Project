@@ -830,7 +830,7 @@ y_hat_train_pos <- ifelse(y_hat_train_pos > 0.5, 1, 0)
 y_hat_train_pos_nowar <- predict(good_glm_pos_nowar, newdata = PositionPlayerHOF_df, type = "response")
 y_hat_train_pos_nowar <- ifelse(y_hat_train_pos_nowar > 0.5, 1, 0)
 
-y_hat_test_pos <- predict(good_glm_pos, newdata = PredictHOF_pos_df, type = "response")
+y_hat_test_pos <- predict(final_pos_glm, newdata = PredictHOF_pos_df, type = "response")
 y_hat_test_pos <- ifelse(y_hat_test_pos > 0.5, 1, 0)
 
 # Adding predicted wein values to the test data sets
