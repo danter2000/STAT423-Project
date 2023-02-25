@@ -549,7 +549,7 @@ row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
                                      PrimaryLg + all_star + 
                                      most_valuable_player + AVG + OBP + SLG +
-                                     Steroids + nice_guy_awards + war + Pos +
+                                     Steroids + nice_guy_awards + WAR + Pos +
                                      gold_glove + silver_slugger +
                                      hank_aaron_award + Steroids:HR +
                                      H:Steroids,
@@ -559,9 +559,9 @@ bad_glm_pos <- glm(as.factor(wein) ~ G + AB + R + H + HR + RBI + SB + BB +
 plot(bad_glm_pos, which = 4)
 
 good_glm_pos <- glm(wein ~ G + AB + R + H + RBI + SB + BB + PrimaryLg +
-                          all_star*war + most_valuable_player + 
-                          AVG + OBP + SLG + HR:Steroids + war:Steroids +
-                          nice_guy_awards + HR*war + Pos + votedBy,
+                          all_star*WAR + most_valuable_player + 
+                          AVG + OBP + SLG + HR:Steroids + WAR:Steroids +
+                          nice_guy_awards + HR*WAR + Pos + votedBy,
                         data = PositionPlayerHOF_df, family = "binomial")
 
 plot(good_glm_pos, which = 4)
