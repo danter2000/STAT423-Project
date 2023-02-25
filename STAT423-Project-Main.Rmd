@@ -141,6 +141,7 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   relocate(Player, .after = playerID) %>%
   relocate(IP, .after = IPouts) %>%
   mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
+  mutate(Steroids = ifelse(Player == "Roger Clemens"), 1, Steroids) %>% 
   mutate(nice_guy_awards = lou_gehrig_memorial_award +
                            hutch_award +
                            roberto_clemente_award + 
@@ -158,8 +159,7 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                    ifelse(Player == "Nap Rucker", "Veterans",
                    ifelse(Player == "Bill Donovan", "Veterans",
                           votedBy))))))))))) %>%
-  mutate(all_star = all_star + as.numeric(baseball_magazine_all_star)) %>%
-  mutate(votedBy = as.factor(votedBy))  %>%
+  mutate(all_star = all_star + as.numeric(baseball_magazine_all_star), wein = as.factor(wein), votedBy = as.factor(votedBy)) %>%
   filter(war != is.na(war))
   
 
@@ -478,19 +478,21 @@ hits_by_HOF <- ggplot(data = PositionPlayerHOF_df,
 
 # Pairs plots
 # pairs(PositionPlayerHOF_df[,c(4, 5, 8, 9, 10, 12, 14, 21, 23, 24, 27, 41)])
+ 
+# get_corr_matrix <- function(data) {
+#   data[is.na(data)] <- 0
+#   
+#   res <- cor(data.frame(lapply(data, as.numeric)))
+# 
+#   corrplot(res, type = "upper",
+#          tl.col = "black", tl.srt = 90)
+# }
+# 
+# get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IPouts", "ERA", "WHIP")])
+# 
+# get_corr_matrix(PositionPlayerHOF_df[c("G", "AB", "H", "2B", "3B", "HR", "RBI", "SB", "BB", "SO", "IBB", "HBP", "SH", "SF", "GIDP", "AVG", "OBP", "SLG")])
 
-get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IPouts", "ERA", "WHIP")])
 
-get_corr_matrix(PositionPlayerHOF_df[c("G", "AB", "H", "2B", "3B", "HR", "RBI", "SB", "BB", "SO", "IBB", "HBP", "SH", "SF", "GIDP", "AVG", "OBP", "SLG")])
-
-get_corr_matrix <- function(data) {
-  data[is.na(data)] <- 0
-  
-  res <- cor(data.frame(lapply(data, as.numeric)))
-
-  corrplot(res, type = "upper",
-         tl.col = "black", tl.srt = 90)
-}
 
 # Counting number of players elected into the hall before and after major awards
 
@@ -582,7 +584,7 @@ good_glm_pos_nowar <- step(glm(wein ~ all_star + HR*Steroids + G  +
 
 # Cooks distance for both bad and good models pitchers ----
 
-row.names(PitcherHOF_df) <- PitcherHOF_df$Player
+row.names(PitcherHOF_df) <- PitcherHOF_df$playerID
 
 good_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV + 
                              war + Steroids + most_valuable_player + 
@@ -999,11 +1001,4 @@ get_confusion_matrix <- function(mod, data) {
 get_confusion_matrix(good_glm_pos, PositionPlayerHOF_df)
 ```
 
-```{r}
-library(DHARMa)
-plot(good_glm_pos)
-testDispersion(good_glm_pos, plot=T,
-type="PearsonChisq",
-alternative="less")
-```
 
