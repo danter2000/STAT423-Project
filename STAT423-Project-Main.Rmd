@@ -835,12 +835,12 @@ y_hat_test_pos <- ifelse(y_hat_test_pos > 0.5, 1, 0)
 
 # Adding predicted wein values to the test data sets
 PredictHOF_pos_df <- PredictHOF_pos_df %>%
-                     mutate(PredictedWein = y_hat_test_pos)
+                     mutate(PredictedWein = y_hat_test_pos_nowar)
 
 PredictHOF_pitch_df <- PredictHOF_pitch_df %>%
                      mutate(PredictedWein = y_hat_test_pitch)
 
-y_hat_test_pos_nowar <- predict(good_glm_pos_nowar, newdata = PredictHOF_pos_df, type = "response")
+y_hat_test_pos_nowar <- predict(final_pos_glm, newdata = PredictHOF_pos_df, type = "response")
 y_hat_test_pos_nowar <- ifelse(y_hat_test_pos_nowar > 0.5, 1, 0)
 
 train_MSE_pos <- mean((PositionPlayerHOF_df$wein - y_hat_train_pos)^2)
