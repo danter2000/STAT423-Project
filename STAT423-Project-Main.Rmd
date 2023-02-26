@@ -171,7 +171,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   mutate(all_star = all_star + as.numeric(baseball_magazine_all_star), wein = as.factor(wein), votedBy = as.factor(votedBy)) %>%
   filter(war != is.na(war)) %>%
   inner_join(Appearances_df[,c(2,3)], by = "playerID") %>%
-  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever"))
+  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever")) %>%
+  mutate(StarterReliever = as.factor(StarterReliever))
  
 PitcherHOF_df$cy_young_award[is.na(PitcherHOF_df$cy_young_award)] <- 0
 PitcherHOF_df$rolaids_relief_man_award[is.na(PitcherHOF_df$rolaids_relief_man_award)] <- 0
@@ -609,7 +610,7 @@ good_glm_pitch <- glm(wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
                              pitching_triple_crown + nice_guy_awards +
                              all_star + Steroids:ERA + Steroids:war + 
                              Steroids:most_valuable_player + Steroids:SO +
-                             votedBy,
+                             votedBy + StarterReliever,
                       data = PitcherHOF_df)
 
 plot(good_glm_pitch, which = 4)
