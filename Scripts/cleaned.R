@@ -670,45 +670,59 @@ summary(good_glm_pos_nowar)
 
 # Cooks distance for both bad and good models pitchers ----
 
-row.names(PitcherHOF_df) <- PitcherHOF_df$playerID
+row.names(PositionPlayerHOF_df) <- NULL
 
-good_glm_pitch <-
-  glm(
-    wein ~ W + L + G + IP + ERA + all_star + WHIP + SO + SV +
-      war + Steroids + most_valuable_player +
-      pitching_triple_crown + nice_guy_awards +
-      all_star + Steroids:ERA + Steroids:war +
-      Steroids:most_valuable_player + Steroids:SO +
-      votedBy,
-    data = PitcherHOF_df,
-    family = "binomial"
-  )
+final_pos_glm <- glm(wein ~ all_star + HR + Steroids + Pos + votedBy + RBI +
+                       most_valuable_player + R + SB + HR:Pos +
+                       all_star:most_valuable_player + Steroids:SLG,
+                     family = "binomial",
+                     data = PositionPlayerHOF_df)
 
-plot(good_glm_pitch, which = 4)
+# Pitcher
+row.names(PitcherHOF_df) <- NULL
 
-bad_glm_pitch <- glm(
-  wein ~ W + L + G + IP + ERA + WHIP + SO + SV +
-    war + Steroids + most_valuable_player +
-    pitching_triple_crown + nice_guy_awards +
-    all_star + Steroids:ERA + Steroids:war +
-    Steroids:most_valuable_player + Steroids:SO +
-    gold_glove + cy_young_award +
-    Steroids:cy_young_award + pitching_triple_crown +
-    rolaids_relief_man_award + votedBy,
-  data = PitcherHOF_df,
-  family = "binomial"
-)
-
-plot(bad_glm_pitch, which = 4)
-
+final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
+                         most_valuable_player + all_star + 
+                         cy_young_award + rolaids_relief_man_award + votedBy +
+                         Steroids:most_valuable_player,
+                       family = "binomial",
+                       data = PitcherHOF_df)
 ##### PLOTS
 library(ggalt)
 library(patchwork)
+library(ggrepel)
 
-pos_OD <- sum(residuals(good_glm_pos,
-                        type = "deviance") ^ 2) /
-  good_glm_pos$df.residual
-pchisq(pos_OD, 1)
+par(mfrow=c(1,2))
+plot(final_pos_glm, which = 4)
+plot(final_pitch_glm, which = 4)
+
+cookit <- function(mod, data, subtitle) {
+  cooksd <- cooks.distance(mod)
+  
+  df <- data %>% 
+    mutate(i = 1:n()) %>% 
+    left_join(data.frame(i = as.numeric(names(cooksd)), cooksd = as.numeric(cooksd)), by = "i")
+  
+  top10 <- df %>% arrange(-cooksd) %>% head(10) %>% 
+    pull(playerID)
+    
+  df %>% 
+    mutate(over = playerID %in% top10) %>% 
+    ggplot() +
+    geom_bar(aes(x = i, y = cooksd, alpha = over), stat = "identity", fill = "dodgerblue4") +
+    # geom_text(aes(x = ifelse(cooksd > mean(cooksd) * 1.5, i, NA), y = ifelse(cooksd > mean(cooksd) * 1.5, cooksd, NA), label = ifelse(cooksd > mean(cooksd) * 1.5, Player, NA))) +
+    geom_label_repel(data = df %>% filter(playerID %in% top10), aes(x = i, y = cooksd, label = Player), fontface = "italic", nudge_y = 0.01) +
+    theme_minimal() +
+    theme(
+      legend.position = "none",
+      text = element_text(size = 15),
+      plot.title = element_text(face = "bold")
+    ) +
+    labs(x = "Observation Number", y = "Cook's Distance", title = "Cook's Distance", subtitle = subtitle)
+}
+
+cookit(final_pos_glm, PositionPlayerHOF_df, "Position Players")
+cookit(final_pitch_glm, PositionPlayerHOF_df, "Pitchers")
 
 od_plot <- function(mod, subtitle) {
   OD <- sum(residuals(mod,
@@ -743,7 +757,7 @@ or_conf_int_plot <- function(mod, subtitle) {
       color = "#ffa600",
       alpha = 0.5
     ) +
-    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c") +
+    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 5) +
     scale_x_log10(n.breaks = 10) +
     theme_minimal() +
     theme(
@@ -766,7 +780,7 @@ or_conf_int_plot <- function(mod, subtitle) {
       color = "#ffa600",
       alpha = 0.5
     ) +
-    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c") +
+    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 5) +
     scale_x_log10(n.breaks = 10) +
     theme_minimal() +
     theme(
@@ -784,15 +798,15 @@ or_conf_int_plot <- function(mod, subtitle) {
   return(p1 + p2)
 }
 
-or_conf_int_plot(good_glm_pos, "Position Players Model")
-or_conf_int_plot(good_glm_pitch, "Pitchers Model")
-or_conf_int_plot(good_glm_pos_nowar, "Position Players Model: No WAR")
+or_conf_int_plot(final_pos_glm, "Position Players Model")
+or_conf_int_plot(final_pitch_glm, "Pitchers Model")
+# or_conf_int_plot(good_glm_pos_nowar, "Position Players Model: No WAR")
 
 library(DHARMa) 
 
 par(mfrow=c(1,2))
-testDispersion(good_glm_pos) 
-testDispersion(good_glm_pitch)
+testDispersion(final_pos_glm) 
+testDispersion(final_pitch_glm)
 
 get_preds <- function(mod, data, subtitle) {
   df <- cbind(data , prob_wein = predict(mod, newdata = data, type = "response")) %>% 
@@ -803,11 +817,12 @@ get_preds <- function(mod, data, subtitle) {
   p1 <- df %>% 
     head(10) %>% 
     ggplot() + 
-    geom_bar(aes(x = paste0(Player, "\n", playerID), y = prob_wein), stat="identity", fill = "#003f5c") +
+    geom_bar(aes(x = playerID, y = prob_wein), stat="identity", fill = "#003f5c") +
+    geom_text(aes(x = playerID, y = prob_wein + 0.03, label = Player)) +
     theme_minimal() +
     theme(
       text = element_text(size = 15),
-      axis.text.x = element_text(face = "italic", angle = 40, hjust = 1, vjust = 1),
+      axis.text.x = element_blank(),
       plot.title = element_text(face = "bold")
     ) +
     labs(
@@ -822,15 +837,16 @@ get_preds <- function(mod, data, subtitle) {
     arrange(-prob_wein) %>% 
     tail(10)
   
-  df$Player <- factor(df$playerID, levels = df$playerID[order(df$prob_wein)])
+  df$playerID <- factor(df$playerID, levels = df$playerID[order(df$prob_wein)])
   
   p2 <- df %>% 
     ggplot() + 
-    geom_bar(aes(x = paste0(Player, "\n", playerID), y = prob_wein), stat="identity", fill = "#003f5c") +
+    geom_bar(aes(x = playerID, y = prob_wein), stat="identity", fill = "#003f5c") +
+    geom_text(aes(x = playerID, y = prob_wein + (prob_wein / 10), label = Player)) +
     theme_minimal() +
     theme(
       text = element_text(size = 15),
-      axis.text.x = element_text(face = "italic", angle = 40, hjust = 1, vjust = 1),
+      axis.text.x = element_blank(),
       plot.title = element_text(face = "bold")
     ) +
     labs(
@@ -843,29 +859,46 @@ get_preds <- function(mod, data, subtitle) {
   return(p1 / p2)
 }
 
-get_preds(good_glm_pos, PredictHOF_pos_df, "Probabilities for Position Players")
-get_preds(good_glm_pitch, PredictHOF_pitch_df, "Probabilities for Pitchers")
+get_preds(final_pos_glm, PredictHOF_pos_df, "Probabilities for Position Players")
+get_preds(final_pitch_glm, PredictHOF_pitch_df, "Probabilities for Pitchers")
 
-get_confusion_matrix <- function(mod, data) {
+library(RColorBrewer)
+
+get_confusion_matrix <- function(mod, data, title) {
   fitted <- fitted(mod)
   
   confusion_matrix <- data %>% 
     mutate(i = 1:n()) %>% 
     left_join(data.frame(i = as.numeric(names(fitted)), fit = fitted), by = "i") %>% 
-    select(-i) %>% 
-    mutate(wein_pred = as.factor((fit > 0.5)*1)) %>% 
-    group_by(wein_pred, wein) %>% 
-    summarize(n = n()) %>% 
-    filter(!is.na(wein_pred))
+    select(-i) %>%
+    mutate(wein_pred = as.factor((fit > 0.5)*1)) %>%
+    group_by(wein_pred, wein) %>%
+    summarize(n = n()) %>%
+    filter(!is.na(wein_pred)) %>% 
+    mutate(label = paste0(n, " ",ifelse(wein_pred == 1 & wein == 1, "TP's", 
+                          ifelse(wein_pred == 0 & wein == 0, "TN's", 
+                                 ifelse(wein_pred == 1 & wein == 0, "FP's", "FN's")))))
   
-  confusion_matrix %>% 
-    mutate(wein = ifelse(wein == 1, "HoF", "No HoF"), wein_pred = ifelse(wein_pred == 1, "HoF", "No HoF")) %>% 
+  accuracy <- round(sum(confusion_matrix[(confusion_matrix$wein_pred == 0 & confusion_matrix$wein == 0) | (confusion_matrix$wein_pred == 1 & confusion_matrix$wein == 1), "n"]) / sum(confusion_matrix$n), 2)
+
+  confusion_matrix %>%
+    # mutate(wein_pred = factor(wein_pred, level = c(0, 1)), wein = factor(wein, level = c(0, 1))) %>% 
+    mutate(wein = ifelse(wein == 1, "HoF", "No HoF"), wein_pred = ifelse(wein_pred == 1, "HoF", "No HoF")) %>%
     ggplot() +
-    geom_tile(aes(x = wein_pred, y = wein, fill = n)) + 
-    geom_text(aes(x = wein_pred, y = wein, label = n)) +
+    geom_tile(aes(x = factor(wein_pred, level = c("HoF", "No HoF")), y = factor(wein, level = c("No HoF", "HoF")), fill = n)) +
+    geom_text(aes(x = wein_pred, y = wein, label = label)) +
+    scale_fill_fermenter(direction = 1) +
     theme_minimal() +
-    labs(x = "Prediction", y = "Actual") %>% 
+    theme(
+      text = element_text(size = 15),
+      axis.text.x = element_text(face = "italic"),
+      axis.text.y = element_text(face = "italic"),
+      plot.title = element_text(face = "bold")
+    ) +
+    labs(x = "Predicted Label", y = "True Label", title = paste0("Confusion Matrix: ", title), subtitle = paste0("Accuracy: ", accuracy)) %>%
     return()
 }
 
-get_confusion_matrix(good_glm_pos, PositionPlayerHOF_df)
+get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df, "Position Players")
+get_confusion_matrix(final_pitch_glm, PitcherHOF_df, "Pitchers")
+
