@@ -45,6 +45,15 @@ colnames(war_df_pos)[1] ="playerID"
 war_df_pitcher <- read_csv(file = "Data/pitcherWARupdated.csv")
 colnames(war_df_pitcher)[1] ="playerID"
 
+Appearances_df <- read_csv(file = "Data/Appearances_2022.csv") 
+
+Appearances_df <- Appearances_df %>%
+                  select(1,4) %>%
+                  group_by(playerID) %>%
+                  mutate(yearID = 1,
+                         years_played = sum(yearID)) %>%
+                  unique()
+
 ```
 
 ```{r combining hof mess, warning=FALSE, message=FALSE}
@@ -141,7 +150,7 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   relocate(Player, .after = playerID) %>%
   relocate(IP, .after = IPouts) %>%
   mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
-  mutate(Steroids = ifelse(Player == "Roger Clemens"), 1, Steroids) %>% 
+  mutate(Steroids = ifelse(Player == "Roger Clemens", 1, Steroids)) %>% 
   mutate(nice_guy_awards = lou_gehrig_memorial_award +
                            hutch_award +
                            roberto_clemente_award + 
@@ -161,7 +170,8 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
                           votedBy))))))))))) %>%
   mutate(all_star = all_star + as.numeric(baseball_magazine_all_star), wein = as.factor(wein), votedBy = as.factor(votedBy)) %>%
   filter(war != is.na(war)) %>%
-  mutate(Steroids = ifelse(Player == "Roger Clemens", 1, Steroids))
+  inner_join(Appearances_df[,c(2,3)], by = "playerID") %>%
+  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever"))
  
 PitcherHOF_df$cy_young_award[is.na(PitcherHOF_df$cy_young_award)] <- 0
 PitcherHOF_df$rolaids_relief_man_award[is.na(PitcherHOF_df$rolaids_relief_man_award)] <- 0
