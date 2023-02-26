@@ -332,6 +332,8 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   ) %>%
   mutate(wein = as.factor(wein)) %>%
   filter(Player != "Satchel Paige") %>%
+  filter(Player != "Shoeless Joe Jackson") %>%
+  filter(Player != "Pete Rose") %>%
   filter(war != is.na(war))
 
 PositionPlayerHOF_df$all_star[is.na(PositionPlayerHOF_df$all_star)] <-
@@ -657,9 +659,9 @@ plot(good_glm_pos, which = 4)
 # Position model sans war
 good_glm_pos_nowar <- step(
   glm(
-    wein ~ all_star + HR*Steroids + G + Pos +
+    wein ~ all_star + HR:Steroids + G + Pos + HR +
       nice_guy_awards + Steroids + HR*Pos + votedBy +
-      RBI + gold_glove + AVG*Pos + most_valuable_player*all_star
+      RBI + gold_glove + AVG*Steroids + most_valuable_player*all_star
     + SLG:Steroids + R + G + SB,
     data = PositionPlayerHOF_df,
     family = "binomial"
@@ -672,8 +674,9 @@ summary(good_glm_pos_nowar)
 
 row.names(PositionPlayerHOF_df) <- NULL
 
-final_pos_glm <- glm(wein ~ all_star + HR + Steroids + Pos + votedBy + RBI +
-                       most_valuable_player + R + SB + HR:Pos +
+final_pos_glm <- glm(wein ~ all_star + G + Pos + HR + nice_guy_awards + 
+                       Steroids + votedBy + RBI + gold_glove + AVG +
+                       most_valuable_player + SB + Pos:HR + 
                        all_star:most_valuable_player + Steroids:SLG,
                      family = "binomial",
                      data = PositionPlayerHOF_df)
