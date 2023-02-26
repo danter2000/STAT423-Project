@@ -801,7 +801,7 @@ get_preds <- function(mod, data, subtitle) {
   p1 <- df %>% 
     head(10) %>% 
     ggplot() + 
-    geom_bar(aes(x = playerID, y = prob_wein), stat="identity", fill = "#003f5c") +
+    geom_bar(aes(x = paste0(Player, "\n", playerID), y = prob_wein), stat="identity", fill = "#003f5c") +
     theme_minimal() +
     theme(
       text = element_text(size = 15),
@@ -824,7 +824,7 @@ get_preds <- function(mod, data, subtitle) {
   
   p2 <- df %>% 
     ggplot() + 
-    geom_bar(aes(x = Player, y = prob_wein), stat="identity", fill = "#003f5c") +
+    geom_bar(aes(x = paste0(Player, "\n", playerID), y = prob_wein), stat="identity", fill = "#003f5c") +
     theme_minimal() +
     theme(
       text = element_text(size = 15),
@@ -843,3 +843,27 @@ get_preds <- function(mod, data, subtitle) {
 
 get_preds(good_glm_pos, PredictHOF_pos_df, "Probabilities for Position Players")
 get_preds(good_glm_pitch, PredictHOF_pitch_df, "Probabilities for Pitchers")
+
+get_confusion_matrix <- function(mod, data) {
+  fitted <- fitted(mod)
+  
+  confusion_matrix <- data %>% 
+    mutate(i = 1:n()) %>% 
+    left_join(data.frame(i = as.numeric(names(fitted)), fit = fitted), by = "i") %>% 
+    select(-i) %>% 
+    mutate(wein_pred = as.factor((fit > 0.5)*1)) %>% 
+    group_by(wein_pred, wein) %>% 
+    summarize(n = n()) %>% 
+    filter(!is.na(wein_pred))
+  
+  confusion_matrix %>% 
+    mutate(wein = ifelse(wein == 1, "HoF", "No HoF"), wein_pred = ifelse(wein_pred == 1, "HoF", "No HoF")) %>% 
+    ggplot() +
+    geom_tile(aes(x = wein_pred, y = wein, fill = n)) + 
+    geom_text(aes(x = wein_pred, y = wein, label = n)) +
+    theme_minimal() +
+    labs(x = "Prediction", y = "Actual") %>% 
+    return()
+}
+
+get_confusion_matrix(good_glm_pos, PositionPlayerHOF_df)
