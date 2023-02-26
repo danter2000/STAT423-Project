@@ -16,7 +16,8 @@ library(tidyverse)
 library(rvest)
 
 PredictHOF_pos_df <- read.csv("data/PredictHOF_pos_df.csv")
-PredictHOF_pitch_df <- read.csv("data/PredictHOF_pitch_df.csv")
+PredictHOF_pitch_df <- read.csv("data/PredictHOF_pitch_df.csv") %>%
+  filter(votedBy == "BBWAA")
 
 PredictHOF_pos_df$Steroids <- as.factor(PredictHOF_pos_df$Steroids)
 
@@ -127,7 +128,7 @@ fluidRow(
 observeEvent(input$submit, {
   newdat <- list("all_star" = input$all_stars, Steroids = as.factor((input$steroids == "Yes")*1), "HR" = input$hrs, "Pos" = input$pos, "votedBy" = input$votedby, "RBI" = input$rbis, "most_valuable_player" = input$mvps, "R" = input$runs, "SLG" = input$slg, "SB" = input$sbs)
   
-      prob <- 1 - predict(final_pos_glm, newdata = newdat, type = "response")
+      prob <- predict(final_pos_glm, newdata = newdat, type = "response")
       
       paste0("You have a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF") %>% 
         modalDialog() %>% 
