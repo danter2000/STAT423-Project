@@ -162,7 +162,11 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   mutate(all_star = all_star + as.numeric(baseball_magazine_all_star), wein = as.factor(wein), votedBy = as.factor(votedBy)) %>%
   filter(war != is.na(war)) %>%
   mutate(Steroids = ifelse(Player == "Roger Clemens", 1, Steroids))
-  
+ 
+PitcherHOF_df$cy_young_award[is.na(PitcherHOF_df$cy_young_award)] <- 0
+PitcherHOF_df$rolaids_relief_man_award[is.na(PitcherHOF_df$rolaids_relief_man_award)] <- 0
+PitcherHOF_df$most_valuable_player[is.na(PitcherHOF_df$most_valuable_player)] <- 0
+PitcherHOF_df$all_star[is.na(PitcherHOF_df$all_star)] <- 0
 
 # Primary position by player
 primary_position <- Appearances %>% 
@@ -863,10 +867,10 @@ y_hat_test_pitch <- ifelse(y_hat_test_pitch > 0.5, 1, 0)
 ```
 
 ```{r try pitchers}
-step(glm(wein ~ G + WHIP + SV + ERA + IP + R + 
-           PrimaryLg + cy_young_award + tsn_reliever_of_the_year + 
-                          all_star*WAR + most_valuable_player + WAR:Steroids +
-                          nice_guy_awards + votedBy,
+step(glm(wein ~ G + W + L + WHIP + SV + ERA + IP + R + 
+           PrimaryLg + cy_young_award + rolaids_relief_man_award +
+                          all_star + most_valuable_player + Steroids +
+                           votedBy,
                         data = PitcherHOF_df, family = "binomial"),
                     direction = "both", k = 2)
 
@@ -967,10 +971,8 @@ plot(final_pos_glm, which = 4)
 # Pitcher
 row.names(PitcherHOF_df) <- PitcherHOF_df$Player
 
-final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
-                         most_valuable_player + all_star + 
-                         cy_young_award + rolaids_relief_man_award + votedBy +
-                         Steroids:most_valuable_player,
+final_pitch_glm <- glm(wein ~ W + SV + R + rolaids_relief_man_award + 
+                         all_star + votedBy + cy_young_award,
                        family = "binomial",
                        data = PitcherHOF_df)
 
@@ -981,15 +983,36 @@ plot(final_pitch_glm, which = 4)
 ```
 
 ```{r}
-pos_fitted <- fitted(good_glm_pos)
+pos_fitted <- fitted(final_pos_glm)
 
-PositionPlayerHOF_df %>% 
+confusion_pos <- PositionPlayerHOF_df %>%
+  filter(!is.na(RBI)) %>%
+  filter(!is.na(SB)) %>%
   mutate(i = 1:n()) %>% 
-  left_join(data.frame(i = as.numeric(names(pos_fitted)), fit = pos_fitted), by = "i") %>% 
+  left_join(data.frame(i = 1:length(pos_fitted), fit = pos_fitted), 
+            by = "i") %>% 
   select(-i) %>% 
   mutate(wein_pred = as.factor((fit > 0.5)*1)) %>% 
   group_by(wein_pred, wein) %>% 
   summarize(n = n())
+
+confusion_pos
+
+misclassfication_pos <- sum(ifelse(confusion_pos$wein_pred != confusion_pos$wein, confusion_pos$n, 0)) / sum(confusion_pos$n)
+
+pitch_fitted <- fitted(final_pitch_glm)
+confusion_pitch <- PitcherHOF_df %>%
+  mutate(i = 1:n()) %>%
+  left_join(data.frame(i = 1:length(pitch_fitted), fit = pitch_fitted),
+            by = "i") %>%
+  select(-i) %>%
+  mutate(wein_pred = as.factor((fit > 0.5)*1)) %>% 
+  group_by(wein_pred, wein) %>% 
+  summarize(n = n())
+
+confusion_pitch
+
+misclassfication_pitch <- sum(ifelse(confusion_pitch$wein_pred != confusion_pitch$wein, confusion_pitch$n, 0)) / sum(confusion_pitch$n)
 
 get_confusion_matrix <- function(mod, data) {
   fitted <- fitted(mod)
@@ -1013,7 +1036,5 @@ get_confusion_matrix <- function(mod, data) {
     return()
 }
 
-get_confusion_matrix(good_glm_pos, PositionPlayerHOF_df)
+get_confusion_matrix(final_glm_pos, PositionPlayerHOF_df)
 ```
-
-
