@@ -681,10 +681,8 @@ final_pos_glm <- glm(wein ~ all_star + HR + Steroids + Pos + votedBy + RBI +
 # Pitcher
 row.names(PitcherHOF_df) <- NULL
 
-final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
-                         most_valuable_player + all_star + 
-                         cy_young_award + rolaids_relief_man_award + votedBy +
-                         Steroids:most_valuable_player,
+final_pitch_glm <- glm(wein ~ W + SV + R + rolaids_relief_man_award + 
+                         all_star + votedBy + cy_young_award,
                        family = "binomial",
                        data = PitcherHOF_df)
 ##### PLOTS
@@ -721,8 +719,8 @@ cookit <- function(mod, data, subtitle) {
     labs(x = "Observation Number", y = "Cook's Distance", title = "Cook's Distance", subtitle = subtitle)
 }
 
-cookit(final_pos_glm, PositionPlayerHOF_df, "Position Players")
-cookit(final_pitch_glm, PositionPlayerHOF_df, "Pitchers")
+cookit(final_pos_glm, PositionPlayerHOF_df, "Position Players Model")
+cookit(final_pitch_glm, PitcherHOF_df, "Pitchers Model")
 
 od_plot <- function(mod, subtitle) {
   OD <- sum(residuals(mod,
@@ -755,7 +753,8 @@ or_conf_int_plot <- function(mod, subtitle) {
     geom_dumbbell(
       aes(x = conf.lower, xend = conf.upper, y = predictor),
       color = "#ffa600",
-      alpha = 0.5
+      alpha = 0.5,
+      size = 5
     ) +
     geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 5) +
     scale_x_log10(n.breaks = 10) +
@@ -778,7 +777,8 @@ or_conf_int_plot <- function(mod, subtitle) {
     geom_dumbbell(
       aes(x = conf.lower, xend = conf.upper, y = predictor),
       color = "#ffa600",
-      alpha = 0.5
+      alpha = 0.5,
+      size = 5
     ) +
     geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 5) +
     scale_x_log10(n.breaks = 10) +
@@ -818,7 +818,7 @@ get_preds <- function(mod, data, subtitle) {
     head(10) %>% 
     ggplot() + 
     geom_bar(aes(x = playerID, y = prob_wein), stat="identity", fill = "#003f5c") +
-    geom_text(aes(x = playerID, y = prob_wein + 0.03, label = Player)) +
+    geom_label(aes(x = playerID, y = prob_wein, label = Player)) +
     theme_minimal() +
     theme(
       text = element_text(size = 15),
@@ -842,7 +842,7 @@ get_preds <- function(mod, data, subtitle) {
   p2 <- df %>% 
     ggplot() + 
     geom_bar(aes(x = playerID, y = prob_wein), stat="identity", fill = "#003f5c") +
-    geom_text(aes(x = playerID, y = prob_wein + (prob_wein / 10), label = Player)) +
+    geom_label(aes(x = playerID, y = prob_wein, label = Player)) +
     theme_minimal() +
     theme(
       text = element_text(size = 15),
@@ -886,19 +886,21 @@ get_confusion_matrix <- function(mod, data, title) {
     mutate(wein = ifelse(wein == 1, "HoF", "No HoF"), wein_pred = ifelse(wein_pred == 1, "HoF", "No HoF")) %>%
     ggplot() +
     geom_tile(aes(x = factor(wein_pred, level = c("HoF", "No HoF")), y = factor(wein, level = c("No HoF", "HoF")), fill = n)) +
-    geom_text(aes(x = wein_pred, y = wein, label = label)) +
+    geom_label(aes(x = wein_pred, y = wein, label = label), size = 6, fill = "#ffffff") +
     scale_fill_fermenter(direction = 1) +
     theme_minimal() +
     theme(
+      legend.position = "top",
+      legend.key.width=unit(4,"cm"),
       text = element_text(size = 15),
       axis.text.x = element_text(face = "italic"),
       axis.text.y = element_text(face = "italic"),
       plot.title = element_text(face = "bold")
     ) +
-    labs(x = "Predicted Label", y = "True Label", title = paste0("Confusion Matrix: ", title), subtitle = paste0("Accuracy: ", accuracy)) %>%
+    labs(x = "Predicted Label", y = "True Label", title = paste0("Confusion Matrix: ", title), subtitle = paste0("Accuracy: ", accuracy), fill = "Counts") %>%
     return()
 }
 
-get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df, "Position Players")
-get_confusion_matrix(final_pitch_glm, PitcherHOF_df, "Pitchers")
+get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df, "Position Players Model")
+get_confusion_matrix(final_pitch_glm, PitcherHOF_df, "Pitchers Model")
 

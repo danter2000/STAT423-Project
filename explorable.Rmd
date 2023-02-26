@@ -1,0 +1,139 @@
+---
+title: "Model Explorer"
+author: "Beisbol"
+date: "2/26/2023"
+output: 
+  html_document:
+    theme: flatly
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(shiny)
+library(tidyverse)
+library(rvest)
+
+PredictHOF_pos_df <- read.csv("data/PredictHOF_pos_df.csv")
+PredictHOF_pitch_df <- read.csv("data/PredictHOF_pitch_df.csv")
+
+PredictHOF_pos_df$Steroids <- as.factor(PredictHOF_pos_df$Steroids)
+
+final_pos_glm <- readRDS("data/final_pos_glm.RDS")
+final_pitch_glm <- readRDS("data/final_pitch_glm.RDS")
+url <- "https://www.baseball-reference.com/players/%s.shtml"
+
+get_profile <- function(playerID) {
+  headshot <- sprintf(url, paste0(str_sub(playerID, 1, 1), "/", playerID)) %>% 
+    read_html() %>% 
+    html_node(css = 'div[class="media-item multiple"] img') %>% 
+    html_attr("src")
+  
+  return(headshot)
+}
+```
+
+```{r echo=FALSE}
+fluidRow(
+  column(4,
+    sidebarLayout(
+      sidebarPanel(
+        radioButtons("type", "Player Type:", 
+                     c("Position", "Pitcher")),
+        radioButtons("voted", "Voted By:", unique(PredictHOF_pos_df$votedBy)),
+        selectizeInput("player", "Player:", paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID), selected = character(0)),
+        width = 12
+      ),
+      mainPanel(width = 20,
+                tags$div(class = "player-card"))
+    )
+  )
+)
+
+observeEvent(input$type, {
+  choices <- NA
+  df <- NA
+  voted <- input$voted
+  if (input$type == "Position") {
+    df <- PredictHOF_pos_df %>% 
+      filter(votedBy == !!voted)
+    choices <- paste0(df$Player, ", ", df$playerID)
+  } else {
+    df <- PredictHOF_pitch_df %>% 
+      filter(votedBy == !!voted)
+    choices <- paste0(df$Player, ", ", df$playerID)
+  }
+  updateSelectizeInput(session, inputId = "player", choices = choices, selected = character(0))
+})
+
+observeEvent(input$player, {
+  if (input$player != "") {
+    id <- str_split(input$player, ", ")[[1]][2]
+    name <- str_split(input$player, ", ")[[1]][1]
+    voted <- input$voted
+    text <- NA
+    if (input$type == "Position") {
+      newdat <- PredictHOF_pos_df %>%
+        filter(playerID == !!id & votedBy == !!voted)
+        
+      prob <- predict(final_pos_glm, newdata = newdat, type = "response")
+      
+      text <- paste0(name, " has a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF")
+    } else {
+          newdat <- PredictHOF_pitch_df %>%
+        filter(playerID == !!id)
+      
+      prob <- predict(final_pitch_glm, newdata = newdat, type = "response")
+      
+      text <- paste0(name, " has a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF")
+    }
+    
+    headshot <- get_profile(id)
+    
+    removeUI("div.player-card")
+    
+    insertUI(
+      selector = "div.player-card",
+      ui = HTML(paste0('<img src="', headshot, '">'))
+    )
+    
+  }
+})
+```
+
+```{r echo=FALSE}
+fluidRow(
+  column(4,
+         sidebarLayout(
+           sidebarPanel(
+             width = 12, id="sidebar",
+             sliderInput("all_stars", "# of All Star Season:", min = 0, max = 30, value = 5),
+             sliderInput("hrs", "# of Career HRs:", min = 0, max = 500, value = 150),
+             radioButtons("steroids", "Used Steroids:", choices = c("Yes", "No")),
+             selectInput("pos", "Position:", choices = unique(PredictHOF_pos_df$Pos)),
+             selectInput("votedby", "Voted By:", choices = unique(PredictHOF_pos_df$votedBy)),
+             sliderInput("rbis", "# of Career RBIs:", min = 0, max = 2500, value = 300),
+             sliderInput("mvps", "# of Career MVPs:", min = 0, max = 10, value = 2),
+             sliderInput("runs", "# of Career Runs:", min = 0, max = 2500, value = 300),
+             sliderInput("sbs", "# of Career SBs:", min = 0, max = 2000, value = 500),
+             sliderInput("slg", "# of Career SLG:", min = 0, max = 1, value = 0.5),
+             actionButton("submit", "Submit", onclick = "Shiny.onInputChange('myclick', submit)")
+           ),
+           mainPanel(
+             width = 20
+           )
+         ))
+)
+
+observeEvent(input$submit, {
+  newdat <- list("all_star" = input$all_stars, Steroids = as.factor((input$steroids == "Yes")*1), "HR" = input$hrs, "Pos" = input$pos, "votedBy" = input$votedby, "RBI" = input$rbis, "most_valuable_player" = input$mvps, "R" = input$runs, "SLG" = input$slg, "SB" = input$sbs)
+  
+        prob <- predict(final_pos_glm, newdata = newdat, type = "response")
+      
+      paste0("You have a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF") %>% 
+        modalDialog() %>% 
+        showModal()
+})
+```
+
