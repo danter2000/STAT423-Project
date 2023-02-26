@@ -24,14 +24,14 @@ final_pos_glm <- readRDS("data/final_pos_glm.RDS")
 final_pitch_glm <- readRDS("data/final_pitch_glm.RDS")
 url <- "https://www.baseball-reference.com/players/%s.shtml"
 
-get_profile <- function(playerID) {
-  headshot <- sprintf(url, paste0(str_sub(playerID, 1, 1), "/", playerID)) %>% 
-    read_html() %>% 
-    html_node(css = 'div[class="media-item multiple"] img') %>% 
-    html_attr("src")
-  
-  return(headshot)
-}
+# get_profile <- function(playerID) {
+#   headshot <- sprintf(url, paste0(str_sub(playerID, 1, 1), "/", playerID)) %>% 
+#     read_html() %>% 
+#     html_node(css = 'div[class="media-item multiple"] img') %>% 
+#     html_attr("src")
+#   
+#   return(headshot)
+# }
 ```
 
 ```{r echo=FALSE}
@@ -41,12 +41,10 @@ fluidRow(
       sidebarPanel(
         radioButtons("type", "Player Type:", 
                      c("Position", "Pitcher")),
-        radioButtons("voted", "Voted By:", unique(PredictHOF_pos_df$votedBy)),
         selectizeInput("player", "Player:", paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID), selected = character(0)),
         width = 12
       ),
-      mainPanel(width = 20,
-                tags$div(class = "player-card"))
+      mainPanel(width = 20)
     )
   )
 )
@@ -54,16 +52,13 @@ fluidRow(
 observeEvent(input$type, {
   choices <- NA
   df <- NA
-  voted <- input$voted
   if (input$type == "Position") {
-    df <- PredictHOF_pos_df %>% 
-      filter(votedBy == !!voted)
-    choices <- paste0(df$Player, ", ", df$playerID)
+    df <- PredictHOF_pos_df 
   } else {
-    df <- PredictHOF_pitch_df %>% 
-      filter(votedBy == !!voted)
-    choices <- paste0(df$Player, ", ", df$playerID)
+    df <- PredictHOF_pitch_df 
   }
+  
+  choices <- paste0(df$Player, ", ", df$playerID)
   updateSelectizeInput(session, inputId = "player", choices = choices, selected = character(0))
 })
 
@@ -71,32 +66,35 @@ observeEvent(input$player, {
   if (input$player != "") {
     id <- str_split(input$player, ", ")[[1]][2]
     name <- str_split(input$player, ", ")[[1]][1]
-    voted <- input$voted
     text <- NA
     if (input$type == "Position") {
       newdat <- PredictHOF_pos_df %>%
-        filter(playerID == !!id & votedBy == !!voted)
+        filter(playerID == !!id)
         
       prob <- predict(final_pos_glm, newdata = newdat, type = "response")
       
-      text <- paste0(name, " has a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF")
+      text <- paste0(name, " has a ", round((1 - as.numeric(prob))*100, 2), "% chance of making it to the HoF")
     } else {
-          newdat <- PredictHOF_pitch_df %>%
+      newdat <- PredictHOF_pitch_df %>%
         filter(playerID == !!id)
       
       prob <- predict(final_pitch_glm, newdata = newdat, type = "response")
       
-      text <- paste0(name, " has a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF")
+      text <- paste0(name, " has a ", round((1 - as.numeric(prob))*100, 2), "% chance of making it to the HoF")
     }
     
-    headshot <- get_profile(id)
+    text %>% 
+      modalDialog() %>% 
+      showModal()
     
-    removeUI("div.player-card")
-    
-    insertUI(
-      selector = "div.player-card",
-      ui = HTML(paste0('<img src="', headshot, '">'))
-    )
+    # headshot <- get_profile(id)
+    # 
+    # removeUI("div.player-card")
+    # 
+    # insertUI(
+    #   selector = "div.player-card",
+    #   ui = HTML(paste0('<img src="', headshot, '">'))
+    # )
     
   }
 })
@@ -129,7 +127,7 @@ fluidRow(
 observeEvent(input$submit, {
   newdat <- list("all_star" = input$all_stars, Steroids = as.factor((input$steroids == "Yes")*1), "HR" = input$hrs, "Pos" = input$pos, "votedBy" = input$votedby, "RBI" = input$rbis, "most_valuable_player" = input$mvps, "R" = input$runs, "SLG" = input$slg, "SB" = input$sbs)
   
-        prob <- predict(final_pos_glm, newdata = newdat, type = "response")
+      prob <- 1 - predict(final_pos_glm, newdata = newdat, type = "response")
       
       paste0("You have a ", round(as.numeric(prob)*100, 2), "% chance of making it to the HoF") %>% 
         modalDialog() %>% 
