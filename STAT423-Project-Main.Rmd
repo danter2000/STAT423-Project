@@ -281,7 +281,7 @@ hof_players <- hall_df_update %>%
 # hall of fame after 10 years 
 # note that players who never made it on a ballot are included
 PredictHOF <- player_df %>%
-  filter(as.numeric(difftime(finalGame, debut, units="days")) / 365 > 10) %>%
+  filter(as.numeric(difftime(finalGame, debut, units="days")) / 365 > 9) %>%
   left_join(hof_players, by = "playerID") %>%
   filter(wein != 1 | is.na(wein)) %>%
   filter(fivePercent != 1 | is.na(fivePercent)) %>%
@@ -312,7 +312,9 @@ PredictHOF_pos_df <- PredictHOF[,c(1,25, 27)] %>%
   left_join(war_df_pos, by = "playerID") %>% 
   mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
   distinct(playerID, .keep_all = TRUE) %>%
-  filter(Pos != "P")
+  filter(Pos != "P") %>%
+  mutate(most_valuable_player = ifelse(Player == "Paul Goldschmidt",
+                                       1, most_valuable_player))
  
 row.names(PredictHOF_pos_df) <- PredictHOF_pos_df$playerID
 
@@ -339,7 +341,10 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
   left_join(Appearances_df[,c(2,3)], by = "playerID") %>%
   mutate(StarterReliever = ifelse((IP / years_played.x) > 100, "Starter", "Reliever")) %>%
   mutate(StarterReliever = as.factor(StarterReliever)) %>%
-  mutate(Steroids = ifelse(Player == "Bartolo Colon", 1, Steroids))
+  mutate(Steroids = ifelse(Player == "Bartolo Colon", 1, Steroids)) %>%
+  mutate(cy_young_award = ifelse(Player == "Justin Verlander",
+                                 3,
+                                 cy_young_award))
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
@@ -730,7 +735,7 @@ point_plot <- ggplot(data = final_time_series_filtered_df,
 # library(rvest)
 
 # Players to model on -- if they retired in the last 5 years
-# recent_players <- player_df %>% 
+# _players <- player_df %>% 
 #   filter(finalGame >= Sys.Date() - (365 * 5) & playerID %in% c((pitching_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique()), (batting_df %>% group_by(playerID) %>% filter(length(unique(yearID)) >= 10) %>% pull(playerID) %>% unique())) & !(playerID %in% (hall_df %>% pull(playerID) %>% unique())))
 
 # Check if they are currently active or not based on if they are on a team
