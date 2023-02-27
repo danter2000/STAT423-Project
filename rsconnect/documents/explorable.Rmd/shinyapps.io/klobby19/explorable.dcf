@@ -5,9 +5,9 @@ account: klobby19
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 8413859
-bundleId: 6889750
+bundleId: 6890456
 url: https://klobby19.shinyapps.io/explorable/
-when: 1677431525.5042
-lastSyncTime: 1677431525.50421
+when: 1677453028.44146
+lastSyncTime: 1677453028.44147
 asMultiple: FALSE
 asStatic: FALSE

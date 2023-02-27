@@ -1,6 +1,6 @@
 ---
 title: "Model Explorer"
-author: "Beisbol"
+author: "Andy, Dante, Kai, Kobe"
 date: "2/26/2023"
 output: 
   html_document:
@@ -14,6 +14,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(shiny)
 library(tidyverse)
 library(rvest)
+library(flexdashboard)
 
 PredictHOF_pos_df <- read.csv("data/PredictHOF_pos_df.csv") %>% 
   filter(votedBy == "BBWAA")
@@ -24,16 +25,17 @@ PredictHOF_pos_df$Steroids <- as.factor(PredictHOF_pos_df$Steroids)
 
 final_pos_glm <- readRDS("data/final_pos_glm.RDS")
 final_pitch_glm <- readRDS("data/final_pitch_glm.RDS")
+
 url <- "https://www.baseball-reference.com/players/%s.shtml"
 
-# get_profile <- function(playerID) {
-#   headshot <- sprintf(url, paste0(str_sub(playerID, 1, 1), "/", playerID)) %>% 
-#     read_html() %>% 
-#     html_node(css = 'div[class="media-item multiple"] img') %>% 
-#     html_attr("src")
-#   
-#   return(headshot)
-# }
+get_profile <- function(playerID) {
+  headshot <- sprintf(url, paste0(str_sub(playerID, 1, 1), "/", playerID)) %>%
+    read_html() %>%
+    html_node(css = 'div[class="media-item multiple"] img') %>%
+    html_attr("src")
+
+  return(headshot)
+}
 ```
 
 ```{r echo=FALSE}
@@ -47,7 +49,7 @@ observeEvent(input$type, {
   }
   
   choices <- paste0(df$Player, ", ", df$playerID)
-  updateSelectizeInput(session, inputId = "player", choices = choices, selected = character(0))
+  updateSelectizeInput(session, inputId = "player", choices = choices, selected = choices[1])
 })
 
 observeEvent(input$player, {
@@ -55,36 +57,47 @@ observeEvent(input$player, {
     id <- str_split(input$player, ", ")[[1]][2]
     name <- str_split(input$player, ", ")[[1]][1]
     text <- NA
+    prob <- NA
     if (input$type == "Position") {
       newdat <- PredictHOF_pos_df %>%
         filter(playerID == !!id)
-      print(newdat)
         
       prob <- predict(final_pos_glm, newdata = newdat, type = "response")
       
-      text <- paste0(name, " has a ", round((1 - as.numeric(prob))*100, 2), "% chance of making it to the HoF")
+      text <- paste0(name, " has a ", round((as.numeric(prob))*100, 2), "% chance of making it to the HoF")
     } else {
       newdat <- PredictHOF_pitch_df %>%
         filter(playerID == !!id)
-      print(newdat)
       
       prob <- predict(final_pitch_glm, newdata = newdat, type = "response")
       
-      text <- paste0(name, " has a ", round((1 - as.numeric(prob))*100, 2), "% chance of making it to the HoF")
+      text <- paste0(name, " has a ", round((as.numeric(prob))*100, 2), "% chance of making it to the HoF")
     }
     
-    text %>% 
-      modalDialog() %>% 
-      showModal()
+    print(text)
     
-    # headshot <- get_profile(id)
-    # 
-    # removeUI("div.player-card")
-    # 
-    # insertUI(
-    #   selector = "div.player-card",
-    #   ui = HTML(paste0('<img src="', headshot, '">'))
-    # )
+    headshot <- get_profile(id)
+    
+    removeUI("#pfp img")
+
+    insertUI(
+      selector = "#pfp", "afterBegin",
+      HTML(paste0('<img src="', headshot, '" width:50px height:100%; margin: auto>'))
+    )
+    
+    insertUI(
+      selector = "#gauge-desc", "beforeEnd",
+      HTML(paste0("<p>", text, "</p>"))
+    )
+    
+    output$gauge = renderGauge({
+    gauge(round((as.numeric(prob) * 100), 4), 
+          min = 0, 
+          max = 100.0, 
+          sectors = gaugeSectors(success = c(80, 100), 
+                                 warning = c(50, 80),
+                                 danger = c(0, 50)))
+  })
     
   }
 })
@@ -97,12 +110,18 @@ tabsetPanel(
     sidebarLayout(
       sidebarPanel(
         width = 4,
-        fluidRow(
+        fluidRow(style = "padding: 2%",
     radioButtons("type", "Player Type:", 
                      c("Position", "Pitcher")),
-        selectizeInput("player", "Player:", paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID), selected = character(0)))
+        selectizeInput("player", "Player:", paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID), selected = paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID)[1]))
       ),
-      mainPanel(width = 20)
+      mainPanel(width = 20,
+                div(style = "display: flex",
+                  id="psearch-card",
+                  div(id="pfp"),
+                  div(style="display: flex; flex-direction: column", id = "gauge-desc",
+                      gaugeOutput("gauge", width = "50%")))
+                      )
     )
 ),
 tabPanel(
@@ -137,7 +156,7 @@ tabPanel(
 )
 
 observeEvent(input$submit, {
-  newdat <- list("all_star" = input$all_stars, Steroids = as.factor((input$steroids == "Yes")*1, levels(PredictHOF_pos_df$Steroids)), "G" = input$gs, "HR" = input$hrs, "Pos" = as.factor(input$pos, levels = levels(PredictHOF_pos_df$Pos)), "votedBy" = as.factor(input$votedby, levels = levels(PredictHOF_pos_df$votedBy)), "RBI" = input$rbis, "most_valuable_player" = input$mvps, "nice_guy_awards" = input$ngas, "gold_glove" = input$ggs, "R" = input$runs, "AVG" = input$avg, "SB" = input$sbs, "SLG" = input$slg)
+  newdat <- list("all_star" = input$all_stars, Steroids = as.factor((input$steroids == "Yes")*1), "G" = input$gs, "HR" = input$hrs, "Pos" = input$pos, "votedBy" = input$votedby, "RBI" = input$rbis, "most_valuable_player" = input$mvps, "nice_guy_awards" = input$ngas, "gold_glove" = input$ggs, "R" = input$runs, "AVG" = input$avg, "SB" = input$sbs, "SLG" = input$slg)
   
       prob <- predict(final_pos_glm, newdata = newdat, type = "response")
       
