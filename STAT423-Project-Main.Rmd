@@ -337,7 +337,8 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
   filter(Player != "Joe Coleman") %>%
   filter(all_star != is.na(all_star)) %>%
   mutate(votedBy = as.factor(votedBy)) %>% 
-  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever"))
+  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever")) %>%
+  mutate(Steroids = ifelse(Player == "Bartolo Colon", 1, 0))
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
