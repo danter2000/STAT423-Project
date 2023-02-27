@@ -901,6 +901,7 @@ step(glm(wein ~ G + W + L + WHIP + SV + ERA + IP + R +
 
 ```{r plots}
 library(ggridges)
+library(corrplot)
 
 PositionPlayerHOF_df %>% 
   ggplot() +
@@ -945,10 +946,18 @@ get_corr_matrix <- function(data) {
   return(recordPlot())
 }
 
-pos_corr <- get_corr_matrix(PositionPlayerHOF_df[c("G", "AB", "H", "2B", "3B", "HR", "RBI", "SB", "BB", "SO", "IBB", "HBP", "SH", "SF", "GIDP", "AVG", "OBP", "SLG", "WAR")])
+pos_corr <- get_corr_matrix(PositionPlayerHOF_df[c("all_star", "G", "Pos", "HR",
+                                                   "nice_guy_awards", "Steroids",
+                                                   "votedBy", "RBI", "AVG",
+                                                   "most_valuable_player", "R",
+                                                   "SB")])
 replayPlot(pos_corr)
 
-pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "G", "SV", "ER", "HR", "SO", "IP", "ERA", "WHIP")])
+pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "L", "SO", "SV", "Steroids",
+                                            "most_valuable_player","all_star",
+                                            "cy_young_award",
+                                            "rolaids_relief_man_award",
+                                            "votedBy", "StarterReliever")])
 replayPlot(pos_corr)
 
 
@@ -993,10 +1002,10 @@ plot(final_pos_glm, which = 4)
 # Pitcher
 row.names(PitcherHOF_df) <- PitcherHOF_df$Player
 
-final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids + most_valuable_player +
-                         all_star + cy_young_award + rolaids_relief_man_award +
-                         votedBy + StarterReliever +
-                         Steroids:most_valuable_player,
+final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
+                              most_valuable_player + all_star + cy_young_award +
+                              rolaids_relief_man_award + votedBy +
+                              StarterReliever + Steroids:most_valuable_player,
                        family = "binomial",
                        data = PitcherHOF_df)
 

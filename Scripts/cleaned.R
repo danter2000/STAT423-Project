@@ -139,62 +139,33 @@ PitcherHOF_df <- inner_join(pitching_df_continuous_counts,
   mutate(IP = IPouts / 3) %>%
   relocate(Player, .after = playerID) %>%
   relocate(IP, .after = IPouts) %>%
-  mutate(Steroids = ifelse(
-    Player %in% espn_ped_df$Player |
-      Player %in% wiki_ped_df$Player,
-    1,
-    0
-  )) %>%
+  mutate(Steroids = ifelse(Player %in% espn_ped_df$Player | Player %in% wiki_ped_df$Player, 1, 0)) %>%
+  mutate(Steroids = ifelse(Player == "Roger Clemens", 1, Steroids)) %>% 
   mutate(nice_guy_awards = lou_gehrig_memorial_award +
            hutch_award +
-           roberto_clemente_award +
+           roberto_clemente_award + 
            branch_rickey_award) %>%
   left_join(war_df_pitcher, by = "playerID") %>%
   distinct(playerID, .keep_all = TRUE) %>%
-  mutate(votedBy = ifelse(
-    Player == "Charles Bender",
-    "Veterans",
-    ifelse(
-      Player == "Ed Walsh",
-      "Veterans",
-      ifelse(
-        Player == "Eddie Plank",
-        "Veterans",
-        ifelse(
-          Player == "Mel Harder",
-          "BBWAA",
-          ifelse(
-            Player == "Red Ruffing",
-            "BBWAA",
-            ifelse(
-              Player == "Rube Waddell",
-              "Veterans",
-              ifelse(
-                Player == "Old Hoss Radbourn",
-                "Veterans",
-                ifelse(
-                  Player == "Mordecai Brown",
-                  "Veterans",
-                  ifelse(
-                    Player == "Nap Rucker",
-                    "Veterans",
-                    ifelse(Player == "Bill Donovan", "Veterans",
-                           votedBy)
-                  )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  )) %>%
-  mutate(
-    all_star = all_star + as.numeric(baseball_magazine_all_star),
-    wein = as.factor(wein),
-    votedBy = as.factor(votedBy)
-  ) %>%
-  filter(war != is.na(war))
+  mutate(votedBy = ifelse(Player == "Charles Bender", "Veterans",
+                          ifelse(Player == "Ed Walsh", "Veterans",
+                                 ifelse(Player == "Eddie Plank", "Veterans",
+                                        ifelse(Player == "Mel Harder", "BBWAA",
+                                               ifelse(Player == "Red Ruffing", "BBWAA",
+                                                      ifelse(Player == "Rube Waddell", "Veterans",
+                                                             ifelse(Player == "Old Hoss Radbourn", "Veterans",
+                                                                    ifelse(Player == "Mordecai Brown", "Veterans",
+                                                                           ifelse(Player == "Nap Rucker", "Veterans",
+                                                                                  ifelse(Player == "Bill Donovan", "Veterans",
+                                                                                         votedBy))))))))))) %>%
+  mutate(all_star = all_star + as.numeric(baseball_magazine_all_star), wein = as.factor(wein), votedBy = as.factor(votedBy)) %>%
+  filter(war != is.na(war)) %>%
+  left_join(Appearances_df[,c(2,3)], by = "playerID") %>%
+  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever")) %>%
+  mutate(StarterReliever = as.factor(StarterReliever)) %>%
+  filter(votedBy != "Nominating Vote") %>%
+  filter(votedBy != "Old Timers") %>%
+  filter(votedBy != "Final Ballot")
 
 
 # Primary position by player
@@ -674,18 +645,21 @@ summary(good_glm_pos_nowar)
 
 row.names(PositionPlayerHOF_df) <- NULL
 
-final_pos_glm <- glm(wein ~ all_star + G + Pos + HR + nice_guy_awards + 
-                       Steroids + votedBy + RBI + gold_glove + AVG +
-                       most_valuable_player + SB + Pos:HR + 
-                       all_star:most_valuable_player + Steroids:SLG,
+final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + 
+                       Steroids + votedBy + RBI + AVG + 
+                       most_valuable_player + R + SB + HR:Steroids + 
+                       Pos:HR + all_star:most_valuable_player + 
+                       Steroids:SLG,
                      family = "binomial",
                      data = PositionPlayerHOF_df)
 
 # Pitcher
 row.names(PitcherHOF_df) <- NULL
 
-final_pitch_glm <- glm(wein ~ W + SV + R + rolaids_relief_man_award + 
-                         all_star + votedBy + cy_young_award,
+final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids + most_valuable_player +
+                         all_star + cy_young_award + rolaids_relief_man_award +
+                         votedBy + StarterReliever +
+                         Steroids:most_valuable_player,
                        family = "binomial",
                        data = PitcherHOF_df)
 ##### PLOTS
