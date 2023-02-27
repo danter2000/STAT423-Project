@@ -402,6 +402,7 @@ PredictHOF_pos_df <- PredictHOF[, c(1, 25, 27)] %>%
     0
   )) %>%
   mutate(
+    Steroids = ifelse(Player == "Ryan Braun", 1, Steroids),
     Steroids = as.factor(Steroids),
     nice_guy_awards = lou_gehrig_memorial_award +
       hutch_award +
@@ -674,11 +675,10 @@ summary(good_glm_pos_nowar)
 
 row.names(PositionPlayerHOF_df) <- NULL
 
-final_pos_glm <- glm(wein ~ all_star + G + Pos + HR + nice_guy_awards + 
-                       Steroids + votedBy + RBI + gold_glove + AVG +
-                       most_valuable_player + SB + Pos:HR + 
-                       all_star:most_valuable_player + Steroids:SLG,
-                     family = "binomial",
+final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + Steroids
+                     + votedBy + RBI + AVG + most_valuable_player + R + SB +
+                       HR:Steroids + Pos:HR + all_star:most_valuable_player +
+                       Steroids:SLG, family = "binomial", 
                      data = PositionPlayerHOF_df)
 
 # Pitcher
