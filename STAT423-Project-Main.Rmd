@@ -598,9 +598,9 @@ plot(good_glm_pos, which = 4)
 
 # Position model sans war
 good_glm_pos_nowar <- step(glm(wein ~ all_star + HR*Steroids + G  +
-                                 nice_guy_awards + Steroids + Pos + votedBy +
-                                 RBI + gold_glove + AVG + most_valuable_player
-                               + SLG:Steroids + H + R + SB, 
+                               nice_guy_awards + Steroids + Pos + votedBy +
+                               RBI + gold_glove + AVG + most_valuable_player +
+                               SLG:Steroids + H + R + SB, 
                                data = PositionPlayerHOF_df,
                                family = "binomial"))
 
@@ -978,10 +978,11 @@ pitching_df %>%
 # Postion Player
 row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 
-final_pos_glm <- glm(wein ~ all_star + G + Pos + HR + nice_guy_awards + 
-                       Steroids + votedBy + RBI + gold_glove + AVG +
-                       most_valuable_player + SB + Pos:HR + 
-                       all_star:most_valuable_player + Steroids:SLG,
+final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + 
+                            Steroids + votedBy + RBI + AVG + 
+                            most_valuable_player + R + SB + HR:Steroids + 
+                            Pos:HR + all_star:most_valuable_player + 
+                            Steroids:SLG,
                      family = "binomial",
                      data = PositionPlayerHOF_df)
 
