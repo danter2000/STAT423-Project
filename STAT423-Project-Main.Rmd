@@ -272,7 +272,8 @@ hof_players <- hall_df_update %>%
   filter(category == "Player") %>% 
   group_by(playerID) %>%
   mutate(yearsOnBallet = n()) %>%
-  summarize(wein = "Y" %in% inducted * 1, votedBy, yearID, maxYear = max(yearID), yearsOnBallet, fivePercent) %>%
+  summarize(wein = "Y" %in% inducted * 1, votedBy, yearID,
+            maxYear = max(yearID), yearsOnBallet, fivePercent) %>%
   filter(yearID == maxYear) %>%
   select(-c(yearID, maxYear)) 
 
