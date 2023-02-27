@@ -330,15 +330,16 @@ PredictHOF_pitch_df <- PredictHOF[,c(1,25, 27)] %>%
                                                 roberto_clemente_award + 
                                                 branch_rickey_award) %>%
   left_join(war_df_pitcher, by = "playerID") %>% 
+  left_join(Appearances_df[,c(2,3)], by = "playerID") %>%
   mutate(all_star = all_stars + as.numeric(baseball_magazine_all_star)) %>%
   distinct(playerID, .keep_all = TRUE) %>%
   filter(G > 10) %>%
   filter(Player != "Joe Coleman") %>%
   filter(all_star != is.na(all_star)) %>%
-  mutate(votedBy = as.factor(votedBy)) %>%
   left_join(Appearances_df[,c(2,3)], by = "playerID") %>%
-  mutate(StarterReliever = ifelse((IP / years_played) > 100, "Starter", "Reliever")) %>%
-  mutate(StarterReliever = as.factor(StarterReliever))
+  mutate(StarterReliever = ifelse((IP / years_played.x) > 100, "Starter", "Reliever")) %>%
+  mutate(StarterReliever = as.factor(StarterReliever)) %>%
+  mutate(Steroids = ifelse(Player == "Bartolo Colon", 1, Steroids))
 
 row.names(PredictHOF_pitch_df) <- PredictHOF_pitch_df$playerID
 
@@ -1002,6 +1003,7 @@ final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + Steroids +
                      data = PositionPlayerHOF_df)
 
 summary(final_pos_glm)
+saveRDS(final_pos_glm, "data/final_pos_glm.RDS")
 
 plot(final_pos_glm, which = 4)
 
@@ -1016,6 +1018,7 @@ final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
                        data = PitcherHOF_df)
 
 summary(final_pitch_glm)
+saveRDS(final_pitch_glm, "data/final_pitch_glm.RDS")
 
 plot(final_pitch_glm, which = 4)
 

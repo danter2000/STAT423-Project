@@ -1,5 +1,5 @@
 ---
-title: "Model Explorer"
+title: "Baseball Hall of Fame: Model Explorer"
 author: "Andy, Dante, Kai, Kobe"
 date: "2/26/2023"
 output: 
@@ -74,20 +74,24 @@ observeEvent(input$player, {
       text <- paste0(name, " has a ", round((as.numeric(prob))*100, 2), "% chance of making it to the HoF")
     }
     
-    print(text)
-    
     headshot <- get_profile(id)
     
+    if(is.na(headshot)) {
+      headshot <- "https://usatodayhss.com/wp-content/uploads/sites/96/2018/08/screen-shot-2018-08-13-at-12-52-49-am.jpg"
+    }
+    
     removeUI("#pfp img")
+    removeUI("#pname")
 
     insertUI(
       selector = "#pfp", "afterBegin",
-      HTML(paste0('<img src="', headshot, '" width:50px height:100%; margin: auto>'))
+      img(src=headshot, style = "height: 150px; border-radius: 5%")
     )
-    
+
     insertUI(
-      selector = "#gauge-desc", "beforeEnd",
-      HTML(paste0("<p>", text, "</p>"))
+      selector = "#gauge-desc", "afterBegin",
+      p(id = "pname", style = "font-size: 20px;",name)
+      # HTML(paste0("<p id='pname'>", name, "</p>"))
     )
     
     output$gauge = renderGauge({
@@ -116,12 +120,15 @@ tabsetPanel(
         selectizeInput("player", "Player:", paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID), selected = paste0(PredictHOF_pos_df$Player, ", ", PredictHOF_pos_df$playerID)[1]))
       ),
       mainPanel(width = 20,
-                div(style = "display: flex",
+                div(style = "margin-left: auto; margin-right: auto; fill: #",
+                div(style = "display: flex; height: 300px; padding-top: 5%;",
                   id="psearch-card",
-                  div(id="pfp"),
-                  div(style="display: flex; flex-direction: column", id = "gauge-desc",
-                      gaugeOutput("gauge", width = "50%")))
+                  div(style="display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: ", id = "gauge-desc",
+                      em("HoF Chance"),
+                      gaugeOutput("gauge", width = "50%")),
+                  div(id="pfp", style = "width: 200px"))
                       )
+      )
     )
 ),
 tabPanel(
