@@ -305,7 +305,11 @@ PositionPlayerHOF_df <- inner_join(batting_df_continuous_counts,
   filter(Player != "Satchel Paige") %>%
   filter(Player != "Shoeless Joe Jackson") %>%
   filter(Player != "Pete Rose") %>%
-  filter(war != is.na(war))
+  filter(war != is.na(war)) %>%
+  filter(votedBy != "Nominating Vote") %>%
+  filter(votedBy != "Old Timers") %>%
+  filter(votedBy != "Final Ballot") %>%
+  filter(Pos != "P")
 
 PositionPlayerHOF_df$all_star[is.na(PositionPlayerHOF_df$all_star)] <-
   0
@@ -646,19 +650,10 @@ summary(good_glm_pos_nowar)
 
 row.names(PositionPlayerHOF_df) <- NULL
 
-<<<<<<< HEAD
-final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + 
-                       Steroids + votedBy + RBI + AVG + 
-                       most_valuable_player + R + SB + HR:Steroids + 
-                       Pos:HR + all_star:most_valuable_player + 
-                       Steroids:SLG,
-                     family = "binomial",
-=======
 final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + Steroids
                      + votedBy + RBI + AVG + most_valuable_player + R + SB +
                        HR:Steroids + Pos:HR + all_star:most_valuable_player +
                        Steroids:SLG, family = "binomial", 
->>>>>>> a9a48a01d777e37cf25ec340ebfa6a6cc5a24647
                      data = PositionPlayerHOF_df)
 
 # Pitcher
@@ -754,7 +749,8 @@ or_conf_int_plot <- function(mod, subtitle) {
       y = "",
       title = "Odds Ratios < 1 (95% CI)",
       subtitle = subtitle
-    ) 
+    ) + 
+    theme(axis.text.x = element_text(size=14, angle=45))
   
   p2 <- or_conf_int %>%
     filter(odds.ratio > 1) %>%
@@ -778,7 +774,8 @@ or_conf_int_plot <- function(mod, subtitle) {
       y = "",
       title = "Odds Ratios > 1 (95% CI)",
       subtitle = subtitle
-    ) 
+    ) + 
+    theme(axis.text.x = element_text(size=14, angle=45))
   
   return(p1 + p2)
 }
