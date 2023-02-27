@@ -652,7 +652,7 @@ row.names(PositionPlayerHOF_df) <- NULL
 
 final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + Steroids
                      + votedBy + RBI + AVG + most_valuable_player + R + SB +
-                       HR:Steroids + Pos:HR + all_star:most_valuable_player +
+                       Pos:HR + all_star:most_valuable_player +
                        Steroids:SLG, family = "binomial", 
                      data = PositionPlayerHOF_df)
 

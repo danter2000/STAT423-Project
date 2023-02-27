@@ -955,7 +955,7 @@ pos_corr <- get_corr_matrix(PositionPlayerHOF_df[c("all_star", "G", "Pos", "HR",
                                                    "nice_guy_awards", "Steroids",
                                                    "votedBy", "RBI", "AVG",
                                                    "most_valuable_player", "R",
-                                                   "SB")])
+                                                   "SB", "SLG")])
 replayPlot(pos_corr)
 
 pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "L", "SO", "SV", "Steroids",
@@ -992,9 +992,9 @@ pitching_df %>%
 # Postion Player
 row.names(PositionPlayerHOF_df) <- PositionPlayerHOF_df$Player
 
-final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + Steroids
-                     + votedBy + RBI + AVG + most_valuable_player + R + SB +
-                       HR:Steroids + Pos:HR + all_star:most_valuable_player +
+final_pos_glm <- glm(wein ~ all_star + Pos + HR + nice_guy_awards + Steroids +
+                      votedBy + RBI + AVG + most_valuable_player + R + SB +
+                       Pos:HR + all_star:most_valuable_player +
                        Steroids:SLG, family = "binomial",
                      data = PositionPlayerHOF_df)
 
