@@ -12,21 +12,40 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Introduction
 The data we are working with is career baseball statistics. The data was collected from official scorekeepers who went to every Major League Baseball game and tracked various outcomes players had over the course of each game. For our finished data set, those statistics were added up at the end of each baseball season and also at the end of each player’s career. The motivation for the scorekeepers to track the data was that they were paid, either by the home team, the league as a whole, or the local newspaper to track these statistics to keep baseball fans informed. 
 
-One motivation for our research question was to better understand what exactly voters for the hall of fame use to decide whether or not a player is inducted. Another motivation for our research is an extension of the first, which is for us to predict which players will be inducted into the hall of fame in the future. 
+One motivation for our research question was to better understand which variables are associated with a successful hall of fame induction. Another motivation for our research is an extension of the first, which is for us to predict which players will be inducted into the hall of fame in the future. 
 
-As such, our first research question is what factors determine whether a position player is inducted into the hall of fame and whether we can create a model that uses these factors to predict what players will make the hall of fame. Our other research question is what factors determine whether a pitcher is inducted into the hall of fame and whether we can create a model that uses these factors to predict what pitchers will make the hall of fame. 
+As such, our first research question is what factors are associated with a  position player being inducted into the hall of fame and whether we can create a model that uses these factors to predict what players will make the hall of fame. Our other research question is what factors are a associated with whether a pitcher is inducted into the hall of fame and whether we can create a model that uses these factors to predict what pitchers will make the hall of fame. 
 
 ## Data Description
 Our data consists of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables itself. However, some categorical variables we may use include factors such as year, league, team, stint, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was known to use steroids or not. 
 
-Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different datasets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In total, we should have around 10,000 observations (individual players).
+Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In total, we have around 750 observations in the position players training data set and 400 observations in the pitching training data set,.
 
 
 ## Exploratory Data Analysis
 
 
+#### Steroids Clustering
+![](../Plots/steroids.png){width=150px, height=150px}
+
 ## Methods
 
 
-## Results
 
+## Results
+Our final models are as follows:
+
+- Position Players:
+
+  `wein ~ all_star + Pos + HR + nice_guy_awards + Steroids + votedBy + RBI + AVG + most_valuable_player + R + SB + Pos:HR + all_star:most_valuable_player + Steroids:SLG`
+  
+- Pitchers:
+
+  `wein ~ W + L + SO + SV + Steroids + most_valuable_player + all_star + cy_young_award + rolaids_relief_man_award + votedBy + StarterReliever + Steroids:most_valuable_player`
+
+#### Coefficients
+![Position Players Coefficients](../Plots/pos_model_table.png){width=100px, height=100px} ![Pitchers Coefficients](../Plots/pitch_model_table.png){width=100px, height=100px}
+
+#### QQ-Plots:
+
+![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=100px, height=100px} ![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=100px, height=100px}
