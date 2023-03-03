@@ -52,20 +52,36 @@ Our final models are as follows:
 
 
 ## Results
-In terms of our model's performance on diagnostics on the training model, we will examine the coefficients and qqplots
+In terms of our model's performance on diagnostics on the training model, we will examine the coefficients, qqplots, and confusion matrices
 
 #### Coefficients
 |Position Players Coefficients|Pitchers Coefficients|
 |:-:|:-:|
-|![Position Players Coefficients](../Plots/pos_model_table.png){width=150px, height=150px}|![Pitchers Coefficients](../Plots/pitch_model_table.png){width=150px, height=150px}|
+|![Position Players Coefficients](../Plots/pos_model_table.png){width=175px, height=175px}|![Pitchers Coefficients](../Plots/pitch_model_table.png){width=175px, height=175px}|
+
+|Position Players Odds|Pitchers Odds|
+|:-:|:-:|
+|![Position Players Odds](../Plots/odd_ratio_pos.png){width=150px, height=150px}|![Pitchers Odds](../Plots/odd_ratio_pitch.png){width=200px, height=200px}|
+
+From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. 
 
 #### QQ-Plots:
-|Position Players Coefficients|Pitchers Coefficients|
+|Position Players|Pitchers|
 |:-:|:-:|
 |![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=150px, height=150px}|![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=150px, height=150px}|
 
-As we can tell, for both the hitting and pitching models, the models have a  similar fit to the training data.
+As we can tell, for both the hitting and pitching models, the models have a  similar fit to the training data. For almost all of the values, they fit right along the line, meaning the residuals are zero or close to zero for most of the data. However, at the extremes of the theoretical quantiles, we do see some variation in the residuals away from the model for both the pitchers and position players (although the pitchers model has more extremes), so the model is not close to perfect.
+
+#### Confusion Matrix
+|Position Players|Pitchers|
+|:-:|:-:|
+|![Position Players](../Plots/confus_pos.png){width=150px, height=150px}|![Pitchers](../Plots/confus_pitch.png){width=150px, height=150px}|
+
+We can tell that both of our models have an extremely high accuracy, with very few false positives or false negatives. Thus, both of our models are well-fitted to the training data.
 
 #### Prediction
-Our final prediction results are published on the web application [here](https://klobby19.shinyapps.io/explorable/)
+In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application **[here](https://klobby19.shinyapps.io/explorable/)**
 
+In terms of our our predictions, we would say that they are, for the most part, accurate. Obviously, our opinion is not a perfect evaluation of whether or not a player will get into the hall of fame, but as people who consume a lot of baseball content, as well as participate in the baseball community, we are likely fairly close to what experts in baseball statistics would look like (not to brag). However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes player hall of fame worthy. 
+
+It is also important to note that these predictions are "now-casting" not forecasting, since we are essentially assuming that all the players that we are predicting are all retired. As such, since our model looks at many counting stats, players who are not retired yet and have low probabilities to get into the hall of fame can, in theory, improve their chances by picking up more stats over the rest of their careers. However, we still believe that our model brings valuable information regarding players who have retired or are at the end of their careers, since they are not likely to improve their chances much, if at all. 
