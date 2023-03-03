@@ -26,7 +26,7 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 
 
 #### Steroids Clustering
-![](../Plots/steroids.png){width=150px, height=150px}
+![Clustering with Steroids in Red](../Plots/steroids.png){width=150px, height=150px}
 
 ## Methods
 
@@ -38,7 +38,8 @@ For pitcher,
 
 In addition to the base covariates, we saw a necessity to mutate additional variables 
 
-## Results
+For our model building, we used essentially every possible variable that could potentially be useful and did not contain too many missing values. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test as many models as possible. Since we are more focused on the prediction aspect, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC or K-fold CV. In addition, AIC uses less computational power than LOOCV, which is vital for us given the number of covariates we used in building our models. 
+
 Our final models are as follows:
 
 - Position Players:
@@ -49,6 +50,10 @@ Our final models are as follows:
 
   `wein ~ W + L + SO + SV + Steroids + most_valuable_player + all_star + cy_young_award + rolaids_relief_man_award + votedBy + StarterReliever + Steroids:most_valuable_player`
 
+
+## Results
+In terms of our model's performance on diagnostics on the training model, we will examine the coefficients and qqplots
+
 #### Coefficients
 |Position Players Coefficients|Pitchers Coefficients|
 |:-:|:-:|
@@ -58,3 +63,9 @@ Our final models are as follows:
 |Position Players Coefficients|Pitchers Coefficients|
 |:-:|:-:|
 |![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=150px, height=150px}|![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=150px, height=150px}|
+
+As we can tell, for both the hitting and pitching models, the models have a  similar fit to the training data.
+
+#### Prediction
+Our final prediction results are published on the web application [here](https://klobby19.shinyapps.io/explorable/)
+
