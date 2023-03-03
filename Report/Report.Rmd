@@ -30,7 +30,13 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 
 ## Methods
 
+Each of our pitcher and batter (position player) data frames consisted of 50 base variables after the conclusion of our various join functions. 
 
+For batters, we began with the "Batting" data frames within the Lahman package that included recognizable rate and counting stats for each observation (player) like batting average, walks, plate appearances, and total hits for each of the four base categories. We then joined a 
+
+For pitcher, 
+
+In addition to the base covariates, we saw a necessity to mutate additional variables 
 
 ## Results
 Our final models are as follows:
