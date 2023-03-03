@@ -19,14 +19,14 @@ As such, our first research question is what factors are associated with a  posi
 ## Data Description
 Our data consists of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables itself. However, some categorical variables we may use include factors such as year, league, team, stint, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was known to use steroids or not. 
 
-Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In total, we have around 750 observations in the position players training data set and 400 observations in the pitching training data set,.
+Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players training data set and 400 observations in the pitching training data set.
 
 
 ## Exploratory Data Analysis
 
 
 #### Steroids Clustering
-![](../Plots/steroids.png){width=150px, height=150px}
+![Clustering with Steroids in Red](../Plots/steroids.png){width=150px, height=150px}
 
 ## Methods
 
@@ -41,7 +41,8 @@ In addition to the base covariates, a large initial AIC from our step() selectio
 (BULLET POINT HERE) For pitchers, preliminary parameter selection via the step() function revealed the importance of relief pitcher accolades. Relief pitchers are a subset of pitchers who typically pitch ~ 60 inning a season. We felt the need for our model to be differentiate between a starter and relief pitcher, and so we mutated a predictor which identifies if a pitcher is a starter or reliever based on seasonal innings pitched totals.
 
 
-## Results
+For our model building, we used essentially every possible variable that could potentially be useful and did not contain too many missing values. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test as many models as possible. Since we are more focused on the prediction aspect, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC or K-fold CV. In addition, AIC uses less computational power than LOOCV, which is vital for us given the number of covariates we used in building our models. 
+
 Our final models are as follows:
 
 - Position Players:
@@ -52,10 +53,24 @@ Our final models are as follows:
 
   `wein ~ W + L + SO + SV + Steroids + most_valuable_player + all_star + cy_young_award + rolaids_relief_man_award + votedBy + StarterReliever + Steroids:most_valuable_player`
 
+
+## Results
+In terms of our model's performance on diagnostics on the training model, we will examine the coefficients and qqplots
+
 #### Coefficients
-![Position Players Coefficients](../Plots/pos_model_table.png){width=100px, height=100px} ![Pitchers Coefficients](../Plots/pitch_model_table.png){width=100px, height=100px}
+|Position Players Coefficients|Pitchers Coefficients|
+|:-:|:-:|
+|![Position Players Coefficients](../Plots/pos_model_table.png){width=150px, height=150px}|![Pitchers Coefficients](../Plots/pitch_model_table.png){width=150px, height=150px}|
 
 #### QQ-Plots:
+|Position Players Coefficients|Pitchers Coefficients|
+|:-:|:-:|
+|![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=150px, height=150px}|![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=150px, height=150px}|
+
+As we can tell, for both the hitting and pitching models, the models have a  similar fit to the training data.
+
+#### Prediction
+Our final prediction results are published on the web application [here](https://klobby19.shinyapps.io/explorable/)
 
 ![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=100px, height=100px} ![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=100px, height=100px}
 
@@ -63,3 +78,4 @@ Our final models are as follows:
 #### References 
 
 https://library.fangraphs.com/misc/war/positional-adjustment/
+
