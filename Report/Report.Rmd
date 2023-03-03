@@ -19,7 +19,7 @@ As such, our first research question is what factors are associated with a  posi
 ## Data Description
 Our data consists of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables itself. However, some categorical variables we may use include factors such as year, league, team, stint, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was known to use steroids or not. 
 
-Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In total, we have around 750 observations in the position players training data set and 400 observations in the pitching training data set,.
+Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players training data set and 400 observations in the pitching training data set.
 
 
 ## Exploratory Data Analysis
@@ -44,8 +44,11 @@ Our final models are as follows:
   `wein ~ W + L + SO + SV + Steroids + most_valuable_player + all_star + cy_young_award + rolaids_relief_man_award + votedBy + StarterReliever + Steroids:most_valuable_player`
 
 #### Coefficients
-![Position Players Coefficients](../Plots/pos_model_table.png){width=100px, height=100px} ![Pitchers Coefficients](../Plots/pitch_model_table.png){width=100px, height=100px}
+|Position Players Coefficients|Pitchers Coefficients|
+|:-:|:-:|
+|![Position Players Coefficients](../Plots/pos_model_table.png){width=150px, height=150px}|![Pitchers Coefficients](../Plots/pitch_model_table.png){width=150px, height=150px}|
 
 #### QQ-Plots:
-
-![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=100px, height=100px} ![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=100px, height=100px}
+|Position Players Coefficients|Pitchers Coefficients|
+|:-:|:-:|
+|![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=150px, height=150px}|![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=150px, height=150px}|
