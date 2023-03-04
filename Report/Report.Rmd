@@ -2,7 +2,9 @@
 title: "Baseball Hall of Fame Report"
 author: "Andy, Dante, Kai, and Kobe"
 date: "`r Sys.Date()`"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
