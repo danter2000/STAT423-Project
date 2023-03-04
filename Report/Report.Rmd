@@ -2,7 +2,9 @@
 title: "Baseball Hall of Fame Report"
 author: "Andy, Dante, Kai, and Kobe"
 date: "`r Sys.Date()`"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 header-includes: |
   \usepackage{float}
   \floatplacement{figure}{H}
@@ -202,7 +204,7 @@ For our hypothesis testing, since we use so many coefficients for both models, o
 
 For our model building, we used essentially every possible variable that could potentially be useful and did not contain too many missing values. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test as many models as possible. Since we are more focused on the prediction aspect, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC. 
 
-In addition, we used AIC over K-fold CV and LOOCV because of the following:
+In addition, we attempted to utilize AIC over K-fold CV and LOOCV because of the following:
 
 ```{r fig.cap = "Position Player Confusion Matrix", out.width="30%", out.height="30%", fig.align='center'}
 get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df_test, "Position Players Model")
@@ -211,7 +213,7 @@ get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df_test, "Position Players
 get_confusion_matrix(final_pitch_glm, PitcherHOF_df_test, "Pitchers Model")
 ```
 
-Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players. Thus, segmenting the data to do LOOCV or K-fold CV would may create inaccurate models, giving us a bad way to do model selection.
+Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players. Thus, segmenting the data to do LOOCV or K-fold CV would may create inaccurate models, giving us a bad way to do model selection. We therefore would prefer to use the step() function as a way to model select.
 
 # Results
 
