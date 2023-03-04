@@ -31,7 +31,8 @@ make_table <- function(mod1, mod2, mod3, title) {
     no.space = TRUE,
     font.size = "small",
     single.row = TRUE,
-    # table.placement = "H",
+    table.placement = "H",
+    # float = TRUE,
     header = FALSE,
     column.labels = c("Iteration 1", "Iteration 2", "Iteration 3"),
     type = "latex"
@@ -222,9 +223,9 @@ make_table(pitcher1, pitcher2, final_pitch_glm, title = "Pitchers Model(s)")
 make_table(position1, position2, final_pos_glm, title = "Position Players Model(s)")
 ```
 
-The former table is the summary information of the models we obtained from many iterations of trying different variables for both pitchers. Further, the first iteration is considered the "base" model which includes all the basic measurements in our dataset as it doesn't include manipulated data like `steroids` and `votedBy`, both variables which needed further research to obtain. The second iteration includes the variables we didn't include in the first iteration whilst the third and final model includes interactions of any variables as well. Thus, the third iteration can be considered the most complex model out of the 3.
+The former tables are the summary information of the models we obtained from many iterations of trying different variables for both pitchers and position players. Further, the first iteration is considered the "base" model which includes all the basic measurements in our dataset as it doesn't include manipulated data like `steroids` and `votedBy`, both variables which needed further research to obtain. The second iteration includes the variables we didn't include in the first iteration whilst the third and final model includes interactions of any variables as well. Thus, the third iteration can be considered the most complex model out of the 3.
 
-As you can observe, the AIC for the model go down as we clean up the variables and add interactions, so we ended up settling with the last model which gave us the lowest AIC. The same process was applied to the position players model.
+As you can observe, the AIC for the models go down as we clean up the variables and add interactions, so we ended up settling with the last model which gave us the lowest AIC.
 
 Our final models are as follows:
 
