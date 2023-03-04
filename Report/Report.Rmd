@@ -5,6 +5,8 @@ date: "`r Sys.Date()`"
 output: pdf_document
 header-includes: |
   \usepackage{float}
+  \floatplacement{figure}{H}
+  \floatplacement{table}{H}
 ---
 
 ```{r setup, include=FALSE}
@@ -14,6 +16,7 @@ library(tidyverse)
 library(ggalt)
 library(patchwork)
 library(RColorBrewer)
+library(equatiomatic)
 
 load("../data/modeliters.RData")
 
@@ -60,14 +63,14 @@ or_conf_int_plot <- function(mod, subtitle) {
     #   alpha = 0.5,
     #   size = 5
     # ) +
-    geom_errorbarh(aes(xmin = conf.lower, xmax = conf.upper, y = predictor), color = "#ffa600") +
-    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 2) +
+    geom_errorbarh(aes(xmin = conf.lower, xmax = conf.upper, y = predictor), color = "#ffa600", height = 0.2) +
+    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 2, shape = 18) +
     scale_x_log10(n.breaks = 10) +
     theme_minimal() +
     theme(
       text = element_text(size = 8, family = font_family),
       axis.text.y = element_text(face = "italic"),
-      axis.text.x = element_text(size = 10, angle = 45),
+      axis.text.x = element_text(size = 4, angle = 45),
       plot.title = element_text(face = "bold")
     ) +
     labs(
@@ -86,14 +89,14 @@ or_conf_int_plot <- function(mod, subtitle) {
     #   alpha = 0.5,
     #   size = 5
     # ) +
-    geom_errorbarh(aes(xmin = conf.lower, xmax = conf.upper, y = predictor), color = "#ffa600") +
-    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 2) +
+    geom_errorbarh(aes(xmin = conf.lower, xmax = conf.upper, y = predictor), color = "#ffa600", height = 0.2) +
+    geom_point(aes(x = odds.ratio, y = predictor), color = "#003f5c", size = 2, shape = 18) +
     scale_x_log10(n.breaks = 10) +
     theme_minimal() +
     theme(
       text = element_text(size = 8, family = font_family),
       axis.text.y = element_text(face = "italic"),
-      axis.text.x = element_text(size = 10, angle = 45),
+      axis.text.x = element_text(size = 4, angle = 45),
       plot.title = element_text(face = "bold")
     ) +
     labs(
@@ -132,7 +135,7 @@ get_confusion_matrix <- function(mod, data, title) {
     theme_minimal() +
     theme(
       legend.position = "top",
-      legend.key.width=unit(4,"cm"),
+      legend.key.width=unit(2,"cm"),
       text = element_text(size = 10, family = font_family),
       axis.text.x = element_text(face = "italic"),
       axis.text.y = element_text(face = "italic"),
@@ -144,35 +147,40 @@ get_confusion_matrix <- function(mod, data, title) {
 
 ```
 
-## Introduction
+# Introduction
 The data we are working with is career baseball statistics. The data was collected from official scorekeepers who went to every Major League Baseball game and tracked various outcomes players had over the course of each game. For our finished data set, those statistics were added up at the end of each baseball season and also at the end of each player’s career. The motivation for the scorekeepers to track the data was that they were paid, either by the home team, the league as a whole, or the local newspaper to track these statistics to keep baseball fans informed. 
 
 One motivation for our research question was to better understand which variables are associated with a successful hall of fame induction. Another motivation for our research is an extension of the first, which is for us to predict which players will be inducted into the hall of fame in the future. 
 
 As such, our first research question is what factors are associated with a  position player being inducted into the hall of fame and whether we can create a model that uses these factors to predict what players will make the hall of fame. Our other research question is what factors are a associated with whether a pitcher is inducted into the hall of fame and whether we can create a model that uses these factors to predict what pitchers will make the hall of fame. 
 
+We'll be using R version 4.0.x throughout this project, so please update to at least R version 4.0 to be able to replicate our process.
+
 ## Data Description
 Our data consists of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables itself. However, some categorical variables we may use include factors such as year, league, team, stint, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was known to use steroids or not. 
 
 Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable (with the two values being 1 and 0), indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players training data set and 400 observations in the pitching training data set.
 
-
 ## Exploratory Data Analysis
 
+TODO: Add more EDA details
 
-#### Steroids Clustering
+### Steroids Clustering
 ![Clustering with Steroids in Red](../Plots/steroids.png){width=150px, height=150px}
 
-## Methods
+# Methods
+
+TODO: improve format
+
 For our hypothesis testing, since we use so many coefficients for both models, our family wise error rate would be high. As such, we are going to use the Bonferonni correction. This gives us that the significant p-values are 0.0015 for Position Players and 0.0042 for Pitchers.
 
-Each of our pitcher and batter (position player) data frames consisted of 50 base variables after the conclusion of our various join functions. 
+- Each of our pitcher and batter (position player) data frames consisted of 50 base variables after the conclusion of our various join functions. 
 
     * For batters, we began summing across playerID groups in the "Batting" data frame within the Lahman package. This allowed us to see career totals for recognizable rate and counting stats for each observation (player) like batting average, walks, plate appearances, and total hits for each of the four base categories. We then joined a pivoted "award" data frame that added approximately 20 accolade predictors for each observation, this includes total all-star selections, most valuable player awards won, silver sluggers, etc. 
 
     * For pitcher, we began summing across playerID groups in the "Pitching" data frame within the Lahman package. This allowed us to see career totals for recognizable rate and counting stats for each observation (pitcher) like innings pitched (a starter would typically pitch ~ 150 in a season), strike outs, earned runs, and we additionally mutated $\frac{9 \times ER}{IP}$ and $\frac{W + H}{IP}$ to get the all important earned run average and WHIP rates. We then joined a pivoted "award" data frame that added approximately 20 accolade predictors for each observation, this includes total all-star selections, Cy Young awards won, Gold Gloves, etc. 
 
-In addition to the base covariates, a large initial AIC from our step() selection process and some rather large Cook's Distance values indicated the necessity to mutate additional predictors. 
+- In addition to the base covariates, a large initial AIC from our step() selection process and some rather large Cook's Distance values indicated the necessity to mutate additional predictors. 
 
     * The late 90's, early 2000's Steroids era of baseball altered the way BBWAA voters viewed the careers of some players in spite of otherwise Hall of Fame worthy numbers. And so, using webscraped data from ESPN and Bay Area Laboratory Co-operative (BALCO) court documents, we mutated a binary 0/1 column that indicated if a player was indited on any sort of performance enhancing drug (PED) scandal.
   
@@ -184,86 +192,85 @@ In addition to the base covariates, a large initial AIC from our step() selectio
 
 For our model building, we used essentially every possible variable that could potentially be useful and did not contain too many missing values. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test as many models as possible. Since we are more focused on the prediction aspect, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC or K-fold CV. In addition, AIC uses less computational power than LOOCV, which is vital for us given the number of covariates we used in building our models. 
 
-The following tables are the summary information of the models we obtained from many iterations of trying different variables for both position players and pitchers. Further, for these groups, the first iteration is considered the "base" model which includes all the basic measurements in our dataset as it doesn't include manipulated data like `steroids` and `votedBy`, both variables which needed further research to obtain. The second iteration includes the variables we didn't include in the first iteration whilst the third and final model includes interactions of any variables as well. Thus, the third iteration can be considered the most complex model out of the 3.
-
 These models were trained on the same corresponding training dataset, which consists of `80%` of the full dataset are using. Thus, we used a $80/20$ split, to get our training and testing data. This allows us to further evaluate the performance of our models as the model will be predicting on unseen data.
 
-## Results
-In terms of our model's performance on diagnostics on the training model, we will examine the coefficients, qqplots, and confusion matrices
+## Confusion Matrix
 
-$\vspace{200pt}$
+TODO: Explain why we're using our training data, fiddle with plot -- text size too big
 
-```{r message=FALSE, echo=FALSE, results='asis'} 
-make_table(position1, position2, final_pos_glm, title = "Position Players Model(s)")
+```{r fig.cap = "Position Player Confusion Matrix", out.width="80%", fig.align='center'}
+get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df_test, "Position Players Model")
 ```
+
+```{r fig.cap = "Pitchers Confusion Matrix", out.width="80%", fig.align='center'}
+get_confusion_matrix(final_pitch_glm, PitcherHOF_df_test, "Pitchers Model")
+```
+
+Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the dataset as there are many more non-hof players compared to hof players. Thus, with only around $20%$ of the testing data consisting of hall of famers, we could consider other possibilities like downsampling to balance out the dataset.
+
+Same goes with the pitchers mode, however, it is predicting a bit better than our position model.
+
+# Results
+
+TODO: format table so that text wrap over and under the table, more detail necessary
 
 ```{r message=FALSE, echo=FALSE, results='asis'}
 make_table(pitcher1, pitcher2, final_pitch_glm, title = "Pitchers Model(s)")
 ```
 
-$\vspace{50pt}$
+```{r message=FALSE, echo=FALSE, results='asis'} 
+make_table(position1, position2, final_pos_glm, title = "Position Players Model(s)")
+```
 
-As you can observe, the AIC for both of these models go down as we clean up the variables and add interactions. Thus, we ended up settling with the third iteration, which are the models with the lowest AIC.
+The former table is the summary information of the models we obtained from many iterations of trying different variables for both pitchers. Further, the first iteration is considered the "base" model which includes all the basic measurements in our dataset as it doesn't include manipulated data like `steroids` and `votedBy`, both variables which needed further research to obtain. The second iteration includes the variables we didn't include in the first iteration whilst the third and final model includes interactions of any variables as well. Thus, the third iteration can be considered the most complex model out of the 3.
+
+As you can observe, the AIC for the model go down as we clean up the variables and add interactions, so we ended up settling with the last model which gave us the lowest AIC. The same process was applied to the position players model.
 
 Our final models are as follows:
 
-- Position Players:
+```{r results = 'asis'}
+extract_eq(final_pos_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 3)
+```
 
-    `wein ~ all_star + Pos + HR + nice_guy_awards + Steroids + votedBy + RBI + AVG + most_valuable_player + R + SB + Pos:HR + all_star:most_valuable_player + Steroids:SLG`
-  
-- Pitchers:
+```{r results = 'asis'}
+extract_eq(final_pitch_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 3)
+```
 
-    `wein ~ W + L + SO + SV + Steroids + most_valuable_player + all_star + cy_young_award + rolaids_relief_man_award + votedBy + StarterReliever + Steroids:most_valuable_player`
+## Coefficients
 
-#### Coefficients
+TODO: label plots with figure # and change font of plots
 
 In this section, we take a look at the coefficients that were computed from our model, specifically we look at the odds ratio and the corresponding 95% confidence interval to gain insight on what kind of variables may be important in our final models.
 
-```{r out.width="100%", echo=FALSE, message=FALSE}
+```{r fig.cap = "Position Players Odds Ratio CI"}
 or_conf_int_plot(final_pos_glm, "Position Players Model")
 ```
 
-```{r out.width="100%", echo=FALSE, message=FALSE}
+```{r fig.cap = "Pitchers Odd Ratio CI"}
 or_conf_int_plot(final_pitch_glm, "Pitchers Model")
 ```
 
-From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. One thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect     `Steroids` has on the chance a player has to get in the hall of fame is still negative.
+From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. One thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect `Steroids` has on the chance a player has to get in the hall of fame is still negative.
 
-#### QQ-Plots:
+## QQ-Plots
+
 |Position Players|Pitchers|
 |:-:|:-:|
 |![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=150px, height=150px}|![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=150px, height=150px}|
 
 As we can tell, for both the hitting and pitching models, the models have a  similar fit to the training data. For almost all of the values, they fit right along the line, meaning the residuals are zero or close to zero for most of the data. However, at the extremes of the theoretical quantiles, we do see some variation in the residuals away from the model for both the pitchers and position players (although the pitchers model has more extremes), so the model is not close to perfect.
 
-#### Confusion Matrix
-We can tell that both of our models have an extremely high accuracy, with very few false positives or false negatives. Thus, both of our models are well-fitted to the training data.
-
-```{r}
-get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df_test, "Position Players Model")
-```
-
-Our model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the dataset as there are many more non-hof players compared to hof players. Thus, with only around $20%$ of the testing data consisting of hall of famers, we could consider other possibilities like downsampling to balance out the dataset.
-
-```{r}
-get_confusion_matrix(final_pitch_glm, PitcherHOF_df_test, "Pitchers Model")
-```
-
-Same goes with the pitchers mode, however, it is predicting a bit better than our position model.
-
-|Position Players|Pitchers|
-|:-:|:-:|
-|![Position Players](../Plots/confus_pos.png){width=150px, height=150px}|![Pitchers](../Plots/confus_pitch.png){width=150px, height=150px}|
-
-However, when evaluating on the same data, we get a relatively high accuracy, which is expected as the model is seeing data that it was modeled on.
-
-#### Prediction
+## Prediction
 In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application **[here](https://klobby19.shinyapps.io/explorable/)**
 
 In terms of our our predictions, we would say that they are, for the most part, accurate. Obviously, our opinion is not a perfect evaluation of whether or not a player will get into the hall of fame, but as people who consume a lot of baseball content, as well as participate in the baseball community, we are likely fairly close to what experts in baseball statistics would look like (not to brag). However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes player hall of fame worthy. 
 
 It is also important to note that these predictions are "now-casting" not forecasting, since we are essentially assuming that all the players that we are predicting are all retired. As such, since our model looks at many counting stats, players who are not retired yet and have low probabilities to get into the hall of fame can, in theory, improve their chances by picking up more stats over the rest of their careers. However, we still believe that our model brings valuable information regarding players who have retired or are at the end of their careers, since they are not likely to improve their chances much, if at all.
 
-#### References 
+## References 
 
-https://library.fangraphs.com/misc/war/positional-adjustment/
+- Fangraphs. (n.d.). Positional Adjustment. Retrieved from https://library.fangraphs.com/misc/war/positional-adjustment/
+- Baseball Reference. (n.d.). Baseball Statistics and History. Retrieved from https://www.baseball-reference.com/
+- Lahman, S. (n.d.). The Baseball Archive. Retrieved from https://www.seanlahman.com/baseball-archive/statistics/
+- Wikipedia. (2021, December 14). List of Major League Baseball players suspended for performance-enhancing drugs. In Wikipedia. Retrieved from https://en.wikipedia.org/wiki/List_of_Major_League_Baseball_players_suspended_for_performance-enhancing_drugs
+- ESPN. (2009, July 31). A-Rod admits using PEDs from 2001-03. Retrieved from https://www.espn.com/mlb/news/story?id=4366683

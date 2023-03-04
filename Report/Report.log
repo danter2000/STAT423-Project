@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.25)  3 MAR 2023 18:51
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.25)  3 MAR 2023 20:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -386,31 +386,31 @@ LaTeX Warning: Label `' multiply defined.
 )
 \openout1 = `Report.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 83.
+LaTeX Font Info:    ... okay on input line 83.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 81.
+Package hyperref Info: Link coloring OFF on input line 83.
 (./Report.out) (./Report.out)
 \@outlinefile=\write3
 \openout3 = `Report.out'.
@@ -449,158 +449,155 @@ Package hyperref Info: Link coloring OFF on input line 81.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 83.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 85.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 83.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 85.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 83.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 85.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 83.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 85.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 83.
+(Font)              <12> on input line 85.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 83.
+(Font)              <8> on input line 85.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 83.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 83.
+(Font)              <6> on input line 85.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 85.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 83.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 85.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<../Plots/steroids.png, id=24, 565.11125pt x 517.935pt>
+<../Plots/steroids.png, id=48, 565.11125pt x 517.935pt>
 File: ../Plots/steroids.png Graphic file (type png)
 <use ../Plots/steroids.png>
-Package pdftex.def Info: ../Plots/steroids.png  used on input line 143.
+Package pdftex.def Info: ../Plots/steroids.png  used on input line 150.
 (pdftex.def)             Requested size: 123.20387pt x 112.91864pt.
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 152.
-(/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [1
+[1
 
 {/Users/kobesarausad/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 166.
+(/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 172.
+(Font)              <10> on input line 186.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 172.
+(Font)              <7> on input line 186.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 172.
+(Font)              <5> on input line 186.
 [2
 pdfTeX warning (ext4): destination with the same identifier (name{figure.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.224   \end{itemize}
-                      <../Plots/steroids.png>]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 243.
+l.219     F
+           or position players specifically, we felt the need to mutate in a <../Plots/steroids.png>]
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 253.
 (/Users/kobesarausad/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
+<Report_files/figure-latex/unnamed-chunk-1-1.pdf, id=75, 469.755pt x 325.215pt>
+File: Report_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-1-1.pdf>
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-1-1.pdf  used on input line 266.
+(pdftex.def)             Requested size: 375.80452pt x 260.17235pt.
+[3]
+<Report_files/figure-latex/unnamed-chunk-2-1.pdf, id=84, 469.755pt x 325.215pt>
+File: Report_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-2-1.pdf  used on input line 275.
+(pdftex.def)             Requested size: 375.80452pt x 260.17235pt.
+[4
+pdfTeX warning (ext4): destination with the same identifier (name{figure.2}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.289 
+      
+pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.289 
+       <./Report_files/figure-latex/unnamed-chunk-1-1.pdf> <./Report_files/figure-latex/unnamed-chunk-2-1.pdf>]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 267.
-[3] [4
+(Font)              <9> on input line 303.
+[5
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.373 
-      ] [5
+l.435 \end{equation}
+                    ] [6
 pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.373 
-      ]
-Underfull \hbox (badness 10000) in paragraph at lines 380--382
-[]\T1/lmtt/m/n/10 wein ~ all_star + Pos + HR + nice_guy_awards + Steroids + votedBy + RBI + AVG +
+l.435 \end{equation}
+                    ]
+Overfull \hbox (57.79355pt too wide) detected at line 445
+[][][][][]
  []
 
-
-Overfull \hbox (1.49371pt too wide) in paragraph at lines 380--382
-\T1/lmtt/m/n/10 most_valuable_player + R + SB + Pos:HR + all_star:most_valuable_player + Steroids:SLG 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 384--385
-[]\T1/lmtt/m/n/10 wein ~ W + L + SO + SV + Steroids + most_valuable_player + all_star + cy_young_award
- []
-
-
-Overfull \hbox (6.7437pt too wide) in paragraph at lines 384--385
-\T1/lmtt/m/n/10 + rolaids_relief_man_award + votedBy + StarterReliever + Steroids:most_valuable_player 
- []
-
-<Report_files/figure-latex/unnamed-chunk-3-1.pdf, id=75, 469.755pt x 325.215pt>
-File: Report_files/figure-latex/unnamed-chunk-3-1.pdf Graphic file (type pdf)
-<use Report_files/figure-latex/unnamed-chunk-3-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-3-1.pdf  used on input line 395.
+<Report_files/figure-latex/unnamed-chunk-7-1.pdf, id=123, 469.755pt x 325.215pt>
+File: Report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-7-1.pdf>
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 459.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<Report_files/figure-latex/unnamed-chunk-4-1.pdf, id=76, 469.755pt x 325.215pt>
-File: Report_files/figure-latex/unnamed-chunk-4-1.pdf Graphic file (type pdf)
-<use Report_files/figure-latex/unnamed-chunk-4-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-4-1.pdf  used on input line 397.
+[7]
+<Report_files/figure-latex/unnamed-chunk-8-1.pdf, id=135, 469.755pt x 325.215pt>
+File: Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-8-1.pdf>
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 465.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[6 <./Report_files/figure-latex/unnamed-chunk-3-1.pdf>]
-<../Plots/normalqq_pos.png, id=90, 292.84406pt x 271.76532pt>
+[8
+pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.468 
+       <./Report_files/figure-latex/unnamed-chunk-7-1.pdf>]
+<../Plots/normalqq_pos.png, id=148, 292.84406pt x 271.76532pt>
 File: ../Plots/normalqq_pos.png Graphic file (type png)
 <use ../Plots/normalqq_pos.png>
-Package pdftex.def Info: ../Plots/normalqq_pos.png  used on input line 411.
+Package pdftex.def Info: ../Plots/normalqq_pos.png  used on input line 485.
 (pdftex.def)             Requested size: 121.67993pt x 112.9215pt.
-<../Plots/normalqq_pitch.png, id=91, 292.84406pt x 271.76532pt>
+<../Plots/normalqq_pitch.png, id=149, 292.84406pt x 271.76532pt>
 File: ../Plots/normalqq_pitch.png Graphic file (type png)
 <use ../Plots/normalqq_pitch.png>
-Package pdftex.def Info: ../Plots/normalqq_pitch.png  used on input line 413.
+Package pdftex.def Info: ../Plots/normalqq_pitch.png  used on input line 487.
 (pdftex.def)             Requested size: 121.67993pt x 112.9215pt.
-<Report_files/figure-latex/unnamed-chunk-5-1.pdf, id=92, 469.755pt x 325.215pt>
-File: Report_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
-<use Report_files/figure-latex/unnamed-chunk-5-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-5-1.pdf  used on input line 432.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[7 <./Report_files/figure-latex/unnamed-chunk-4-1.pdf> <../Plots/normalqq_pos.png> <../Plots/normalqq_pitch.png>]
-<Report_files/figure-latex/unnamed-chunk-6-1.pdf, id=112, 469.755pt x 325.215pt>
-File: Report_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
-<use Report_files/figure-latex/unnamed-chunk-6-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-6-1.pdf  used on input line 442.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-[8 <./Report_files/figure-latex/unnamed-chunk-5-1.pdf>]
-<../Plots/confus_pos.png, id=125, 685.56125pt x 416.05438pt>
-File: ../Plots/confus_pos.png Graphic file (type png)
-<use ../Plots/confus_pos.png>
-Package pdftex.def Info: ../Plots/confus_pos.png  used on input line 452.
-(pdftex.def)             Requested size: 186.0664pt x 112.92024pt.
-<../Plots/confus_pitch.png, id=126, 697.10437pt x 419.06563pt>
-File: ../Plots/confus_pitch.png Graphic file (type png)
-<use ../Plots/confus_pitch.png>
-Package pdftex.def Info: ../Plots/confus_pitch.png  used on input line 454.
-(pdftex.def)             Requested size: 187.83775pt x 112.91902pt.
-[9 <./Report_files/figure-latex/unnamed-chunk-6-1.pdf> <../Plots/confus_pos.png> <../Plots/confus_pitch.png>] [10] (./Report.aux)
+[9
+pdfTeX warning (ext4): destination with the same identifier (name{figure.5}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.498 
+       <./Report_files/figure-latex/unnamed-chunk-8-1.pdf> <../Plots/normalqq_pos.png> <../Plots/normalqq_pitch.png>] [10] (./Report.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: 5A8C9A34F1863934A471E239DD3DB7ED;564.
+(rerunfilecheck)             Checksum: FF3F4F00A68E259B89DB862AD0A6BA53;1293.
  ) 
 Here is how much of TeX's memory you used:
- 11477 strings out of 477984
- 181912 string characters out of 5837987
- 1878388 words of memory out of 5000000
+ 11482 strings out of 477984
+ 181771 string characters out of 5837987
+ 1880388 words of memory out of 5000000
  31419 multiletter control sequences out of 15000+600000
- 563533 words of font info for 77 fonts, out of 8000000 for 9000
+ 575503 words of font info for 81 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,10n,76p,369b,579s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on Report.pdf (10 pages, 441562 bytes).
+ 75i,10n,76p,369b,569s stack positions out of 10000i,1000n,20000p,200000b,200000s
+{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/kobesarausad/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Report.pdf (10 pages, 395832 bytes).
 PDF statistics:
- 237 PDF objects out of 1000 (max. 8388607)
- 173 compressed objects within 2 object streams
- 38 named destinations out of 1000 (max. 500000)
- 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 283 PDF objects out of 1000 (max. 8388607)
+ 216 compressed objects within 3 object streams
+ 43 named destinations out of 1000 (max. 500000)
+ 124 words of extra memory for PDF output out of 10000 (max. 10000000)
 
