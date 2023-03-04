@@ -164,15 +164,24 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 
 ## Exploratory Data Analysis
 
-TODO: Add more EDA details
+#### Correlation Plots
+![Position Players Correlation Plot](../Plots/corr_pos.png){width=150px, height=150px}
 
-### Steroids Clustering
-![Clustering with Steroids in Red](../Plots/steroids.png){width=150px, height=150px}
+![Pitchers Correlation Plot](../Plots/corr_pitch.png){width=150px, height=150px}
+
+We can see that a few of our variables have multicollinearity, but not all of them.
+
+#### Awards EDA
+![Awards Creation](../Plots/award_eda.png){width=200px, height=150px}
+
+This chart is relevant since it shows how certain awards were only created after 
+
+#### Steroids Clustering
+![Clustering with Steroids in Red](../Plots/steroids.png){width=200px, height=200px}
+
+As we can tell from this clustering, many of the position players who took steroids throughout their career have eerily similar career statistics. As such, it made sense to make `Steroids` its own variable.
 
 # Methods
-
-TODO: improve format
-
 For our hypothesis testing, since we use so many coefficients for both models, our family wise error rate would be high. As such, we are going to use the Bonferonni correction. This gives us that the significant p-values are 0.0015 for Position Players and 0.0042 for Pitchers.
 
 - Each of our pitcher and batter (position player) data frames consisted of 50 base variables after the conclusion of our various join functions. 
@@ -191,25 +200,18 @@ For our hypothesis testing, since we use so many coefficients for both models, o
 
     * For pitchers, preliminary parameter selection via the step() function revealed the importance of relief pitcher accolades. Relief pitchers are a subset of pitchers who typically pitch ~ 60 inning a season. We felt the need for our model to be differentiate between a starter and relief pitcher, and so we mutated a predictor which identifies if a pitcher is a starter or reliever based on seasonal innings pitched totals.
 
-For our model building, we used essentially every possible variable that could potentially be useful and did not contain too many missing values. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test as many models as possible. Since we are more focused on the prediction aspect, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC or K-fold CV. In addition, AIC uses less computational power than LOOCV, which is vital for us given the number of covariates we used in building our models. 
+For our model building, we used essentially every possible variable that could potentially be useful and did not contain too many missing values. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test as many models as possible. Since we are more focused on the prediction aspect, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC. 
 
-These models were trained on the same corresponding training dataset, which consists of `80%` of the full dataset are using. Thus, we used a $80/20$ split, to get our training and testing data. This allows us to further evaluate the performance of our models as the model will be predicting on unseen data.
+In addition, we used AIC over K-fold CV and LOOCV because of the following:
 
-## Confusion Matrix
-
-TODO: Explain why we're using our training data, fiddle with plot -- text size too big
-
-```{r fig.cap = "Position Player Confusion Matrix", out.width="80%", fig.align='center'}
+```{r fig.cap = "Position Player Confusion Matrix", out.width="30%", out.height="30%", fig.align='center'}
 get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df_test, "Position Players Model")
 ```
-
-```{r fig.cap = "Pitchers Confusion Matrix", out.width="80%", fig.align='center'}
+```{r fig.cap = "Pitchers Confusion Matrix", out.width="30%", out.height="30%", fig.align='center'}
 get_confusion_matrix(final_pitch_glm, PitcherHOF_df_test, "Pitchers Model")
 ```
 
-Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the dataset as there are many more non-hof players compared to hof players. Thus, with only around $20%$ of the testing data consisting of hall of famers, we could consider other possibilities like downsampling to balance out the dataset.
-
-Same goes with the pitchers mode, however, it is predicting a bit better than our position model.
+Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players. Thus, segmenting the data to do LOOCV or K-fold CV would may create inaccurate models, giving us a bad way to do model selection.
 
 # Results
 
