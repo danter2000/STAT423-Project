@@ -5,6 +5,7 @@ date: "`r Sys.Date()`"
 output:
   html_document:
     df_print: paged
+  word_document: default
 header-includes: |
   \usepackage{float}
   \floatplacement{figure}{H}
@@ -171,12 +172,19 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 
 ![Pitchers Correlation Plot](../Plots/corr_pitch.png){width=150px, height=150px}
 
-We can see that a few of our variables have multicollinearity, but not all of them.
+We can see that a few of our variables have multicollinearity, especially the hitting rate stats which are amalgamations of counting hit stats. However not all predictor are as correlated.
 
 #### Awards EDA
 ![Awards Creation](../Plots/award_eda.png){width=200px, height=150px}
 
-This chart is relevant since it shows how certain awards were only created after 
+A time plot showing the total counts of players inducted and dropped off the ballot.
+
+Introduction of awards overlaid to explain a lack of significance which we might see for accolades introduced in the mid 20th century after a large proportion of total players who have ever been on ballot had already been inducted or dropped off. Below are the cumulative percentages of the proportion of players who had either been inducted into the hall of fame or dropped off the ballot by the time each award was introduced. As we see, almost 2/3 of players who had ever been on the ballot had their Hall of Fame candidacy decided before the introduction of the Silver Slugger award.
+• Before MVP & All-Star – 0%
+• Before Cy Young Award - 33.9%
+• Before Gold Glove Award - 36.4%
+• Before Rolaids Reliever of the Year Award – 59.6%
+• Before Silver Slugger – 63.6%
 
 #### Steroids Clustering
 ![Clustering with Steroids in Red](../Plots/steroids.png){width=200px, height=200px}
@@ -264,6 +272,14 @@ From both of these charts we can see which coefficients, and their corresponding
 |![Position Players QQ-Plot](../Plots/normalqq_pos.png){width=150px, height=150px}|![Pitchers QQ-Plot](../Plots/normalqq_pitch.png){width=150px, height=150px}|
 
 As we can tell, for both the hitting and pitching models, the models have a  similar fit to the training data. For almost all of the values, they fit right along the line, meaning the residuals are zero or close to zero for most of the data. However, at the extremes of the theoretical quantiles, we do see some variation in the residuals away from the model for both the pitchers and position players (although the pitchers model has more extremes), so the model is not close to perfect.
+
+## Cook's Distance Plots
+
+|Position Players|Pitchers|
+|:-:|:-:|
+|![Position Players Cook's Distance Plot](../Plots/pos_cooks.png){width=150px, height=150px}|![Pitchers Cook's Distance Plot](../Plots/pitch_cooks.png){width=150px, height=150px}|
+
+These Cook’s Distance plots pass the eye test for weird observations. Joe Torre was inducted more for his contributions to the game as baseball's Commissioner, and not so much for his prowess as a player. Roy Campanella’s Kansas City Monarch data is not included in his MLB counting stats, so our model is a bit confused to why he is inducted even though it’s entirely deserving. Curt Schilling’s character off the field has been widely attributed to why he is not elected despite his successful career.
 
 ## Prediction
 In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application **[here](https://klobby19.shinyapps.io/explorable/)**
