@@ -29,6 +29,7 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 ![Clustering with Steroids in Red](../Plots/steroids.png){width=150px, height=150px}
 
 ## Methods
+For our hypothesis testing, since we use so many coefficients for both models, our family wise error rate would be high. As such, we are going to use the Bonferonni correction. This gives us that the significant p-values are 0.0015 for Position Players and 0.0042 for Pitchers.
 
 Each of our pitcher and batter (position player) data frames consisted of 50 base variables after the conclusion of our various join functions. 
 
@@ -71,7 +72,7 @@ In terms of our model's performance on diagnostics on the training model, we wil
 |:-:|:-:|
 |![Position Players Odds](../Plots/odd_ratio_pos.png){width=150px, height=150px}|![Pitchers Odds](../Plots/odd_ratio_pitch.png){width=200px, height=200px}|
 
-From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. 
+From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. One thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect     `Steroids` has on the chance a player has to get in the hall of fame is still negative.
 
 #### QQ-Plots:
 |Position Players|Pitchers|
