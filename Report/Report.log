@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.21)  3 MAR 2023 21:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.21)  3 MAR 2023 23:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -475,7 +475,7 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 85.
 (c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<../Plots/corr_pos.png, id=40, 355.82938pt x 299.61937pt>
+<../Plots/corr_pos.png, id=44, 355.82938pt x 299.61937pt>
 File: ../Plots/corr_pos.png Graphic file (type png)
 <use ../Plots/corr_pos.png>
 Package pdftex.def Info: ../Plots/corr_pos.png  used on input line 148.
@@ -483,97 +483,107 @@ Package pdftex.def Info: ../Plots/corr_pos.png  used on input line 148.
 [1
 
 {c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<../Plots/corr_pitch.png, id=54, 384.43625pt x 291.0875pt>
+<../Plots/corr_pitch.png, id=58, 384.43625pt x 291.0875pt>
 File: ../Plots/corr_pitch.png Graphic file (type png)
 <use ../Plots/corr_pitch.png>
 Package pdftex.def Info: ../Plots/corr_pitch.png  used on input line 154.
 (pdftex.def)             Requested size: 149.13174pt x 112.9196pt.
-<../Plots/award_eda.png, id=55, 554.57187pt x 352.81813pt>
+<../Plots/award_eda.png, id=59, 554.57187pt x 352.81813pt>
 File: ../Plots/award_eda.png Graphic file (type png)
 <use ../Plots/award_eda.png>
-Package pdftex.def Info: ../Plots/award_eda.png  used on input line 166.
+Package pdftex.def Info: ../Plots/award_eda.png  used on input line 167.
 (pdftex.def)             Requested size: 177.492pt x 112.92026pt.
-<../Plots/steroids.png, id=56, 565.11125pt x 517.935pt>
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 182.
+(c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [2 <../Plots/corr_pos.png> <../Plots/corr_pitch.png> <../Plots/award_eda.png>]
+<../Plots/steroids.png, id=76, 565.11125pt x 517.935pt>
 File: ../Plots/steroids.png Graphic file (type png)
 <use ../Plots/steroids.png>
-Package pdftex.def Info: ../Plots/steroids.png  used on input line 178.
+Package pdftex.def Info: ../Plots/steroids.png  used on input line 192.
 (pdftex.def)             Requested size: 164.27472pt x 150.56084pt.
-[2 <../Plots/corr_pos.png> <../Plots/corr_pitch.png> <../Plots/award_eda.png>]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 184.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 198.
 (c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 197.
-(c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 217.
+(Font)              <10> on input line 231.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 217.
+(Font)              <7> on input line 231.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 217.
+(Font)              <5> on input line 231.
 [3 <../Plots/steroids.png>]
-<Report_files/figure-latex/unnamed-chunk-1-1.pdf, id=86, 469.755pt x 325.215pt>
+<Report_files/figure-latex/unnamed-chunk-1-1.pdf, id=90, 469.755pt x 325.215pt>
 File: Report_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-1-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-1-1.pdf  used on input line 286.
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-1-1.pdf  used on input line 300.
 (pdftex.def)             Requested size: 140.92758pt x 97.56525pt.
-<Report_files/figure-latex/unnamed-chunk-2-1.pdf, id=87, 469.755pt x 325.215pt>
+<Report_files/figure-latex/unnamed-chunk-2-1.pdf, id=91, 469.755pt x 325.215pt>
 File: Report_files/figure-latex/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-2-1.pdf  used on input line 294.
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-2-1.pdf  used on input line 308.
 (pdftex.def)             Requested size: 140.92758pt x 97.56525pt.
 [4 <./Report_files/figure-latex/unnamed-chunk-1-1.pdf> <./Report_files/figure-latex/unnamed-chunk-2-1.pdf>]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 318.
+(Font)              <9> on input line 334.
 [5] [6]
-Overfull \hbox (57.79355pt too wide) detected at line 459
+Overfull \hbox (57.79355pt too wide) detected at line 475
 [][][][][]
  []
 
-<Report_files/figure-latex/unnamed-chunk-7-1.pdf, id=126, 469.755pt x 325.215pt>
+<Report_files/figure-latex/unnamed-chunk-7-1.pdf, id=130, 469.755pt x 325.215pt>
 File: Report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 473.
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 489.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [7]
-<Report_files/figure-latex/unnamed-chunk-8-1.pdf, id=140, 469.755pt x 325.215pt>
+<Report_files/figure-latex/unnamed-chunk-8-1.pdf, id=144, 469.755pt x 325.215pt>
 File: Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-8-1.pdf>
-Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 479.
+Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 495.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 [8 <./Report_files/figure-latex/unnamed-chunk-7-1.pdf>]
-<../Plots/normalqq_pos.png, id=153, 292.84406pt x 271.76532pt>
+<../Plots/normalqq_pos.png, id=157, 292.84406pt x 271.76532pt>
 File: ../Plots/normalqq_pos.png Graphic file (type png)
 <use ../Plots/normalqq_pos.png>
-Package pdftex.def Info: ../Plots/normalqq_pos.png  used on input line 505.
+Package pdftex.def Info: ../Plots/normalqq_pos.png  used on input line 521.
 (pdftex.def)             Requested size: 121.67993pt x 112.9215pt.
-<../Plots/normalqq_pitch.png, id=154, 292.84406pt x 271.76532pt>
+<../Plots/normalqq_pitch.png, id=158, 292.84406pt x 271.76532pt>
 File: ../Plots/normalqq_pitch.png Graphic file (type png)
 <use ../Plots/normalqq_pitch.png>
-Package pdftex.def Info: ../Plots/normalqq_pitch.png  used on input line 507.
+Package pdftex.def Info: ../Plots/normalqq_pitch.png  used on input line 523.
 (pdftex.def)             Requested size: 121.67993pt x 112.9215pt.
-[9 <./Report_files/figure-latex/unnamed-chunk-8-1.pdf> <../Plots/normalqq_pos.png> <../Plots/normalqq_pitch.png>] [10] (./Report.aux)
+[9 <./Report_files/figure-latex/unnamed-chunk-8-1.pdf> <../Plots/normalqq_pos.png> <../Plots/normalqq_pitch.png>]
+<../Plots/pos_cooks.png, id=176, 864.22874pt x 531.9875pt>
+File: ../Plots/pos_cooks.png Graphic file (type png)
+<use ../Plots/pos_cooks.png>
+Package pdftex.def Info: ../Plots/pos_cooks.png  used on input line 549.
+(pdftex.def)             Requested size: 183.44507pt x 112.92206pt.
+<../Plots/pitch_cooks.png, id=177, 843.65187pt x 529.98pt>
+File: ../Plots/pitch_cooks.png Graphic file (type png)
+<use ../Plots/pitch_cooks.png>
+Package pdftex.def Info: ../Plots/pitch_cooks.png  used on input line 551.
+(pdftex.def)             Requested size: 179.74673pt x 112.91644pt.
+[10 <../Plots/pos_cooks.png> <../Plots/pitch_cooks.png>] [11] (./Report.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Report.out' has not changed.
-(rerunfilecheck)             Checksum: 0207580858ED387A18CCBB5104AFB019;1003.
+(rerunfilecheck)             Checksum: EC409CEB889F8AAF6A9AA5AC79A03E72;1170.
  ) 
 Here is how much of TeX's memory you used:
- 11464 strings out of 477989
- 181491 string characters out of 5837889
+ 11485 strings out of 477989
+ 181942 string characters out of 5837889
  1875340 words of memory out of 5000000
- 31393 multiletter control sequences out of 15000+600000
+ 31408 multiletter control sequences out of 15000+600000
  575503 words of font info for 81 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,10n,76p,369b,573s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,10n,76p,369b,571s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}<c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Report.pdf (10 pages, 588642 bytes).
+Output written on Report.pdf (11 pages, 919948 bytes).
 PDF statistics:
- 288 PDF objects out of 1000 (max. 8388607)
- 215 compressed objects within 3 object streams
- 48 named destinations out of 1000 (max. 500000)
- 123 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 303 PDF objects out of 1000 (max. 8388607)
+ 225 compressed objects within 3 object streams
+ 52 named destinations out of 1000 (max. 500000)
+ 141 words of extra memory for PDF output out of 10000 (max. 10000000)
 

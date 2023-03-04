@@ -3,9 +3,10 @@ title: "Baseball Hall of Fame Report"
 author: "Andy, Dante, Kai, and Kobe"
 date: "`r Sys.Date()`"
 output:
+  pdf_document: default
+  word_document: default
   html_document:
     df_print: paged
-  word_document: default
 header-includes: |
   \usepackage{float}
   \floatplacement{figure}{H}
