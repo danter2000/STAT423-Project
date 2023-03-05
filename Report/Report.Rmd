@@ -3,7 +3,8 @@ title: "Baseball Hall of Fame Report"
 author: "Andy, Dante, Kai, and Kobe"
 date: "`r Sys.Date()`"
 output:
-  pdf_document: default
+  pdf_document: 
+    latex_engine: xelatex
   word_document: default
   html_document:
     df_print: paged
@@ -12,6 +13,8 @@ header-includes: |
   \floatplacement{figure}{H}
   \floatplacement{table}{H}
 ---
+\fontsize{9}{15}
+\selectfont
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
@@ -169,26 +172,26 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 ## Exploratory Data Analysis
 
 #### Correlation Plots
-![Position Players Correlation Plot](../Plots/corr_pos.png){width=150px, height=150px}
 
-![Pitchers Correlation Plot](../Plots/corr_pitch.png){width=150px, height=150px}
+|Position Players|Pitchers|
+|:-:|:-:|
+|![Position Players Correlation Plot](../Plots/corr_pos.png){width=150px, height=150px}|![Pitchers Correlation Plot](../Plots/corr_pitch.png){width=150px, height=150px}|
 
 We can see that a few of our variables have multicollinearity, especially the hitting rate stats which are amalgamations of counting hit stats. However not all predictor are as correlated.
 
-#### Awards EDA
-![Awards Creation](../Plots/award_eda.png){width=200px, height=150px}
+#### Awards EDA & Steroids SVD plots
 
-A time plot showing the total counts of players inducted and dropped off the ballot.
+|Awards and Elected Counts|Steroids Clusters|
+|:-:|:-:|
+|![Awards and Elected Plot](../Plots/award_eda.png){width=150px, height=150px}|![Steroids SVD Plot](../Plots/steroids.png){width=150px, height=150px}|
 
-Introduction of awards overlaid to explain a lack of significance which we might see for accolades introduced in the mid 20th century after a large proportion of total players who have ever been on ballot had already been inducted or dropped off. Below are the cumulative percentages of the proportion of players who had either been inducted into the hall of fame or dropped off the ballot by the time each award was introduced. As we see, almost 2/3 of players who had ever been on the ballot had their Hall of Fame candidacy decided before the introduction of the Silver Slugger award.
-• Before MVP & All-Star – 0%
-• Before Cy Young Award - 33.9%
-• Before Gold Glove Award - 36.4%
-• Before Rolaids Reliever of the Year Award – 59.6%
-• Before Silver Slugger – 63.6%
-
-#### Steroids Clustering
-![Clustering with Steroids in Red](../Plots/steroids.png){width=200px, height=200px}
+A time plot showing the total counts of players inducted and dropped off the ballot. Introduction of awards overlaid to explain a lack of significance which we might see for accolades introduced in the mid 20th century after a large proportion of total players who have ever been on ballot had already been inducted or dropped off. Below are the cumulative percentages of the proportion of players who had either been inducted into the hall of fame or dropped off the ballot by the time each award was introduced. As we see, almost 2/3 of players who had ever been on the ballot had their Hall of Fame candidacy decided before the introduction of the Silver Slugger award.
+ 
+* Before MVP & All-Star – 0%
+* Before Cy Young Award - 33.9%
+* Before Gold Glove Award - 36.4%
+* Before Rolaids Reliever of the Year Award – 59.6%
+* Before Silver Slugger – 63.6%
 
 As we can tell from this clustering, many of the position players who took steroids throughout their career have eerily similar career statistics. As such, it made sense to make `Steroids` its own variable.
 
@@ -215,12 +218,9 @@ For our model building, we used essentially every possible variable that could p
 
 In addition, we attempted to utilize AIC over K-fold CV and LOOCV because of the following:
 
-```{r fig.cap = "Position Player Confusion Matrix", out.width="30%", out.height="30%", fig.align='center'}
-get_confusion_matrix(final_pos_glm, PositionPlayerHOF_df_test, "Position Players Model")
-```
-```{r fig.cap = "Pitchers Confusion Matrix", out.width="30%", out.height="30%", fig.align='center'}
-get_confusion_matrix(final_pitch_glm, PitcherHOF_df_test, "Pitchers Model")
-```
+|Position Players|Pitchers|
+|:-:|:-:|
+|![Position Players Confusion Matrix](../Plots/conf_pos.png){width=150px, height=150px}|![Pitchers Confusion Matrix](../Plots/conf_pitch.png){width=150px, height=150px}|
 
 Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players. Thus, segmenting the data to do LOOCV or K-fold CV would may create inaccurate models, giving us a bad way to do model selection. We therefore would prefer to use the step() function as a way to model select.
 
