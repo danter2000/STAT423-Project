@@ -299,7 +299,7 @@ As we can tell, for both the hitting and pitching models, the models have a  sim
 
 These Cook’s Distance plots pass the eye test for weird observations. Joe Torre was inducted more for his contributions to the game as baseball's Commissioner, and not so much for his prowess as a player. Roy Campanella’s Kansas City Monarch data is not included in his MLB counting stats, so our model is a bit confused to why he is inducted even though it’s entirely deserving. Curt Schilling’s character off the field has been widely attributed to why he is not elected despite his successful career.
 
-### Prediction
+#### Prediction
 In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application **[here](https://klobby19.shinyapps.io/explorable/)**
 
 In terms of our our predictions, we would say that they are, for the most part, accurate. Obviously, our opinion is not a perfect evaluation of whether or not a player will get into the hall of fame, but as people who consume a lot of baseball content, as well as participate in the baseball community, we are likely fairly close to what experts in baseball statistics would look like (not to brag). However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes player hall of fame worthy. 
@@ -345,6 +345,6 @@ In future research, we would like to solve our issues of inproportionate predict
 
 * All: General data tydying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. Quality control of final report.
 * Andy: 
-* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on skills of team members and project needs. Awards EDA. Odd ratios interpretation, Cook's Distances, impact of our results.
+* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on project needs. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results.
 * Kai:
 * Kobe: 
