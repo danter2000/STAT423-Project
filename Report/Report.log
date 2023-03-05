@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.4)  3 MAR 2023 23:09
+=======
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.21)  3 MAR 2023 23:07
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -482,7 +486,11 @@ Package pdftex.def Info: ../Plots/corr_pos.png  used on input line 148.
 (pdftex.def)             Requested size: 134.1035pt x 112.91931pt.
 [1
 
+<<<<<<< HEAD
 {c:/Users/dante/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+=======
+{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 <../Plots/corr_pitch.png, id=58, 384.43625pt x 291.0875pt>
 File: ../Plots/corr_pitch.png Graphic file (type png)
 <use ../Plots/corr_pitch.png>
@@ -494,6 +502,7 @@ File: ../Plots/award_eda.png Graphic file (type png)
 Package pdftex.def Info: ../Plots/award_eda.png  used on input line 167.
 (pdftex.def)             Requested size: 177.492pt x 112.92026pt.
 LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 182.
+<<<<<<< HEAD
 (c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [2
@@ -512,13 +521,22 @@ pdfTeX warning (ext4): destination with the same identifier (name{figure.3}) has
                                                   \__shipout_drop_firstpage_...
 l.188 ...s Clustering}\label{steroids-clustering}}
                                                    <../Plots/corr_pos.png> <../Plots/corr_pitch.png> <../Plots/award_eda.png>]
+=======
+(c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [2 <../Plots/corr_pos.png> <../Plots/corr_pitch.png> <../Plots/award_eda.png>]
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 <../Plots/steroids.png, id=76, 565.11125pt x 517.935pt>
 File: ../Plots/steroids.png Graphic file (type png)
 <use ../Plots/steroids.png>
 Package pdftex.def Info: ../Plots/steroids.png  used on input line 192.
 (pdftex.def)             Requested size: 164.27472pt x 150.56084pt.
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 198.
+<<<<<<< HEAD
 (c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+=======
+(c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
@@ -527,12 +545,16 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <7> on input line 231.
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <5> on input line 231.
+<<<<<<< HEAD
 [3
 pdfTeX warning (ext4): destination with the same identifier (name{figure.4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.252     W
            e then ran our step() model selection process again, and while we <../Plots/steroids.png>]
+=======
+[3 <../Plots/steroids.png>]
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 <Report_files/figure-latex/unnamed-chunk-1-1.pdf, id=90, 469.755pt x 325.215pt>
 File: Report_files/figure-latex/unnamed-chunk-1-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-1-1.pdf>
@@ -556,6 +578,7 @@ l.323
        <./Report_files/figure-latex/unnamed-chunk-1-1.pdf> <./Report_files/figure-latex/unnamed-chunk-2-1.pdf>]
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <9> on input line 334.
+<<<<<<< HEAD
 [5
 pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
@@ -567,6 +590,9 @@ pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has 
                                                   \__shipout_drop_firstpage_...
 l.446 A
        s you can observe, the AIC for the models go down as we clean up the]
+=======
+[5] [6]
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 Overfull \hbox (57.79355pt too wide) detected at line 475
 [][][][][]
  []
@@ -582,12 +608,16 @@ File: Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-8-1.pdf>
 Package pdftex.def Info: Report_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 495.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<<<<<<< HEAD
 [8
 pdfTeX warning (ext4): destination with the same identifier (name{figure.7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.498 
        <./Report_files/figure-latex/unnamed-chunk-7-1.pdf>]
+=======
+[8 <./Report_files/figure-latex/unnamed-chunk-7-1.pdf>]
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 <../Plots/normalqq_pos.png, id=157, 292.84406pt x 271.76532pt>
 File: ../Plots/normalqq_pos.png Graphic file (type png)
 <use ../Plots/normalqq_pos.png>
@@ -598,12 +628,16 @@ File: ../Plots/normalqq_pitch.png Graphic file (type png)
 <use ../Plots/normalqq_pitch.png>
 Package pdftex.def Info: ../Plots/normalqq_pitch.png  used on input line 523.
 (pdftex.def)             Requested size: 121.67993pt x 112.9215pt.
+<<<<<<< HEAD
 [9
 pdfTeX warning (ext4): destination with the same identifier (name{figure.8}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
 l.534 
        <./Report_files/figure-latex/unnamed-chunk-8-1.pdf> <../Plots/normalqq_pos.png> <../Plots/normalqq_pitch.png>]
+=======
+[9 <./Report_files/figure-latex/unnamed-chunk-8-1.pdf> <../Plots/normalqq_pos.png> <../Plots/normalqq_pitch.png>]
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 <../Plots/pos_cooks.png, id=176, 864.22874pt x 531.9875pt>
 File: ../Plots/pos_cooks.png Graphic file (type png)
 <use ../Plots/pos_cooks.png>
@@ -622,6 +656,7 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
 (rerunfilecheck)             Checksum: EC409CEB889F8AAF6A9AA5AC79A03E72;1170.
  ) 
 Here is how much of TeX's memory you used:
+<<<<<<< HEAD
  11490 strings out of 477984
  182119 string characters out of 5837250
  1875382 words of memory out of 5000000
@@ -631,6 +666,17 @@ Here is how much of TeX's memory you used:
  75i,10n,76p,369b,571s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}<c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
 Output written on Report.pdf (11 pages, 919866 bytes).
+=======
+ 11485 strings out of 477989
+ 181942 string characters out of 5837889
+ 1875340 words of memory out of 5000000
+ 31408 multiletter control sequences out of 15000+600000
+ 575503 words of font info for 81 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 75i,10n,76p,369b,571s stack positions out of 10000i,1000n,20000p,200000b,200000s
+{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}<c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy6.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy9.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb><c:/Users/kaije/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Report.pdf (11 pages, 919948 bytes).
+>>>>>>> c936a3cebffbe71155024b0fe816ec94f8e5e11b
 PDF statistics:
  303 PDF objects out of 1000 (max. 8388607)
  225 compressed objects within 3 object streams
