@@ -13,7 +13,7 @@ header-includes: |
   \floatplacement{figure}{H}
   \floatplacement{table}{H}
 ---
-\fontsize{9}{15}
+\fontsize{9}{14}
 \selectfont
 
 ```{r setup, include=FALSE}
@@ -36,7 +36,7 @@ make_table <- function(mod1, mod2, mod3, title) {
     mod3,
     title = title,
     no.space = TRUE,
-    font.size = "small",
+    font.size = "tiny",
     single.row = TRUE,
     table.placement = "H",
     # float = TRUE,
@@ -47,10 +47,22 @@ make_table <- function(mod1, mod2, mod3, title) {
     return()
 }
 
+final_pitch_glm <- glm(wein ~ W + L + SO + SV + Steroids +
+                              most_valuable_player + all_star + cy_young_award +
+                              rolaids_relief_man_award + votedBy +
+                              StarterReliever + Steroids:most_valuable_player,
+                       family = "binomial",
+                       data = PitcherHOF_df)
+
+
 or_conf_int_plot <- function(mod, subtitle) {
+  
   or_conf_int <-
     exp(cbind("Odds ratio" = coef(mod), confint.default(mod, level = 0.95))) %>%
-    data.frame()
+    data.frame() %>%
+    mutate(pval = as.numeric(coef(summary(mod))[,4])) %>%
+    filter(pval < .05) %>%
+    select(c(1,2,3))
   
   colnames(or_conf_int) <-
     c("odds.ratio", "conf.lower", "conf.upper")
@@ -115,6 +127,7 @@ or_conf_int_plot <- function(mod, subtitle) {
     )
   
   return(p1 + p2)
+  
 }
 
 get_confusion_matrix <- function(mod, data, title) {
@@ -155,7 +168,7 @@ get_confusion_matrix <- function(mod, data, title) {
 
 ```
 
-# Introduction
+## Introduction
 
 #### Background and Motivation
 The data we are working with is career baseball statistics. The data was collected from official scorekeepers who went to every Major League Baseball game and tracked various outcomes players had over the course of each game. For our finished data set, those statistics were added up at the end of each baseball season and also at the end of each player’s career. The motivation for the scorekeepers to track the data was that they were paid, either by the home team, the league as a whole, or the local newspaper to track these statistics to keep baseball fans informed. 
@@ -191,14 +204,12 @@ We can see that a few of our variables have multicollinearity, especially the hi
 A time plot showing the total counts of players inducted and dropped off the ballot. Introduction of awards overlaid to explain a lack of significance which we might see for accolades introduced in the mid 20th century after a large proportion of total players who have ever been on ballot had already been inducted or dropped off. Below are the cumulative percentages of the proportion of players who had either been inducted into the hall of fame or dropped off the ballot by the time each award was introduced. As we see, almost 2/3 of players who had ever been on the ballot had their Hall of Fame candidacy decided before the introduction of the Silver Slugger award.
  
 * Before MVP & All-Star – 0%
-* Before Cy Young Award - 33.9%
-* Before Gold Glove Award - 36.4%
-* Before Rolaids Reliever of the Year Award – 59.6%
-* Before Silver Slugger – 63.6%
+* Before Cy Young and Gold Glove Award ~ 33.9%
+* Before Rolaids Reliever of the Year and Silver Slugger Award ~ 61%
 
 As we can tell from this clustering, many of the position players who took steroids throughout their career have eerily similar career statistics. As such, it made sense to make `Steroids` its own variable.
 
-# Methods
+## Methods
 
 #### Family-wise Error
 For our hypothesis testing, since we use so many coefficients for both models, our family wise error rate would be high. As such, we are going to use the Bonferonni correction. This gives us that the significant p-values are 0.0015 for Position Players and 0.0042 for Pitchers.
@@ -207,7 +218,6 @@ For our hypothesis testing, since we use so many coefficients for both models, o
 We are assuming a constant probability of being elected into the Hall of Fame throughout the history of baseball, a necessary assumption for logistic regression with a binomial random variable response. Addtionally, we are assuming homoskedaskity and normally distributed errors which we will show through qqplots after we have filtered our data properly. Lastly, we are assuming each observation is independent of one another, which we must be careful with. Baseball is a series of one-on-one match ups between a batter and a pitcher. It is zero-sum, meaning the sucess of a pitcher is correltated to the failure of a batter. However, because the number of times any hitter will face the same pitcher is negliable compared to the amount of pitchers the batter will otherwise face throughout their entire career, we will assume independence.
 
 #### Data Wrangling
-Each of our pitcher and batter (position player) data frames consisted of 50 base variables after the conclusion of our various join functions. 
 
 * For batters, we began summing across playerID groups in the "Batting" data frame within the Lahman package. This allowed us to see career totals for recognizable rate and counting stats for each observation (player) like batting average, walks, plate appearances, and total hits for each of the four base categories. We then joined a pivoted "award" data frame that added approximately 20 accolade predictors for each observation, this includes total all-star selections, most valuable player awards won, silver sluggers, etc. 
 
@@ -232,9 +242,10 @@ In addition, we attempted to utilize AIC over K-fold CV and LOOCV because of the
 |:-:|:-:|
 |![Position Players Confusion Matrix](../Plots/conf_pos.png){width=150px, height=150px}|![Pitchers Confusion Matrix](../Plots/conf_pitch.png){width=150px, height=150px}|
 
-Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players. Thus, segmenting the data to do LOOCV or K-fold CV would may create inaccurate models, giving us a bad way to do model selection. We therefore would prefer to use the step() function as a way to model select.
+Our position player model seems to be identifying the non-hof players correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players (~ 18% of players are in the Hall of Fame in both batter and pitcher data frames) Thus, CV may not be practical for our data and make because of its expected behavior.
 
-# Results
+## Results
+
 
 ```{r message=FALSE, echo=FALSE, results='asis'}
 make_table(pitcher1, pitcher2, final_pitch_glm, title = "Pitchers Model(s)")
@@ -260,17 +271,17 @@ extract_eq(final_pitch_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, u
 
 #### Coefficients
 
-In this section, we take a look at the coefficients that were computed from our model, specifically we look at the odds ratio and the corresponding 95% confidence interval to gain insight on what kind of variables may be important in our final models.
+In this section, we take a look at the coefficients that were computed from our model, specifically we look at the odds ratio and the corresponding 95% confidence interval to gain insight on what kind of variables may be important in our final models. Note, only the parameters with < .05 p-value have plotted odds ratios below.
 
-```{r fig.cap = "Position Players Odds Ratio CI"}
+```{r fig.cap = "Position Players Odds Ratio CI", out.width="80%", out.height="80%"}
 or_conf_int_plot(final_pos_glm, "Position Players Model")
 ```
 
-```{r fig.cap = "Pitchers Odd Ratio CI"}
+```{r fig.cap = "Pitchers Odd Ratio CI", out.width = "80%", out.height="80%"}
 or_conf_int_plot(final_pitch_glm, "Pitchers Model")
 ```
 
-From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. One thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect `Steroids` has on the chance a player has to get in the hall of fame is still negative.
+From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. While not significant, and therefore not included above in the plot, one thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect `Steroids` has on the chance a player has to get in the hall of fame is still negative.
 
 #### QQ-Plots Diagnostics
 
@@ -288,7 +299,7 @@ As we can tell, for both the hitting and pitching models, the models have a  sim
 
 These Cook’s Distance plots pass the eye test for weird observations. Joe Torre was inducted more for his contributions to the game as baseball's Commissioner, and not so much for his prowess as a player. Roy Campanella’s Kansas City Monarch data is not included in his MLB counting stats, so our model is a bit confused to why he is inducted even though it’s entirely deserving. Curt Schilling’s character off the field has been widely attributed to why he is not elected despite his successful career.
 
-## Prediction
+### Prediction
 In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application **[here](https://klobby19.shinyapps.io/explorable/)**
 
 In terms of our our predictions, we would say that they are, for the most part, accurate. Obviously, our opinion is not a perfect evaluation of whether or not a player will get into the hall of fame, but as people who consume a lot of baseball content, as well as participate in the baseball community, we are likely fairly close to what experts in baseball statistics would look like (not to brag). However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes player hall of fame worthy. 
@@ -332,8 +343,8 @@ In future research, we would like to solve our issues of inproportionate predict
 
 ## Appendix
 
-* All: General data tydying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. 
+* All: General data tydying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. Quality control of final report.
 * Andy: 
-* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on skills of team members and project needs. Awards EDA. Interpretated odd ratios, Cook's Distances, and stated impact of our results. Quality control of final report.
+* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on skills of team members and project needs. Awards EDA. Odd ratios interpretation, Cook's Distances, impact of our results.
 * Kai:
 * Kobe: 
