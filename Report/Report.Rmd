@@ -215,7 +215,7 @@ As we can tell from this clustering, many of the position players who took stero
 For our hypothesis testing, since we use so many coefficients for both models, our family wise error rate would be high. As such, we are going to use the Bonferonni correction. This gives us that the significant p-values are 0.0015 for Position Players and 0.0042 for Pitchers.
 
 #### Assumptions
-We are assuming a constant probability of being elected into the Hall of Fame throughout the history of baseball, a necessary assumption for logistic regression with a binomial random variable response. Addtionally, we are assuming homoskedaskity and normally distributed errors which we will show through qqplots after we have filtered our data properly. Lastly, we are assuming each observation is independent of one another, which we must be careful with. Baseball is a series of one-on-one match ups between a batter and a pitcher. It is zero-sum, meaning the sucess of a pitcher is correltated to the failure of a batter. However, because the number of times any hitter will face the same pitcher is negliable compared to the amount of pitchers the batter will otherwise face throughout their entire career, we will assume independence.
+We are assuming a constant probability of being elected into the Hall of Fame throughout the history of baseball, a necessary assumption for logistic regression with a binomial random variable response. This seems reasonable according to our `Awards EDA`. Addtionally, we are assuming homoskedaskity and normally distributed errors which we will show through `qqplots` after we have filtered our data properly. Lastly, we are assuming each observation is independent of one another, which we must be careful with. Baseball is a series of one-on-one match ups between a batter and a pitcher. It is zero-sum, meaning the success of a pitcher is correlated to the failure of a batter. However, because the number of times any hitter will face the same pitcher is negligible compared to the amount of pitchers the batter will otherwise face throughout their entire career, we will assume independence.
 
 #### Data Wrangling
 
@@ -225,7 +225,7 @@ We are assuming a constant probability of being elected into the Hall of Fame th
 
 In addition to the base covariates, a large initial AIC from our step() selection process and some rather large Cook's Distance values indicated the necessity to mutate additional predictors. 
 
-* The late 90's, early 2000's Steroids era of baseball altered the way BBWAA voters viewed the careers of some players in spite of otherwise Hall of Fame worthy numbers. And so, using webscraped data from ESPN and Bay Area Laboratory Co-operative (BALCO) court documents, we mutated a binary 0/1 column that indicated if a player was indited on any sort of performance enhancing drug (PED) scandal.
+* The late 90's, early 2000's Steroids era of baseball altered the way BBWAA voters viewed the careers of some players in spite of otherwise Hall of Fame worthy numbers. And so, using web scraped data from ESPN and Bay Area Laboratory Co-operative (BALCO) court documents, we mutated a binary 0/1 column that indicated if a player was indited on any sort of performance enhancing drug (PED) scandal.
   
 * We then ran our step() model selection process again, and while we obtained better AIC values, we felt we could do better. We understood what the baseball writers considered important to be elected into the Hall of Fame was period and cohort dependent. Therefore, we mutated a column that signified which of two committees elected a player into the Hall of Fame; the Baseball Writers Association of America (BBWAA) or the Veterans Committee. The BBWAA typically votes players who appeal to modern analytics of what makes a player well Hall of Fame worthy, while the Veterans Committee typically votes players based on high batting averages or nepotism from the dead-ball era of baseball (1880-1920).
 
@@ -345,6 +345,6 @@ In future research, we would like to solve our issues of inproportionate predict
 
 * All: General data tydying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. Quality control of final report.
 * Andy: 
-* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on project needs. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results.
+* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on project needs. Assumptions and issues. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results. 
 * Kai:
 * Kobe: 
