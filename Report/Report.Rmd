@@ -285,6 +285,8 @@ or_conf_int_plot(final_pitch_glm, "Pitchers Model")
 
 From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. While not significant, and therefore not included above in the plot, one thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect `Steroids` has on the chance a player has to get in the hall of fame is still negative.
 
+One thing that is important to note is how, for both models, the number of observations gets higher with once we arrive at the final model. This is due to some of the variables having missing values in them, so once we eliminated that variable, it allowed us to add those observations back into the model. As a result, our final models use more observations
+
 #### QQ-Plots Diagnostics
 
 ```{r, echo=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
