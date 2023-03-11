@@ -285,6 +285,14 @@ or_conf_int_plot(final_pitch_glm, "Pitchers Model")
 
 From both of these charts we can see which coefficients, and their corresponding odds ratios, were the largest and most likely to be associated with increasing/decreasing hall of fame likelihood. While not significant, and therefore not included above in the plot, one thing of note is that the `Steroids` coefficient is positive, but that does not include the interaction of `Steroids` with `SLG`, which means that the overall effect `Steroids` has on the chance a player has to get in the hall of fame is still negative.
 
+#### QQ-Plots Diagnostics
+
+```{r, echo=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
+mgcv::qq.gam(final_pos_glm, pch = 1, type = "response")
+title(main = "Position Players QQ-Plot")
+mgcv::qq.gam(final_pitch_glm, pch = 1, type = "response")
+title(main = "Pitchers QQ-Plot")
+```
 
 #### Binned Residual Plot Diagnostics
 
