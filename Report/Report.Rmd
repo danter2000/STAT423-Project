@@ -24,7 +24,6 @@ library(ggalt)
 library(patchwork)
 library(RColorBrewer)
 library(equatiomatic)
-library(arm)
 
 load("../data/modeliters.RData")
 
@@ -211,7 +210,7 @@ Using t-SNE, a dimension reduction approach, we can visualize the many variables
 For our hypothesis testing, since we use so many predictors for both models, our family wise error rate would be higher than our intended level. As such, we are going to use the Bonferonni correction. This gives us that the significant threshold for p-values are 0.0015 for Position Players and 0.0042 for Pitchers.
 
 ## Assumptions
-We are assuming a constant probability of being elected into the Hall of Fame throughout the history of baseball, a necessary assumption for logistic regression with a binomial random variable response. This seems reasonable according to our `Awards EDA`. Additionally, we are assuming homoskedaskity and normally distributed errors which we will show through `qqplots` after we have filtered our data properly. Lastly, we are assuming each observation is independent of one another, which we must be careful with. Baseball is a series of one-on-one match ups between a batter and a pitcher. It is zero-sum, meaning the success of a pitcher is correlated to the failure of a batter. However, because the number of times any hitter will face the same pitcher is negligible compared to the amount of pitchers the batter will otherwise face throughout their entire career, we will assume independence.
+We are assuming a constant probability of being elected into the Hall of Fame throughout the history of baseball, a necessary assumption for logistic regression with a binomial random variable response. This seems reasonable according to our `Awards EDA`. Additionally, we are assuming homoscedasticity and normally distributed errors which we will show through `qqplots` after we have filtered our data properly. Lastly, we are assuming each observation is independent of one another, which we must be careful with. Baseball is a series of one-on-one match ups between a batter and a pitcher. It is zero-sum, meaning the success of a pitcher is correlated to the failure of a batter. However, because the number of times any hitter will face the same pitcher is negligible compared to the amount of pitchers the batter will otherwise face throughout their entire career, we will assume independence.
 
 ## Data Wrangling
 
