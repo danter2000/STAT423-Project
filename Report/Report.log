@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.4)  12 MAR 2023 12:56
-=======
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.2.8)  12 MAR 2023 12:01
->>>>>>> acda67cdfec4ece05f18e465bf92febbb3abb6c0
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.4)  12 MAR 2023 13:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -762,12 +758,7 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 8.99904pt on input line 276.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 4.99947pt on input line 276.
-[3]
-File: ../Plots/conf_pos.png Graphic file (type bmp)
-<../Plots/conf_pos.png>
-File: ../Plots/conf_pitch.png Graphic file (type bmp)
-<../Plots/conf_pitch.png>
-[4] [5]
+[3] [4] [5]
 File: Report_files/figure-latex/unnamed-chunk-5-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-5-1.pdf>
 [6]
@@ -794,17 +785,10 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
 (rerunfilecheck)             Checksum: 6CA4E674FBCA1101A097D3FE94324E9F;3266.
  ) 
 Here is how much of TeX's memory you used:
-<<<<<<< HEAD
- 17246 strings out of 478683
- 321771 string characters out of 5846910
+ 17229 strings out of 478683
+ 321362 string characters out of 5846910
  1880012 words of memory out of 5000000
- 37114 multiletter control sequences out of 15000+600000
-=======
- 17240 strings out of 478687
- 321534 string characters out of 5847512
- 1880001 words of memory out of 5000000
- 37107 multiletter control sequences out of 15000+600000
->>>>>>> acda67cdfec4ece05f18e465bf92febbb3abb6c0
+ 37099 multiletter control sequences out of 15000+600000
  517829 words of font info for 80 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  86i,10n,121p,369b,430s stack positions out of 10000i,1000n,20000p,200000b,200000s

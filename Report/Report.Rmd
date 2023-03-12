@@ -62,7 +62,16 @@ or_conf_int_plot <- function(mod, subtitle) {
     data.frame() %>%
     mutate(pval = as.numeric(coef(summary(mod))[,4])) %>%
     filter(pval < .05) %>%
-    dplyr::select(c(1,2,3))
+    dplyr::select(c(1,2,3)) %>%
+    mutate(Odds.ratio = ifelse(rownames(.) == "AVG",
+                               exp(log(Odds.ratio) / 1000),
+                               Odds.ratio)) %>%
+    mutate(X2.5.. = ifelse(rownames(.) == "AVG",
+                              exp(log(X2.5..) / 1000),
+                               X2.5..)) %>%
+    mutate(X97.5.. = ifelse(rownames(.) == "AVG",
+                               exp(log(X97.5..) / 1000),
+                               X97.5..))
   
   colnames(or_conf_int) <-
     c("odds.ratio", "conf.lower", "conf.upper")
@@ -231,14 +240,6 @@ In addition to the base covariates, a large initial AIC from our step() selectio
 ## Model Selection
 For our model building, we used essentially every possible variable that could potentially be useful and did not contain more than 30 missing observations. As such, we started our process with even larger models than ones we already had To narrow down the number of covariates, we used step-wise model selection that goes both forwards and backwards, allowing us to test a large number of models. Since we are more focused on the prediction aspect, as we wanted to be able to predict current eligible players, we chose to use AIC as our primary criteria for model selection over other criteria such as BIC. 
 
-In addition, we attempted to utilize AIC over K-fold CV and LOOCV because of the following:
-
-|Position Players|Pitchers|
-|:-:|:-:|
-|![Position Players Confusion Matrix](../Plots/conf_pos.png){width=150px, height=150px}|![Pitchers Confusion Matrix](../Plots/conf_pitch.png){width=150px, height=150px}|
-
-Our position player model seems to be identifying the players that don't make it to the hof correctly but is not able to correctly identify any hof players. This could possibly stem from the problem that there is an imbalance in the data set as there are many more non-hof players compared to hof players (~ 18% of players are in the Hall of Fame in both batter and pitcher data frames) Thus, CV may not be practical for our data and make because of its expected behavior.
-
 # Results
 
 ```{r message=FALSE, echo=FALSE, results='asis'}
@@ -304,17 +305,32 @@ These Cook’s Distance plots pass the eye test for weird observations. Joe Torr
 ```{r, echo=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
 set.seed(100)
 # Position Players
-pos_split <- train_test_split(PositionPlayerHOF_df, 0.7)
-pos_train_model <- glm(final_pos_glm$formula, pos_split$train,
+pos_split_wein <- train_test_split(PositionPlayerHOF_df[PositionPlayerHOF_df$wein == 1,], 0.7)
+
+pos_split_wenotin <- train_test_split(PositionPlayerHOF_df[PositionPlayerHOF_df$wein == 0,], 0.7)
+
+# Join 30% of each
+pos_split_70each_train <- rbind(pos_split_wein$train, pos_split_wenotin$train)
+
+pos_split_30each_test <- rbind(pos_split_wein$test, pos_split_wenotin$test)
+
+pos_train_model <- glm(final_pos_glm$formula, pos_split_70each_train,
                        family = "binomial")
-get_confusion_matrix(pos_train_model, pos_split$test, 
+get_confusion_matrix(pos_train_model, pos_split_30each_test, 
                      "Position Players 70/30 Split")
 
 # Pitchers
-pitch_split <- train_test_split(PitcherHOF_df, 0.7)
-pitch_train_model <- glm(final_pitch_glm$formula, pitch_split$train,
+pitch_split_wein <- train_test_split(PitcherHOF_df[PitcherHOF_df$wein == 1,], 0.7)
+
+pitch_split_wenotin <- train_test_split(PitcherHOF_df[PitcherHOF_df$wein == 0,], 0.7)
+
+pitch_split_70each_train <- rbind(pitch_split_wein$train, pitch_split_wenotin$train)
+
+pitch_split_30each_test <- rbind(pitch_split_wein$test, pitch_split_wenotin$test)
+
+pitch_train_model <- glm(final_pitch_glm$formula, pitch_split_70each_train,
                          family = "binomial")
-get_confusion_matrix(pitch_train_model, pitch_split$test, 
+get_confusion_matrix(pitch_train_model, pitch_split_30each_test, 
                      "Pitchers 70/30 Split")
 ```
 
