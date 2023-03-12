@@ -63,7 +63,7 @@ or_conf_int_plot <- function(mod, subtitle) {
     data.frame() %>%
     mutate(pval = as.numeric(coef(summary(mod))[,4])) %>%
     filter(pval < .05) %>%
-    select(c(1,2,3))
+    dplyr::select(c(1,2,3))
   
   colnames(or_conf_int) <-
     c("odds.ratio", "conf.lower", "conf.upper")
@@ -126,7 +126,7 @@ get_confusion_matrix <- function(mod, data, title) {
   confusion_matrix <- data %>% 
     mutate(i = 1:n()) %>% 
     left_join(data.frame(i = as.numeric(names(fitted)), fit = fitted), by = "i") %>% 
-    select(-i) %>%
+    dplyr::select(-i) %>%
     mutate(wein_pred = as.factor((fit > 0.5)*1)) %>%
     group_by(wein_pred, wein) %>%
     summarize(n = n()) %>%
