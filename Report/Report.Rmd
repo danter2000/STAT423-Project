@@ -24,8 +24,6 @@ library(ggalt)
 library(patchwork)
 library(RColorBrewer)
 library(equatiomatic)
-library(performance)
-library(see)
 
 load("../data/modeliters.RData")
 
@@ -287,21 +285,7 @@ From both of these charts we can see which coefficients, and their corresponding
 
 One thing that is important to note is how, for both models, the number of observations gets higher with once we arrive at the final model. This is due to some of the variables having missing values in them, so once we eliminated that variable, it allowed us to add those observations back into the model. As a result, our final models use more observations
 
-#### QQ-Plots Diagnostics
-
-```{r, echo=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
-mgcv::qq.gam(final_pos_glm, pch = 1, type = "response")
-title(main = "Position Players QQ-Plot")
-mgcv::qq.gam(final_pitch_glm, pch = 1, type = "response")
-title(main = "Pitchers QQ-Plot")
-```
-
 #### Binned Residual Plot Diagnostics
-
-```{r, echo=FALSE, warning=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
-plot(binned_residuals(final_pos_glm))
-plot(binned_residuals(final_pitch_glm))
-```
 
 ```{r, echo=FALSE, warning=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
 arm::binnedplot(predict(final_pos_glm, type = "response"),
@@ -312,7 +296,7 @@ arm::binnedplot(predict(final_pitch_glm, type = "response"),
            main = "Pitchers Binned Residual Plot")
 ```
 
-TODO: Figure out what this means
+For both models, we can tell that many of the residuals are outside or near the standard-error bounds. This may mean that our models deviate some from true model. As such, even though our models have a low AIC relative to other models we have tried, they still are nowhere close to perfect models
 
 #### Cook's Distance Diagnostics
 
@@ -322,8 +306,28 @@ TODO: Figure out what this means
 
 These Cook’s Distance plots pass the eye test for weird observations. Joe Torre was inducted more for his contributions to the game as baseball's Commissioner, and not so much for his prowess as a player. Roy Campanella’s Kansas City Monarch data is not included in his MLB counting stats, so our model is a bit confused to why he is inducted even though it’s entirely deserving. Curt Schilling’s character off the field has been widely attributed to why he is not elected despite his successful career.
 
+#### Training/Test Set 
+```{r, echo=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
+set.seed(100)
+# Position Players
+pos_split <- train_test_split(PositionPlayerHOF_df, 0.7)
+pos_train_model <- glm(final_pos_glm$formula, pos_split$train,
+                       family = "binomial")
+get_confusion_matrix(pos_train_model, pos_split$test, 
+                     "Position Players 70/30 Split")
+
+# Pitchers
+pitch_split <- train_test_split(PitcherHOF_df, 0.7)
+pitch_train_model <- glm(final_pitch_glm$formula, pitch_split$train,
+                         family = "binomial")
+get_confusion_matrix(pitch_train_model, pitch_split$test, 
+                     "Pitchers 70/30 Split")
+```
+
+We can tell above that neither model particularly performed very well on the test set. While the overall accuracy is high, both models clearly struggle with correctly identifying a hall of fame player. The precision, which is the number of true positives out of total positives, is below 50% for both models. The same is true for the recall, which is the number of true positives out of total hall of fame players in the test set.
+
 #### Prediction
-In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application **[here](https://klobby19.shinyapps.io/explorable/)**
+In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application here:  **[https://klobby19.shinyapps.io/explorable/](https://klobby19.shinyapps.io/explorable/)**
 
 In terms of our our predictions, we would say that they are, for the most part, accurate. However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina, both of whom have low predicted chance of getting in. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes player hall of fame worthy. 
 
