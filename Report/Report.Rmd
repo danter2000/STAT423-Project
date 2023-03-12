@@ -185,9 +185,9 @@ As such, our first research question is what factors are associated with a  posi
 We'll be using R version `2022.02.3+492` throughout this project, so please update to at least R version `2022.02.3+492` to be able to replicate our process.
 
 # Data Description
-Our data consist of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables themselves. However, some categorical variables we may use include factors such as year, league, team, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was publicly suspected to use steroids or not.
+Our data consist of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables themselves. However, some categorical variables we may use include factors such as year, league, team, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was publicly suspected to use steroids or not according to ESPN, MLB PED test results, and miscellaneous PED related court documents.
 
-Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable, indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players data set and 400 observations in the pitching data set.
+Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable, indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players data set and 400 observations in the pitching data set. 
 
 # Exploratory Data Analysis
 
@@ -215,7 +215,7 @@ A time plot showing the total counts of players inducted and players no longer e
 * Before Cy Young and Gold Glove Award ~ 33.9%
 * Before Rolaids Reliever of the Year and Silver Slugger Award ~ 61%
 
-Using t-SNE, a dimension reduction approach, we can visualize the many variables we have into two principal components, which is what is seen here. As we can tell from this clustering, many of the position players who took steroids throughout their career have eerily similar career statistics. As such, it made sense to make `Steroids` its own variable.
+Using t-SNE, a dimension reduction approach, we can visualize the many variables we have into two principal components, which is what is seen here. As we can tell from this clustering, many of the position players who took steroids throughout their career colored in $\textcolor{red}{red}$ have eerily similar career statistics. As such, it made sense to make `Steroids` its own variable. The axis have no reasonable interpretation as is with some dimension reduction techniques.
 
 # Methods
 
