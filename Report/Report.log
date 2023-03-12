@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.4)  12 MAR 2023 14:29
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.4)  12 MAR 2023 14:33
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -741,47 +741,43 @@ File: ../Plots/corr_pos.png Graphic file (type bmp)
 <../Plots/corr_pos.png>
 File: ../Plots/corr_pitch.png Graphic file (type bmp)
 <../Plots/corr_pitch.png>
-File: ../Plots/corr_pos.png Graphic file (type bmp)
-<../Plots/corr_pos.png>
-File: ../Plots/corr_pitch.png Graphic file (type bmp)
-<../Plots/corr_pitch.png>
 File: ../Plots/award_eda.png Graphic file (type bmp)
 <../Plots/award_eda.png>
 File: ../Plots/steroids.png Graphic file (type bmp)
 <../Plots/steroids.png>
-[2] [3]
+[2]
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 9.0pt on input line 285.
+(Font)              scaled to size 9.0pt on input line 260.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(1)/m/n' will be
-(Font)              scaled to size 5.0pt on input line 285.
+(Font)              scaled to size 5.0pt on input line 260.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 9.00082pt on input line 285.
+(Font)              scaled to size 9.00082pt on input line 260.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(2)/m/n' will be
-(Font)              scaled to size 5.00046pt on input line 285.
+(Font)              scaled to size 5.00046pt on input line 260.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 8.99904pt on input line 285.
+(Font)              scaled to size 8.99904pt on input line 260.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
-(Font)              scaled to size 4.99947pt on input line 285.
-[4] [5] [6]
-File: Report_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
-<use Report_files/figure-latex/unnamed-chunk-6-1.pdf>
+(Font)              scaled to size 4.99947pt on input line 260.
+[3] [4] [5]
 File: Report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-7-1.pdf>
-[7]
+[6]
 File: Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-8-1.pdf>
-File: Report_files/figure-latex/unnamed-chunk-8-2.pdf Graphic file (type pdf)
-<use Report_files/figure-latex/unnamed-chunk-8-2.pdf>
-File: ../Plots/pos_cooks.png Graphic file (type bmp)
-<../Plots/pos_cooks.png>
-File: ../Plots/pitch_cooks.png Graphic file (type bmp)
-<../Plots/pitch_cooks.png>
-[8]
+[7]
 File: Report_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-9-1.pdf>
 File: Report_files/figure-latex/unnamed-chunk-9-2.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-9-2.pdf>
-[9] [10] [11] (./Report.aux)
+File: ../Plots/pos_cooks.png Graphic file (type bmp)
+<../Plots/pos_cooks.png>
+File: ../Plots/pitch_cooks.png Graphic file (type bmp)
+<../Plots/pitch_cooks.png>
+File: Report_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-10-1.pdf>
+File: Report_files/figure-latex/unnamed-chunk-10-2.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-10-2.pdf>
+[8] [9] [10] [11] (./Report.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -789,10 +785,10 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
 (rerunfilecheck)             Checksum: 6CA4E674FBCA1101A097D3FE94324E9F;3266.
  ) 
 Here is how much of TeX's memory you used:
- 17253 strings out of 478683
- 321929 string characters out of 5846910
- 1882012 words of memory out of 5000000
- 37120 multiletter control sequences out of 15000+600000
+ 17272 strings out of 478683
+ 322485 string characters out of 5846910
+ 1887012 words of memory out of 5000000
+ 37139 multiletter control sequences out of 15000+600000
  517829 words of font info for 80 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  86i,10n,121p,369b,430s stack positions out of 10000i,1000n,20000p,200000b,200000s
