@@ -286,7 +286,7 @@ From both of these charts we can see which coefficients, and their corresponding
 
 ## Binned Residual Plot Diagnostics
 
-```{r, echo=FALSE, warning=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
+```{r, echo=FALSE, fig.cap = "Binned Residuals Plot", warning=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
 arm::binnedplot(predict(final_pos_glm, type = "response"),
                 resid(final_pos_glm),
            main = "Position Players Binned Residual Plot")
@@ -299,14 +299,16 @@ For both models, we can tell that many of the residuals are outside or near the 
 
 ## Cook's Distance Diagnostics
 
-|Position Players|Pitchers|
-|:-:|:-:|
-|![Position Players Cook's Distance Plot](../Plots/pos_cooks.png){width=150px, height=150px}|![Pitchers Cook's Distance Plot](../Plots/pitch_cooks.png){width=150px, height=150px}|
+```{r fig.cap="Cook's Distance Plots", fig.show='hold',fig.align='center', out.width="49%", out.height="20%"}
+
+knitr::include_graphics(c("../Plots/pos_cooks.png", "../Plots/pitch_cooks.png"))
+
+```
 
 These Cook’s Distance plots pass the eye test for weird observations. Joe Torre was inducted more for his contributions to the game as baseball's Commissioner, and not so much for his prowess as a player. Roy Campanella’s Kansas City Monarch data is not included in his MLB counting stats, so our model is a bit confused to why he is inducted even though it’s entirely deserving. Curt Schilling’s character off the field has been widely attributed to why he is not elected despite his successful career.
 
 ## Training/Test Set 
-```{r, echo=FALSE, out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
+```{r, echo=FALSE, fig.cap = "K-fold Confusion Matrices", out.height="40%", out.width="40%", fig.show='hold', fig.align='left'}
 set.seed(100)
 # Position Players
 pos_split_wein <- train_test_split(PositionPlayerHOF_df[PositionPlayerHOF_df$wein == 1,], 0.7)
