@@ -392,4 +392,4 @@ In future research, we would like to solve our issues of inappropriate predictor
 * Andy: 
 * Dante: Proposed research question and gathered initial datasets. Deligated tasks based on project needs. Assumptions and issues. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results. 
 * Kai:
-* Kobe: 
+* Kobe: Carried out necessary data scraping tasks for extra variables, data visualizations of different concepts, and the shiny app. 
