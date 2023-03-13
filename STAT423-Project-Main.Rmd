@@ -85,7 +85,7 @@ hall_df_tidy <- hall_df %>%
 pitching_df_continuous_counts <- pitching_df %>%
   subset(select =-c(2:5, 19)) %>%
   group_by(playerID) %>%
-  summarize(across(everything(), sum)) %>%
+  dplyr::summarize(across(everything(), sum)) %>%
   mutate(ERA = round(ER / IPouts * 27, 2),
          WHIP = round((BB + H) / IPouts * 3, 2))
 
@@ -103,7 +103,7 @@ pitching_df_categorical_counts <- pitching_df %>%
 hof_players <- hall_df %>% 
   filter(category == "Player") %>% 
   group_by(playerID) %>%
-  summarize(wein = "Y" %in% inducted * 1, votedBy, yearID, maxYear = max(yearID)) %>%
+  dplyr::summarize(wein = "Y" %in% inducted * 1, votedBy, yearID, maxYear = max(yearID)) %>%
   filter(yearID == maxYear) %>%
   select(-c(yearID, maxYear))
 
@@ -119,7 +119,7 @@ awards_new <- awards_df %>%
 awards_wider <- awards_new %>% 
   mutate(award_id_clean = str_replace_all(str_replace_all(str_to_lower(awardID), " ", "_"), "-", "_")) %>% 
   group_by(playerID, award_id_clean) %>% 
-  summarize(n = n()) %>%
+  dplyr::summarize(n = n()) %>%
   pivot_wider(id_cols = playerID, names_from = award_id_clean, values_from = n) %>% 
   mutate(across(1:28, ~ replace_na(.x, 0)))
 
@@ -191,7 +191,7 @@ primary_position <- Appearances %>%
   pivot_longer(cols = c(P, C, `1B`, `2B`, `3B`, SS, RF, CF, LF, DH),
                names_to = "Pos") %>%
   group_by(playerID) %>%
-  summarize(Pos = Pos, Value = value, Max = max(value)) %>%
+  dplyr::summarize(Pos = Pos, Value = value, Max = max(value)) %>%
   filter(Value == Max) %>%
   select(playerID, Pos)
   
@@ -967,7 +967,7 @@ pos_corr <- get_corr_matrix(PositionPlayerHOF_df[c("all_star", "G", "Pos", "HR",
                                                    "SB", "SLG")])
 replayPlot(pos_corr)
 
-pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "L", "SO", "SV", "Steroids",
+pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "SO", "SV", "Steroids",
                                             "most_valuable_player","all_star",
                                             "cy_young_award",
                                             "rolaids_relief_man_award",

@@ -50,7 +50,7 @@ make_table <- function(mod1, mod2, mod3, title) {
 final_pitch_glm <- glm(wein ~ W + SO + SV:StarterReliever + Steroids +
                               most_valuable_player + all_star + cy_young_award +
                               StarterReliever:rolaids_relief_man_award + votedBy +
-                              Steroids:most_valuable_player,
+                              Steroids:most_valuable_player + StarterReliever,
                        family = "binomial",
                        data = PitcherHOF_df)
 

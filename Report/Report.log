@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.4)  12 MAR 2023 17:53
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.4)  12 MAR 2023 18:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -694,6 +694,10 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 4.99947pt on input line 200.
 [2] [3] [4] [5]
+Overfull \hbox (332.08083pt too wide) detected at line 481
+[][][][][]
+ []
+
 File: Report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-7-1.pdf>
 [6]
@@ -722,7 +726,7 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
 Here is how much of TeX's memory you used:
  16585 strings out of 478683
  312325 string characters out of 5846910
- 1886012 words of memory out of 5000000
+ 1887012 words of memory out of 5000000
  36473 multiletter control sequences out of 15000+600000
  517829 words of font info for 80 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
