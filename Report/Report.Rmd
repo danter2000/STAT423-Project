@@ -187,7 +187,7 @@ We'll be using R version `2022.02.3+492` throughout this project, so please upda
 # Data Description
 Our data consist of mostly quantitative variables mixed in with some categorical variables. Most baseball metrics come in quantitative form so it is often hard to obtain categorical measurements unless they come directly from the quantitative variables themselves. However, some categorical variables we may use include factors such as year, league, team, and possibly some other categorical variables that are computed from other quantitative variables. One other potential categorical variable would be a binary variable indicating whether a player was publicly suspected to use steroids or not according to ESPN, MLB PED test results, and miscellaneous PED related court documents.
 
-Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we’ll have two different data sets, since metrics for batters and pitchers are vastly different. However, we’ll still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable, indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players data set and 400 observations in the pitching data set. 
+Furthermore, we are splitting this project into two parts: batters and pitchers. Thus, there is a need to split the data; in other words, we will have two different data sets, since metrics for batters and pitchers are vastly different. However, we will still be predicting the same variable: hall of fame. Hall of fame is a binary categorical variable, indicating whether a player was inducted into the hall of fame or not. In addition, we made sure to only include players who were on a hall of fame ballot at some point. In total, we have around 750 observations in the position players data set and 400 observations in the pitching data set. 
 
 # Exploratory Data Analysis
 
@@ -199,7 +199,7 @@ knitr::include_graphics(c("../Plots/corr_pos.png", "../Plots/corr_pitch.png"))
 
 ```
 
-We can see that a few of our variables have multicollinearity, especially the hitting rate stats which are amalgamations of counting hit stats. However not all predictors are as highly correlated with each other. So, we'll carry on with our analysis using most of the variables, since we deem those variables as important factors.
+We can see that a few of our variables have multicollinearity, especially the hitting rate stats which are amalgamations of counting hit stats. However not all predictors are as highly correlated with each other. So, we will carry on with our analysis using most of the variables, since we deem those variables as important factors.
 
 ## Awards EDA & Steroids SVD plots
 
@@ -229,7 +229,7 @@ We are assuming a constant probability of being elected into the Hall of Fame th
 
 * For batters, we summed across playerID groups in the "Batting" data frame in the Lahman package. This allowed us to see career totals for rate and counting stats for each observation (player) like batting average (AVG), walks (BB), and total hits for each of the four base categories (1B, 2B, 3B, HR). We joined a pivoted "award" data frame that added approximately 20 accolade predictors for each observation. This includes total all-star selections, Most Valuable Player awards won, Silver Sluggers, etc. 
 
-* For pitcher, we sumed across playerID groups in the "Pitching" data frame in the Lahman package. This allowed us to see career totals for recognizable rate and counting stats for each observation (pitcher) like innings pitched (IP), strike outs (SO), earned runs (ER), and we additionally mutated $\frac{9 \times \text{Earned Runs}}{\text{Innings Pitched}}$ and $\frac{\text{Walks} + \text{Hits}}{\text{Innings Pitched}}$ to get the all important ERA (Earned Run Average) and WHIP rates. We then joined a pivoted "award" data frame that added approximately 20 accolade predictors for each observation, this includes total all-star selections, Cy Young awards won, Gold Gloves, etc. 
+* For pitcher, we sumed across playerID groups in the "Pitching" data frame in the Lahman package. This allowed us to see career totals for recognizable rate and counting stats for each observation (pitcher) like innings pitched (IP), strike outs (SO), earned runs (ER), and we additionally mutated $\frac{9 \times \text{Earned Runs}}{\text{Innings Pitched}}$ and $\frac{\text{Walks} + \text{Hits}}{\text{Innings Pitched}}$ to get the all important ERA (Earned Run Average) and WHIP (Walks plus Hits per Inning Pitched) rates. We then joined a pivoted "award" data frame that added approximately 20 accolade predictors for each observation, this includes total all-star selections, Cy Young awards won, Gold Gloves, etc. 
 
 The initial AIC's (approximately 220 and 80 for our Position Player and Pitcher models respectively) from our step() selection process and some rather large Cook's Distance values indicated the necessity to mutate additional predictors. Players like Barry Bonds, Roger Clemens, and Manny Ramirez were being flagged by our Cook's Distance Plots as uncharacteristically not elected into the Hall of Fame. 
 
@@ -347,14 +347,14 @@ We can tell above that neither model particularly performed very well on the tes
 ## Prediction
 In addition to how our model performed on the training data, we wanted to see how it would work on future prospective hall of fame inductees. As such, our final prediction results are published on the web application here:  **[https://klobby19.shinyapps.io/explorable/](https://klobby19.shinyapps.io/explorable/)**
 
-In terms of our our predictions, we would say that they are, for the most part, accurate. However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina, both of whom have low predicted chance of getting in. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes player hall of fame worthy. 
+In terms of our our predictions, we would say that they are, for the most part, accurate. However, there are a few players in which we disagree with the model's choice in the position player side, namely Adrian Beltre and Yadier Molina, both of whom have a low predicted chance of getting in. This may be because of overfitting to our training data or it also could be a result of a changing criteria when it comes to what makes a player hall of fame worthy. 
 
 It is also important to note that these predictions are "now-casting" not forecasting, since we are essentially assuming that all the players that we are predicting are all retired. As such, since our model looks at many counting stats, players who are not retired yet and have low probabilities to get into the hall of fame can, in theory, improve their chances by picking up more stats over the rest of their careers. However, we still believe that our model brings valuable information regarding players who have retired or are at the end of their careers, since they are not likely to improve their chances much, if at all.
 
 # Discussions and Conclusions
 
 ## Interpretation
-The goal of our research question has always been prediction, and thus, the AIC value which we used to assess our model has left us with many more parameters than if we used the BIC. Below are selected coefficients from our final position player and pitching glm objects. We will interpret them based on the fact that they met our family wise signifiance level, and not necissarly because they have a sign or magnitude which makes sense contextually.
+The goal of our research question has always been prediction, and thus, the AIC value which we used to assess our model has left us with many more parameters than if we used the BIC. Below are selected coefficients from our final position player and pitching glm objects. We will interpret them based on the fact that they met our family wise significance level, and not necessarily because they have a sign or magnitude which makes sense contextually.
 
 * From the exponentiated `all_star` parameter $e^{\beta_{allstar}} = e^{1.321} = 3.75$, we can say for every all-star selection of a position player, the odds of being elected into the Baseball Hall of Fame increase by 3.75 times when holding all other predictors constant. From the 95% C.I. [1.95, 9.38], we are 95% confident that for every all-star appearance, the odds of being elected into the Hall of Fame increases by 1.95 to 9.38 times. This makes sense intuitively, as consistent all-star selections is synonymous with consistent player performance. The positive feedback loop of baseball writers awards players accolades and then using those accolades to justify Hall of Fame election is shown through many parameters in both the batter and pitcher models.
 
@@ -388,8 +388,8 @@ In future research, we would like to solve our issues of inappropriate predictor
 
 # Appendix
 
-* All: General data tydying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. Quality control of final report.
+* All: General data tidying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. Quality control of final report.
 * Andy: 
-* Dante: Proposed research question and gathered initial datasets. Deligated tasks based on project needs. Assumptions and issues. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results. 
+* Dante: Proposed research question and gathered initial data sets. Delegated tasks based on project needs. Assumptions and issues. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results. 
 * Kai:
 * Kobe: Carried out necessary data scraping tasks for extra variables, data visualizations of different concepts, and the shiny app. 
