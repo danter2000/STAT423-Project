@@ -267,7 +267,7 @@ extract_eq(final_pos_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use
 ```
 
 ```{r results = 'asis'}
-extract_eq(final_pitch_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 3)
+extract_eq(final_pitch_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 2)
 ```
 
 ## Coefficients
