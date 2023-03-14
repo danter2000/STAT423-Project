@@ -966,9 +966,10 @@ get_corr_matrix <- function(data, fp) {
 }
 
 
-pos_corr <- get_corr_matrix(data = PositionPlayerHOF_df[c("all_star", "SB",
+pos_corr <- get_corr_matrix(data = PositionPlayerHOF_df[c("all_star", "SB", "Pos",
                                                    "HR", "RBI", "Steroids",
-                                                   "nice_guy_awards", "AVG", "R",
+                                                   "nice_guy_awards",
+                                                   "votedBy", "AVG", "R",
                                                    "most_valuable_player")],
                             fp = "../Plots/corr_pos_new.png")
 replayPlot(pos_corr)
@@ -976,7 +977,7 @@ replayPlot(pos_corr)
 pitch_corr <- get_corr_matrix(data = PitcherHOF_df[c("W", "SO", "Steroids",
                                             "most_valuable_player","all_star",
                                             "cy_young_award",
-                                            )],
+                                            "votedBy", "StarterReliever")],
                               fp = "Plots/corr_pitch_new.png")
 replayPlot(pitch_corr)
 

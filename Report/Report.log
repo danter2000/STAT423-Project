@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.13)  14 MAR 2023 16:41
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.13)  14 MAR 2023 16:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -670,8 +670,8 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 75.
 (c:/Users/dante/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-File: ../corr_pos.png Graphic file (type bmp)
-<../corr_pos.png>
+File: ../Plots/corr_pos.png Graphic file (type bmp)
+<../Plots/corr_pos.png>
 File: ../Plots/corr_pitch.png Graphic file (type bmp)
 <../Plots/corr_pitch.png>
 [1
@@ -698,14 +698,9 @@ Overfull \hbox (43.7596pt too wide) detected at line 472
 [][][][][]
  []
 
-[5]
-Overfull \hbox (122.43408pt too wide) detected at line 484
-[][][][][]
- []
-
+[5] [6]
 File: Report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-7-1.pdf>
-[6]
 File: Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-8-1.pdf>
 File: Report_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
@@ -722,7 +717,7 @@ File: Report_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
 File: Report_files/figure-latex/unnamed-chunk-11-2.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-11-2.pdf>
 [8] [9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 758--762
+Underfull \hbox (badness 10000) in paragraph at lines 765--769
 
  []
 
@@ -734,9 +729,9 @@ Package rerunfilecheck Info: File `Report.out' has not changed.
 (rerunfilecheck)             Checksum: 6CA4E674FBCA1101A097D3FE94324E9F;3266.
  ) 
 Here is how much of TeX's memory you used:
- 16586 strings out of 478683
- 312226 string characters out of 5846909
- 1885012 words of memory out of 5000000
+ 16585 strings out of 478683
+ 312325 string characters out of 5846909
+ 1886012 words of memory out of 5000000
  36473 multiletter control sequences out of 15000+600000
  517829 words of font info for 80 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
