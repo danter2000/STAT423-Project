@@ -55,6 +55,11 @@ final_pitch_glm <- glm(wein ~ W + SO + SV:StarterReliever + Steroids +
                        data = PitcherHOF_df)
 
 
+pitcher1 <- glm(wein ~ W + ERA + all_star + WHIP + SO + gold_glove + SV + cy_young_award + most_valuable_player + pitching_triple_crown + 
+    rolaids_relief_man_award + nice_guy_awards, family = "binomial", data = PitcherHOF_df)
+
+pitcher2 <- glm(wein ~ W + ERA + all_star + WHIP + SO + gold_glove + SV + cy_young_award + Steroids + most_valuable_player + pitching_triple_crown + rolaids_relief_man_award + nice_guy_awards, family = "binomial", data = PitcherHOF_df)
+
 or_conf_int_plot <- function(mod, subtitle) {
   
   or_conf_int <-
