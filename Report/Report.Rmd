@@ -396,5 +396,5 @@ In future research, we would like to solve our issues of inappropriate predictor
 * All: General data tidying including the joining, mutation, and filtering necessary for analysis. Developed presentation slides and report. Quality control of final report.
 * Andy: Generated prediction data set for post-testing involving current and past players eligible for hall of fame, applied to predictive model.  
 * Dante: Proposed research question and gathered initial data sets. Delegated tasks based on project needs. Assumptions and issues. Awards EDA, Odd ratios interpretation, Cook's Distances, impact of our results. 
-* Kai:
+* Kai: Mostly worked on model selection for the two models. Also suggested and worked on adding extra variables to the model, such as Steroids and Position and StarterReliever. 
 * Kobe: Carried out necessary data scraping tasks for extra variables, data visualizations of different concepts, and the shiny app. 
