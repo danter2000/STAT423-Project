@@ -200,7 +200,7 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 
 ```{r fig.cap="Correlation Plots", fig.show='hold',fig.align='center', out.width="49%", out.height="20%"}
 
-knitr::include_graphics(c("../Plots/corr_pos.png", "../Plots/corr_pitch.png"))
+knitr::include_graphics(c("../corr_pos.png", "../Plots/corr_pitch.png"))
 
 ```
 
@@ -268,7 +268,7 @@ make_table(position1, position2, final_pos_glm, title = "Position Players Model(
 Our final models are as follows:
 
 ```{r results = 'asis'}
-extract_eq(final_pos_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 3)
+extract_eq(final_pos_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 4)
 ```
 
 ```{r results = 'asis'}

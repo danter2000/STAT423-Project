@@ -940,42 +940,51 @@ flattenCorrMatrix <- function(cormat, pmat) {
     )
 }
 
-get_corr_matrix <- function(data) {
-  data[is.na(data)] <- 0
-  res2<-rcorr(as.matrix(as.data.frame(lapply(data, as.numeric))))
-  cor_df <- flattenCorrMatrix(res2$r, res2$P)
-  return(cor_df)
-  cor_df %>%
-    ggplot() +
-    geom_tile(aes(x = row, y = column, fill = cor))
+#get_corr_matrix <- function(data) {
+#  data[is.na(data)] <- 0
+ # res2<-rcorr(as.matrix(as.data.frame(lapply(data, as.numeric))))
+#  cor_df <- flattenCorrMatrix(res2$r, res2$P)
+#  return(cor_df)
+#  cor_df %>%
+#    ggplot() +
+#    geom_tile(aes(x = row, y = column, fill = cor))
   
-}
+#}
 
-get_corr_matrix <- function(data) {
+get_corr_matrix <- function(data, fp) {
   data[is.na(data)] <- 0
   
   res <- cor(data.frame(lapply(data, as.numeric)))
 
-  corrplot(res, method = 'square', order = 'FPC', type = 'lower', tl.col = 'black', tl.srt = 90 , col = COL2('RdBu', 10))
-  return(recordPlot())
+  p1 <- {
+    corrplot(res, method = 'square', order = 'FPC', type = 'lower', tl.col = 'black', tl.srt = 90 , col = COL2('RdBu', 10))
+  
+    recordPlot()
+  }
+  
+  ggsave(filename = fp, plot=replayPlot(p1))
 }
 
-pos_corr <- get_corr_matrix(PositionPlayerHOF_df[c("all_star", "G", "Pos", "HR",
-                                                   "nice_guy_awards", "Steroids",
-                                                   "votedBy", "RBI", "AVG",
-                                                   "most_valuable_player", "R",
-                                                   "SB", "SLG")])
+
+pos_corr <- get_corr_matrix(data = PositionPlayerHOF_df[c("all_star", "SB", "Pos",
+                                                   "HR", "RBI", "Steroids",
+                                                   "nice_guy_awards",
+                                                   "votedBy", "AVG", "R",
+                                                   "most_valuable_player")],
+                            fp = "Plots/corr_pos_new.png")
 replayPlot(pos_corr)
 
-pos_corr <- get_corr_matrix(PitcherHOF_df[c("W", "SO", "SV", "Steroids",
+pitch_corr <- get_corr_matrix(data = PitcherHOF_df[c("W", "SO", "Steroids",
                                             "most_valuable_player","all_star",
                                             "cy_young_award",
-                                            "rolaids_relief_man_award",
-                                            "votedBy", "StarterReliever")])
-replayPlot(pos_corr)
+                                            "votedBy", "StarterReliever")],
+                              fp = "Plots/corr_pos_new.png")
+replayPlot(pitch_corr)
 
 
-# ggsave(filename = "~/desktop/postcorr.png", replayPlot(pos_corr))
+#ggsave(filename = "STAT423-Project/Plots/corr_pos_new.png", (pos_corr))
+
+#ggsave(filename = "../Plots/corr_pitch_new.png", replayPlot(pitch_corr))
 ```
 
 ```{r awards sanity check}
