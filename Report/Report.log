@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.13)  14 MAR 2023 16:37
-=======
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.2.8)  14 MAR 2023 15:32
->>>>>>> 9417e19293d97c61d4a5adac0c02635feaeb2e6a
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.13)  14 MAR 2023 16:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -346,8 +342,11 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box55
 \@float@everytoks=\toks24
 \@floatcapt=\box56
+) (./Report.aux
+
+LaTeX Warning: Label `' multiply defined.
+
 )
-No file Report.aux.
 \openout1 = `Report.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 73.
@@ -603,11 +602,9 @@ LaTeX Font Info:    Encoding `OMX' has changed to `TU' for symbol font
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
 (Font)                  OMX/lmex/m/n --> TU/latinmodern-math.otf(3)/b/n on input line 73.
 Package hyperref Info: Link coloring OFF on input line 73.
+(./Report.out) (./Report.out)
 \@outlinefile=\write3
 \openout3 = `Report.out'.
-
-
-Package hyperref Warning: Rerun to get /PageLabels entry.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -702,16 +699,47 @@ Overfull \hbox (43.7596pt too wide) detected at line 472
  []
 
 [5]
-! Undefined control sequence.
-l.475 \9
-         
-Here is how much of TeX's memory you used:
- 16439 strings out of 478683
- 307379 string characters out of 5846909
- 1885012 words of memory out of 5000000
- 36345 multiletter control sequences out of 15000+600000
- 517821 words of font info for 79 fonts, out of 8000000 for 9000
- 14 hyphenation exceptions out of 8191
- 86i,10n,121p,300b,390s stack positions out of 10000i,1000n,20000p,200000b,200000s
+Overfull \hbox (122.43408pt too wide) detected at line 484
+[][][][][]
+ []
 
-Output written on Report.pdf (5 pages).
+File: Report_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-7-1.pdf>
+[6]
+File: Report_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-8-1.pdf>
+File: Report_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-9-1.pdf>
+File: Report_files/figure-latex/unnamed-chunk-9-2.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-9-2.pdf>
+[7]
+File: ../Plots/pos_cooks.png Graphic file (type bmp)
+<../Plots/pos_cooks.png>
+File: ../Plots/pitch_cooks.png Graphic file (type bmp)
+<../Plots/pitch_cooks.png>
+File: Report_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-11-1.pdf>
+File: Report_files/figure-latex/unnamed-chunk-11-2.pdf Graphic file (type pdf)
+<use Report_files/figure-latex/unnamed-chunk-11-2.pdf>
+[8] [9] [10]
+Underfull \hbox (badness 10000) in paragraph at lines 758--762
+
+ []
+
+[11] (./Report.aux)
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package rerunfilecheck Info: File `Report.out' has not changed.
+(rerunfilecheck)             Checksum: 6CA4E674FBCA1101A097D3FE94324E9F;3266.
+ ) 
+Here is how much of TeX's memory you used:
+ 16586 strings out of 478683
+ 312226 string characters out of 5846909
+ 1885012 words of memory out of 5000000
+ 36473 multiletter control sequences out of 15000+600000
+ 517829 words of font info for 80 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 86i,10n,121p,300b,424s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on Report.pdf (11 pages).

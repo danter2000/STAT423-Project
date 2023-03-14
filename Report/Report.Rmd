@@ -200,7 +200,8 @@ Furthermore, we are splitting this project into two parts: batters and pitchers.
 
 ```{r fig.cap="Correlation Plots", fig.show='hold',fig.align='center', out.width="49%", out.height="20%"}
 
-knitr::include_graphics(c("../corr_pos.png", "../Plots/corr_pitch.png"))
+knitr::include_graphics(c("../Plots/corr_pos.png",
+                          "../Plots/corr_pitch.png"))
 
 ```
 
@@ -272,7 +273,7 @@ extract_eq(final_pos_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use
 ```
 
 ```{r results = 'asis'}
-extract_eq(final_pitch_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 2)
+extract_eq(final_pitch_glm, wrap = TRUE, intercept = "beta", ital_vars = TRUE, use_coefs = TRUE, terms_per_line = 1)
 ```
 
 ## Coefficients
