@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.13)  14 MAR 2023 17:06
+This is XeTeX, Version 3.141592653-2.6-0.999994 (TeX Live 2022) (preloaded format=xelatex 2023.3.13)  14 MAR 2023 17:08
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -716,12 +716,7 @@ File: Report_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-11-1.pdf>
 File: Report_files/figure-latex/unnamed-chunk-11-2.pdf Graphic file (type pdf)
 <use Report_files/figure-latex/unnamed-chunk-11-2.pdf>
-[8] [9] [10]
-Underfull \hbox (badness 10000) in paragraph at lines 765--769
-
- []
-
-[11] (./Report.aux)
+[8] [9] [10] [11] (./Report.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
